@@ -1,4 +1,4 @@
 package com.flipkart.service;
 
-public class temp {
+public class SemRegistration {
 }
