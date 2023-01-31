@@ -9,4 +9,7 @@ public class PaymentServiceOperation implements PaymentService{
     public void paymentApproved() {
 
     }
+    public int sendNotification(){
+        return 0;
+    }
 }

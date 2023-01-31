@@ -8,7 +8,9 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
     public boolean addCourse() {
         return true;
     }
+    public void deleteCourse(){
 
+    }
     public boolean removeCourse(int courseId)  {
         return true;
     }

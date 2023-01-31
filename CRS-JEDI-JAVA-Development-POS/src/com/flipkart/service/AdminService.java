@@ -6,6 +6,7 @@ import com.flipkart.bean.Student;
 
 public interface AdminService {
     public boolean addCourse();
+    public void deleteCourse();
 
     public boolean removeCourse(int courseId);
 
@@ -15,4 +16,5 @@ public interface AdminService {
     public boolean addAdmin(Admin admin);
 
     public void generateGradeCard(Student student);
+
 }

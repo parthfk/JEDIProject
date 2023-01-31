@@ -1,7 +1,5 @@
 package com.flipkart.bean;
 
-import com.flipkart.service.SemRegistrationServiceOperation;
-
 import java.util.List;
 
 public class Student extends User {
