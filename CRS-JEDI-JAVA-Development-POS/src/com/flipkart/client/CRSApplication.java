@@ -4,48 +4,41 @@ import java.io.Console;
 import java.util.Scanner;
 
 public class CRSApplication {
-
-    public static void  login(){
-
+    public static void login() {
         Scanner in = new Scanner(System.in);
         Console pIn = System.console();
-
 
         System.out.println("Please enter your username");
         String userName = in.next();
 
-
         System.out.println("Please enter your Password");
         String password = in.next();
-
-
 
         //Insert Authentication here
 
         boolean endApplication  = false;
 
         while(!endApplication) {
-            endApplication=true;
+            endApplication = true;
 
-            System.out.println("Please enter your Role ");
+            System.out.println("Please enter your Role: ");
             String role = in.next().toLowerCase();
 
-            if(role.equals("student")){
-                   // System.out.println("Redirect to Student Menu");
+            switch (role) {
+                case "student":
                     CRSStudentMenu studentMenu = new CRSStudentMenu(userName);
-                }
-                else if(role.equals("professor")){
-//                System.out.println("Redirect to Professor Menu");
-                CRSProfessorMenu professorMenu = new CRSProfessorMenu(userName);
-                }
-                else if(role.equals("admin")){
-//                System.out.println("Redirect to Admin Menu");
-                CRSAdminMenu adminMenu = new CRSAdminMenu(userName);
-            }
-                else {
+                    break;
+                case "professor":
+                    CRSProfessorMenu professorMenu = new CRSProfessorMenu(userName);
+                    break;
+                case "admin":
+                    CRSAdminMenu adminMenu = new CRSAdminMenu(userName);
+                    break;
+                default:
                     System.out.println("Please enter a valid Role.");
                     endApplication = false;
-                }
+                    break;
+            }
         }
     }
 
@@ -58,12 +51,11 @@ public class CRSApplication {
 
         boolean endApplication  = false;
 
-        while(!endApplication) {
-            endApplication=true;
+        while (!endApplication) {
+            endApplication = true;
             int optionSelected = in.nextInt();
             switch (optionSelected) {
                 case 1:
-                    //
                     login();
                     break;
                 case 2:
@@ -77,7 +69,7 @@ public class CRSApplication {
                     break;
                 default:
                     System.out.println("Please select a valid input !");
-                    endApplication=false;
+                    endApplication = false;
             }
         }
     }
