@@ -1,14 +1,10 @@
 package com.flipkart.bean;
 
-import com.flipkart.service.SemRegistration;
-
 import java.util.List;
 
 public class Professor extends User{
-
     private String DepartmentID;
     private List<Course> courseTaken;
-
     public String getDepartmentID() {
         return DepartmentID;
     }

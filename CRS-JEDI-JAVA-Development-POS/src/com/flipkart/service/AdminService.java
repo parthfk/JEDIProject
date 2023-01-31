@@ -4,7 +4,7 @@ import com.flipkart.bean.Admin;
 import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
 
-public class AdminService extends UserService{
+public class AdminService extends UserService {
     public boolean addCourse() {
         return true;
     }
@@ -16,7 +16,6 @@ public class AdminService extends UserService{
     public void approveStudent(Student student) {
 
     }
-
     public boolean addProfessor(Professor professor) {
         return true;
     }
@@ -28,5 +27,4 @@ public class AdminService extends UserService{
     public void generateGradeCard(Student student) {
 
     }
-
 }

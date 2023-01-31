@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Catalogue {
 	private List<Course> offeredCourseList;
-
 	public List<Course> viewCourseList() {
 		return offeredCourseList;
 	}

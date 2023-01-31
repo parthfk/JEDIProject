@@ -31,5 +31,4 @@ public class RegisteredCourse {
 		this.semesterID = semesterID;
 	}
 
-	
 }

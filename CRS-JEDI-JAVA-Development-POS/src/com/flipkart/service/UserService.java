@@ -5,7 +5,6 @@ import com.flipkart.bean.Course;
 import java.util.List;
 
 public class UserService {
-
     public boolean logIn() {
         return true;
     }

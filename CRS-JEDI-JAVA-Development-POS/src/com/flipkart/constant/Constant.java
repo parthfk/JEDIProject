@@ -1,4 +1,5 @@
 package com.flipkart.constant;
 
-public class temp {
+public class Constant {
+
 }

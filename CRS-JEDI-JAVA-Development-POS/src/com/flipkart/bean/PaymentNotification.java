@@ -1,4 +1,4 @@
-package com.flipkart.service;
+package com.flipkart.bean;
 
 public class PaymentNotification {
     private String studentId;
@@ -36,10 +36,5 @@ public class PaymentNotification {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    private int sendNotification() {
-        // status code
-        return 0;
     }
 }

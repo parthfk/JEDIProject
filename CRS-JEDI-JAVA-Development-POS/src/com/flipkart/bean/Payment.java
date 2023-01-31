@@ -1,5 +1,4 @@
-package com.flipkart.service;
-
+package com.flipkart.bean;
 
 import java.util.Date;
 
@@ -7,6 +6,7 @@ public class Payment {
     private String paymentId;
     private String studentId;
     private double amount;
+    private int modeOfPayment;
     private Date transactionDate;
 
     public String getPaymentId() {
@@ -33,15 +33,19 @@ public class Payment {
         this.amount = amount;
     }
 
+    public int getModeOfPayment() {
+        return modeOfPayment;
+    }
+
+    public void setModeOfPayment(int modeOfPayment) {
+        this.modeOfPayment = modeOfPayment;
+    }
+
     public Date getTransactionDate() {
         return transactionDate;
     }
 
     public void setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
-    }
-
-    public double calculateAmount() {
-        return 0;
     }
 }

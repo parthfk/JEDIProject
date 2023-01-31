@@ -1,18 +1,14 @@
 package com.flipkart.bean;
 
-import com.flipkart.service.SemRegistration;
+import com.flipkart.service.SemRegistrationService;
 
 import java.util.List;
 
 public class Student extends User{
-
     private String DepartmentID;
     private boolean feeDone;
-
     private boolean statusApproval;
-
-    private SemRegistration semRegistration;
-
+    private SemRegistrationService semRegistration;
     private List<Course> courseRegistered;
 
     public String getDepartmentID() {
@@ -39,11 +35,11 @@ public class Student extends User{
         this.statusApproval = statusApproval;
     }
 
-    public SemRegistration getSemRegistration() {
+    public SemRegistrationService getSemRegistration() {
         return semRegistration;
     }
 
-    public void setSemRegistration(SemRegistration semRegistration) {
+    public void setSemRegistration(SemRegistrationService semRegistration) {
         this.semRegistration = semRegistration;
     }
 

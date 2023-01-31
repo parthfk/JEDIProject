@@ -6,7 +6,6 @@ import com.flipkart.bean.Student;
 import java.util.List;
 
 public class ProfessorService extends UserService{
-
     public void addGrade(){
 
     }
@@ -18,6 +17,5 @@ public class ProfessorService extends UserService{
     }
     public List<Course> viewCourseList(){
         return null;
-
     }
 }
