@@ -57,9 +57,4 @@ public class GradeCard {
 	public void setGradeCardApproved(boolean gradeCardApproved) {
 		this.gradeCardApproved = gradeCardApproved;
 	}
-
-	
-	public void displayGradeCard() {
-		//implementation
-	}
 }

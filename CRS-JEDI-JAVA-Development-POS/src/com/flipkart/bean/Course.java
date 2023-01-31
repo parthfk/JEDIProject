@@ -23,5 +23,4 @@ public class Course {
 	public void setProfessorID(String professorID) {
 		this.professorID = professorID;
 	}
-	
 }
