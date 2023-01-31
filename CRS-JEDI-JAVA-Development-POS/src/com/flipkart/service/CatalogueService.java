@@ -4,14 +4,8 @@ import com.flipkart.bean.Course;
 
 import java.util.List;
 
-public class CatalogueService {
-    public List<Course> viewCourseList () {
-        return null;
-    }
-    public void addCourse() {
-
-    }
-    public void deleteCourse() {
-
-    }
+public interface CatalogueService {
+    public List<Course> viewCourseList ();
+    public void addCourse();
+    public void deleteCourse();
 }

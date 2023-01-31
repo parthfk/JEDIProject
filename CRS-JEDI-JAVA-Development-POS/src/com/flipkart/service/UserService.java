@@ -4,16 +4,12 @@ import com.flipkart.bean.Course;
 
 import java.util.List;
 
-public class UserService {
-    public boolean logIn() {
-        return true;
-    }
+public interface UserService {
 
-    public boolean logOut() {
-        return true;
-    }
+    public boolean logIn();
 
-    public List<Course> viewCourseCatalogue() {
-        return null;
-    }
+    public boolean logOut();
+
+    public List<Course> viewCourseCatalogue();
+
 }

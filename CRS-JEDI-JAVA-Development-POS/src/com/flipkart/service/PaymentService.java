@@ -1,12 +1,7 @@
 package com.flipkart.service;
 
+public interface PaymentService {
+    public double calculateAmount();
 
-public class PaymentService {
-    public double calculateAmount() {
-        return 0;
-    }
-
-    public void paymentApproved() {
-
-    }
+    public void paymentApproved();
 }

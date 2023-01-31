@@ -4,27 +4,15 @@ import com.flipkart.bean.Admin;
 import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
 
-public class AdminService extends UserService {
-    public boolean addCourse() {
-        return true;
-    }
+public interface AdminService {
+    public boolean addCourse();
 
-    public boolean removeCourse(int courseId)  {
-        return true;
-    }
+    public boolean removeCourse(int courseId);
 
-    public void approveStudent(Student student) {
+    public void approveStudent(Student student);
+    public boolean addProfessor(Professor professor);
 
-    }
-    public boolean addProfessor(Professor professor) {
-        return true;
-    }
+    public boolean addAdmin(Admin admin);
 
-    public boolean addAdmin(Admin admin) {
-        return true;
-    }
-
-    public void generateGradeCard(Student student) {
-
-    }
+    public void generateGradeCard(Student student);
 }

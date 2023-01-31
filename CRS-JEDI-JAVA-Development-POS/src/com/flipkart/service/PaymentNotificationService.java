@@ -1,8 +1,7 @@
 package com.flipkart.service;
 
-public class PaymentNotificationService {
-    private int sendNotification() {
-        // status code
-        return 0;
-    }
+import com.flipkart.bean.GradeCard;
+
+public interface PaymentNotificationService {
+    public int sendNotification();
 }
