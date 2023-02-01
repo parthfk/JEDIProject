@@ -6,8 +6,18 @@ public class Student extends User {
     private String DepartmentID;
     private boolean feeDone;
     private boolean statusApproval;
-    private SemRegistrationServiceOperation semRegistration;
+    private SemRegistration semRegistration;
     private List<Course> courseRegistered;
+
+    private boolean gradeCardApproved;
+
+    public boolean isGradeCardApproved() {
+        return gradeCardApproved;
+    }
+
+    public void setGradeCardApproved(boolean gradeCardApproved) {
+        this.gradeCardApproved = gradeCardApproved;
+    }
 
     public String getDepartmentID() {
         return DepartmentID;
@@ -33,11 +43,11 @@ public class Student extends User {
         this.statusApproval = statusApproval;
     }
 
-    public SemRegistrationServiceOperation getSemRegistration() {
+    public SemRegistration getSemRegistration() {
         return semRegistration;
     }
 
-    public void setSemRegistration(SemRegistrationServiceOperation semRegistration) {
+    public void setSemRegistration(SemRegistration semRegistration) {
         this.semRegistration = semRegistration;
     }
 

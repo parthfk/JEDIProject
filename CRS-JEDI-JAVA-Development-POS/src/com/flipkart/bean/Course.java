@@ -39,4 +39,9 @@ public class Course {
 		this.availableSeats = availableSeats;
 	}
 
+	@Override
+	public String toString() {
+		return "Course ID: " + courseID + "; Course Name: " + name + "; Professor ID: " + professorID
+				+ "; available seats: " + availableSeats + "\n";
+	}
 }

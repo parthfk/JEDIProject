@@ -8,7 +8,6 @@ public class GradeCard {
 	private String semesterID;
 	private List<RegisteredCourse> courseList;
 	private List<Grade> grades;
-	private boolean gradeCardApproved;
 	
 	public String getStudentID() {
 		return studentID;
@@ -48,13 +47,5 @@ public class GradeCard {
 
 	public void setGrades(List<Grade> grades) {
 		this.grades = grades;
-	}
-
-	public boolean isGradeCardApproved() {
-		return gradeCardApproved;
-	}
-
-	public void setGradeCardApproved(boolean gradeCardApproved) {
-		this.gradeCardApproved = gradeCardApproved;
 	}
 }
