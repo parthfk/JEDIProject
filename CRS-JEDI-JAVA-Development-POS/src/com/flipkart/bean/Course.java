@@ -4,8 +4,14 @@ public class Course {
 	private String courseID;
 	private String name;
 	private String professorID;
-
 	private int availableSeats = 10;
+
+	public Course(String courseID, String name, String professorID, int availableSeats) {
+		this.courseID = courseID;
+		this.name = name;
+		this.professorID = professorID;
+		this.availableSeats = availableSeats;
+	}
 
 	public String getCourseID() {
 		return courseID;
