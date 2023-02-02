@@ -38,11 +38,12 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
        String semesterId = in.nextLine();
        System.out.println("Please select one of the following courses to grade: ");
        this.printCourseList(coursesList);
-       System.out.println("Please select 1 to " +coursesList.size());
+
+       System.out.println("Please select Serial number to add course grade out of " +coursesList.size());
        int courseIdx = -1;
        try {
              courseIdx = Integer.parseInt(in.nextLine());
-            courseToGrade = coursesList.get(courseIdx);
+            courseToGrade = coursesList.get(courseIdx-1);
        }
        catch(Exception e){
            e.printStackTrace();
@@ -60,12 +61,12 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
                if(gradeValidated){
                    Grade gradeObj= new Grade();
                     gradeObj.setGrade(gradeString);
-                   for(RegisteredCourse registeration: registeredCourseList){
-                       if(registeration.getStudentID().equals(student.getUserId()) &&
-                               registeration.getSemesterID().equals(semesterId) &&
-                               registeration.getCourseID().equals(courseToGrade.getCourseID())
+                   for(RegisteredCourse registration: registeredCourseList){
+                       if(registration.getStudentID().equals(student.getUserId()) &&
+                               registration.getSemesterID().equals(semesterId) &&
+                               registration.getCourseID().equals(courseToGrade.getCourseID())
                        ){
-                            registeration.setGrade(gradeObj);
+                           registration.setGrade(gradeObj);
                             break;
                        }
                    }

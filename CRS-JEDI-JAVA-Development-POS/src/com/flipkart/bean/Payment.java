@@ -1,14 +1,22 @@
 package com.flipkart.bean;
 
+import com.flipkart.constant.PaymentMode;
+
 import java.util.Date;
+import java.util.UUID;
 
 public class Payment {
+    public static final double AMOUNT = 10000;
     private String paymentId;
     private String studentId;
-    private double amount;
-    private int modeOfPayment;
+    private PaymentMode modeOfPayment;
     private Date transactionDate;
 
+    public Payment(String studentId){
+        paymentId = UUID.randomUUID().toString();
+        this.studentId = studentId;
+        transactionDate = new Date();
+    }
     public String getPaymentId() {
         return paymentId;
     }
@@ -25,19 +33,11 @@ public class Payment {
         this.studentId = studentId;
     }
 
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public int getModeOfPayment() {
+    public PaymentMode getModeOfPayment() {
         return modeOfPayment;
     }
 
-    public void setModeOfPayment(int modeOfPayment) {
+    public void setModeOfPayment(PaymentMode modeOfPayment) {
         this.modeOfPayment = modeOfPayment;
     }
 

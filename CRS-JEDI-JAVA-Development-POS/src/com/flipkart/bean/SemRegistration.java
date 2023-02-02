@@ -8,6 +8,13 @@ public class SemRegistration {
     private ArrayList<Course> secondaryCourses;
     private Boolean regDone;
 
+    public SemRegistration(Student student) {
+        this.studentId = student.getUserId();
+        this.primaryCourses = new ArrayList<>();
+        this.secondaryCourses = new ArrayList<>();
+        this.regDone = false;
+    }
+
     public String getStudentId() {
         return studentId;
     }

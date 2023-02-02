@@ -6,6 +6,12 @@ public class PaymentNotification {
     private String notificationId;
     private String message;
 
+    public PaymentNotification(String studentId,double paymentAmount,String paymentId,String message){
+        this.studentId = studentId;
+        this.paymentAmount = paymentAmount;
+        this.notificationId = paymentId;
+        this.message = message;
+    }
     public String getStudentId() {
         return studentId;
     }

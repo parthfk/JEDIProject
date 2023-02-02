@@ -19,7 +19,6 @@ public class Student extends User {
         this.courseRegistered=new ArrayList<>();
         this.gradeCardApproved=false;
     }
-
     public boolean isGradeCardApproved() {
         return gradeCardApproved;
     }
@@ -29,11 +28,11 @@ public class Student extends User {
     }
 
     public String getDepartmentID() {
-        return DepartmentID;
+        return departmentID;
     }
 
-    public void setDepartmentID(String departmentID) {
-        DepartmentID = departmentID;
+    public void setDepartmentID(String department_ID) {
+        departmentID = department_ID;
     }
 
     public boolean isFeeDone() {

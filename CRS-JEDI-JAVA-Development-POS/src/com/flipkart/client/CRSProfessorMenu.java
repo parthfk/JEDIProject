@@ -30,15 +30,16 @@ public class CRSProfessorMenu {
     }
 
     public void displayMenu(Professor professor) {
-        System.out.println("Welcome to professor portal -> " + this.professorUsername);
-        System.out.println("Press 1 to select courses to teach");
-        System.out.println("Press 2 to view selected courses");
-        System.out.println("Press 3 to view enrolled students");
-        System.out.println("Press 4 to add grades");
-        System.out.println("Press 5 to logout");
 
         while(true) {
-            int input=scanner.nextInt();
+            consolePrints();
+            int input = -1;
+            try {
+                input = Integer.parseInt(scanner.nextLine());
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
             ProfessorService profService = new ProfessorServiceOperation(professor);
 
             switch (input) {
@@ -80,5 +81,14 @@ public class CRSProfessorMenu {
                     System.out.println("Please select valid input");
             }
         }
+    }
+
+    private void consolePrints() {
+        System.out.println("Welcome to professor portal -> " + this.professorUsername);
+        System.out.println("Press 1 to select courses to teach");
+        System.out.println("Press 2 to view selected courses");
+        System.out.println("Press 3 to view enrolled students");
+        System.out.println("Press 4 to add grades");
+        System.out.println("Press 5 to logout");
     }
 }

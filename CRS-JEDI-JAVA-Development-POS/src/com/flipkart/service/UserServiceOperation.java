@@ -13,24 +13,23 @@ public class UserServiceOperation implements UserService {
     public User logIn() {
         Scanner in = new Scanner(System.in);
         boolean emailValidated = false,passWordEnteredIsCorrect = false;
-        String inputEmail = null, passwordEntered=null;
         User userObj = null;
 
         //List<User> userData = null;
+        System.out.println("Please enter your Email id: ");
+        String inputEmail = in.nextLine().toLowerCase();
+        System.out.println("Please enter your Password: ");
+        String passwordEntered = in.nextLine().toLowerCase();
         System.out.println("Please enter your Role: ");
         String role = in.nextLine().toLowerCase();
 
         while(!emailValidated) {
-            System.out.println("Please enter your emailId: (or press 1 to exit)");
-            inputEmail = in.nextLine();
-            if(inputEmail.equals("1")) {
-                return null;
-            }
-
             String regex = "^(.+)@(.+)$";
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(inputEmail);
-            if (matcher.matches()){
+            boolean studentApproved=false;
+            if (matcher.matches())
+            {
                 if(role.equals("admin"))
                 {
                     List<Admin> adminList = UserData.adminList;
@@ -41,46 +40,63 @@ public class UserServiceOperation implements UserService {
                             break;
                         }
                     }
+                    if(!emailValidated) {
+                        System.out.println("Invalid Credentials. Please try again");
+                        return null;
+                    }
+
                 }
-                else if(role.equals("student"))
-                {
+                else if(role.equals("student")) {
                     List<Student> studentList = UserData.studentList;
-                    for(Student u : studentList){
-                        if(u.getEmail().equals(inputEmail)){
+                    for (Student u : studentList) {
+                        if (u.getEmail().equals(inputEmail)) {
                             userObj = u;
+                            if (!u.isStatusApproval()) {
+                                System.out.println("Registration not approved. Please contact admin");
+                                return null;
+                            } else {
+                                studentApproved = true;
+                            }
                             emailValidated = true;
                             break;
                         }
+                    }
+                    if (!emailValidated && studentApproved){
+                        System.out.println("Invalid Credentials. Please try again");
+                        return null;
                     }
                 }
                 else if(role.equals("professor"))
                 {
                     List<Professor> professorList = UserData.professorList;
+                    boolean flag = false;
                     for(Professor u : professorList){
                         if(u.getEmail().equals(inputEmail)){
                             userObj = u;
                             emailValidated = true;
+                            //flag = true;
                             break;
                         }
                     }
+                    if(!emailValidated){
+                        System.out.println("Invalid Credentials. Please try again");
+                        return null;
+                    }
                 }
 
-            }
-            if(!emailValidated)
-                System.out.println("Email entered is incorrect !");
-        }
-        while(!passWordEnteredIsCorrect){
-            System.out.println("Please enter your password: (or press 1 to exit)");
-            passwordEntered = in.nextLine();
-            if(passwordEntered.equals("1")) {
+            } else {
+                System.out.println("Invalid formatted email!");
                 return null;
             }
+
+        }
+        while(!passWordEnteredIsCorrect){
             if(passwordEntered.equals(userObj.getPassword())){
                 passWordEnteredIsCorrect=true;
             }else{
                 System.out.println("Password is incorrect !");
+                return null;
             }
-
         }
         System.out.println("You have logged in successfully !");
         return userObj;
@@ -161,7 +177,7 @@ public class UserServiceOperation implements UserService {
 
             }
             if(!emailValidated)
-                System.out.println("Email entered is incorrect !");
+                System.out.println("Email entered is invalid!");
         }
 
         while(!passWordEnteredIsCorrect){

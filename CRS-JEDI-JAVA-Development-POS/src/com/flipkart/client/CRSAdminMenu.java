@@ -28,7 +28,7 @@ public class CRSAdminMenu {
 
     public CRSAdminMenu(Admin admin) {
         this.adminUsername = admin.getName();
-        displayMenu();
+        //displayMenu();
 
         userService = new UserServiceOperation();
 
@@ -39,6 +39,7 @@ public class CRSAdminMenu {
 
     private void displayAdminMenu(Admin admin) {
         while(true) {
+            displayMenu();
             int input=in.nextInt();
             AdminService adminObj=new AdminServiceOperation();
 
@@ -72,6 +73,7 @@ public class CRSAdminMenu {
                 default:
                     System.out.println("Please select valid input");
             }
+
         }
     }
 

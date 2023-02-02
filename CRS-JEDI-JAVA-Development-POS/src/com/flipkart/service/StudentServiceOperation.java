@@ -1,58 +1,68 @@
 package com.flipkart.service;
 
-import com.flipkart.bean.Course;
-import com.flipkart.bean.GradeCard;
-import com.flipkart.bean.SemRegistration;
-import com.flipkart.bean.Student;
+import com.flipkart.bean.*;
+import com.flipkart.constant.PaymentMode;
 import com.flipkart.data.CourseData;
 import com.flipkart.data.UserData;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.List;
 
 public class StudentServiceOperation extends UserServiceOperation implements StudentService  {
 
     private Student student;
+    public StudentServiceOperation() {}
     public StudentServiceOperation(Student student) {
         this.student = student;
     }
 
     public void registerForSem() {
-        student.setSemRegistration(new SemRegistration());
-        System.out.println("Press 1 to view course catalog");
-        System.out.println("Press 2 to add Primary Courses");
-        System.out.println("Press 3 to add Secondary Courses");
-        System.out.println("Press 4 to confirm and proceed with final registration");
-        System.out.println("Press 5 to delete a Courses");
-        System.out.println("Press 6 to pay fee");
-        System.out.println("Press 7 to go back to student menu");
+        student.setSemRegistration(new SemRegistration(student));
 
-        Scanner in = new Scanner(System.in);
-        int input = in.nextInt();
-        switch(input) {
-            case 1:
-                super.viewCourseCatalogue();
-                break;
-            case 2:
-                selectPrimaryCourse();
-                break;
-            case 3:
-                selectSecondaryCourse();
-                break;
-            case 4:
-                confirmRegistration();
-                break;
-            case 5:
-                dropCourse();
-                break;
-            case 6:
-                payFee();
-                return;
-            case 7:
-                return;
-            default:
-                break;
+        boolean registering = true;
+        while(registering) {
+            System.out.println("Press 1 to view course catalog");
+            System.out.println("Press 2 to add Primary Courses");
+            System.out.println("Press 3 to add Secondary Courses");
+            System.out.println("Press 4 to confirm and proceed with final registration");
+            System.out.println("Press 5 to pay fee");
+
+            boolean addDropWindow = true; // todo change
+            if (addDropWindow) {
+                System.out.println("Press 6 to add a course ");
+                System.out.println("Press 7 to delete a Courses");
+            }
+            System.out.println("Press # to go back to student menu");
+
+            Scanner in = new Scanner(System.in);
+            int input = in.nextInt();
+            switch (input) {
+                case 1:
+                    super.viewCourseCatalogue();
+                    break;
+                case 2:
+                    selectPrimaryCourse();
+                    break;
+                case 3:
+                    selectSecondaryCourse();
+                    break;
+                case 4:
+                    confirmRegistration();
+                    break;
+                case 5:
+                    dropCourse();
+                    break;
+                case 6:
+                    payFee();
+                    return;
+                case 7:
+                    registering = false;
+                    return;
+                default:
+                    break;
+            }
         }
     }
 
@@ -66,7 +76,8 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         String password=in.nextLine();
         System.out.println("Enter your Department Id");
         String departmentId=in.nextLine();
-        Student newStudent=new Student(name,password,emailEntered,departmentId);
+        Student newStudent=new Student(name,emailEntered,password,departmentId);
+        newStudent.setUserId(Integer.toString(new Random().nextInt(100)));
         UserData.studentList.add(newStudent);
     }
     public void selectPrimaryCourse() {
@@ -110,6 +121,31 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
     public void confirmRegistration() {
         // Proceed with business logic for course verification.
+        List<Course> coursesRegistered = new ArrayList<>();
+        for (Course c: student.getSemRegistration().getPrimaryCourses()) {
+            if (c.getAvailableSeats() <= 0) {
+                System.out.println("Course " + c.getCourseID() + " not available.");
+                continue;
+            }
+            coursesRegistered.add(c);
+        }
+        if (coursesRegistered.size() < 4) {
+            for (Course c: student.getSemRegistration().getSecondaryCourses()) {
+                if (c.getAvailableSeats() <= 0) {
+                    System.out.println("Course " + c.getCourseID() + " not available.");
+                    continue;
+                }
+                if (coursesRegistered.size() >= 4) break;
+                coursesRegistered.add(c);
+            }
+        }
+
+        student.setCourseRegistered(coursesRegistered);
+        student.getSemRegistration().setRegDone(true);
+        System.out.println("You are now registered for the following courses: ");
+        for (Course c: student.getCourseRegistered()) {
+            System.out.println(c);
+        }
     }
 
     public void addCourse() {
@@ -157,12 +193,83 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         }
         else {
             System.out.println("No such registered course exists");
-
         }
     }
-    
-    public void payFee() {
 
+    public void payFee() {
+        if(!student.getSemRegistration().getRegDone()){
+            System.out.println("Please complete semester registration first.");
+            return;
+        }
+        if(student.isFeeDone()){
+            System.out.println("Fees already paid!");
+            return;
+        }
+        PaymentService paymentServiceOperation = new PaymentServiceOperation();
+        double amountToPay = paymentServiceOperation.calculateAmount();
+        System.out.println("Hello, your fees due is " + amountToPay);
+        Payment studentPayment = new Payment(student.getUserId());
+        System.out.println("How would you like to pay the fees?");
+        System.out.println("Press 1 for Online Transaction");
+        System.out.println("Press 2 for Offline Transaction");
+
+        System.out.println("Which mode of payment would you like to use?");
+        Scanner sc = new Scanner(System.in);
+        int choice = sc.nextInt();
+
+        if(choice == 1){
+            System.out.println("Press 1 for UPI Payment");
+            System.out.println("Press 2 for Debit Card");
+            System.out.println("Press 3 for Credit Card");
+            System.out.println("Press 4 for Net banking");
+        }else if(choice == 2){
+            System.out.println("Press 5 for Cash Transaction");
+            System.out.println("Press 6 for Cheque Transaction");
+        }
+
+        int mode = sc.nextInt();
+        String message = "";
+        switch(mode){
+            case 1:
+                message = "Fees paid online through"+ " UPI !" ;
+                studentPayment.setModeOfPayment(PaymentMode.UPI);
+                paymentServiceOperation.payUPI();
+                break;
+            case 2:
+                message = "Fees paid online through"+ " debit card !" ;
+                studentPayment.setModeOfPayment(PaymentMode.DEBIT_CARD);
+                paymentServiceOperation.payDebitCard();
+                break;
+            case 3:
+                message = "Fees paid online through"+ " credit card !" ;
+                studentPayment.setModeOfPayment(PaymentMode.CREDIT_CARD);
+                paymentServiceOperation.payCreditCard();
+                break;
+            case 4:
+                studentPayment.setModeOfPayment(PaymentMode.NET_BANKING);
+                paymentServiceOperation.payNetBanking();
+                break;
+            case 5:
+                message = "Fees paid offline through"+ " cash !" ;
+                studentPayment.setModeOfPayment(PaymentMode.CASH);
+                paymentServiceOperation.payCash();
+                break;
+            case 6:
+                message = "Fees paid offline through"+ " cheque !" ;
+                studentPayment.setModeOfPayment(PaymentMode.CHEQUE);
+                paymentServiceOperation.payCheque();
+                break;
+            default:
+                System.out.println("Invalid key, try again!");
+                break;
+        }
+            if(paymentServiceOperation.paymentApproved()){
+
+                paymentServiceOperation.sendNotification(
+                        student.getUserId(),paymentServiceOperation.calculateAmount(), studentPayment.getPaymentId(),message);
+            }else{
+                System.out.println("Sorry,Payment Failed ! Please try again or contact admin.");
+            }
     }
 
     public GradeCard displayGradeCard() {

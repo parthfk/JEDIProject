@@ -70,7 +70,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         for(Student s:UserData.studentList)
         {
             if(!s.isStatusApproval())
-                System.out.println("Student User ID: "+s.getUserId()+"Student Name: "+s.getName()+"Student Department: "+s.getDepartmentID()+"Student Email: "+s.getEmail());
+                System.out.println("Student User ID: "+s.getUserId()+" Student Name: "+s.getName()+" Student Department: "+s.getDepartmentID()+" Student Email: "+s.getEmail());
         }
         while(true)
         {
@@ -143,7 +143,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
             for(Student s: UserData.studentList)
             {
                 if(s.isStatusApproval() && !s.isGradeCardApproved())
-                    System.out.println("Name of student : "+ s.getName()+"UserID : "+ s.getUserId()+"Email "+s.getEmail()+"Department Registered in "+s.getDepartmentID());
+                    System.out.println("Name of student : "+ s.getName()+" UserID : "+ s.getUserId()+" Email "+s.getEmail()+" Department Registered in "+s.getDepartmentID());
             }
             System.out.println("Enter UserID of student to approve Grade Gard or Press # to exit");
             String userId_of_approved_gradeCard = scanner.next();

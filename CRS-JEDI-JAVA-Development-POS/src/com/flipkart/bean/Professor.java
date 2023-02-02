@@ -1,5 +1,6 @@
 package com.flipkart.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Professor extends User {
@@ -9,6 +10,10 @@ public class Professor extends User {
         return DepartmentID;
     }
 
+    public Professor(){
+        DepartmentID="";
+        coursesTaken = new ArrayList<Course>();
+    }
     public void setDepartmentID(String departmentID) {
         DepartmentID = departmentID;
     }
