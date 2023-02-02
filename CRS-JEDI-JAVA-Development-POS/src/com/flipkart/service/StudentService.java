@@ -1,10 +1,10 @@
 package com.flipkart.service;
 
 import com.flipkart.bean.GradeCard;
+import com.flipkart.bean.Student;
 
 public interface StudentService {
-    public void  registerForSem();
-    public void reqGradeCard();
+    public void registerForSem();
     public void signup();
     public void selectPrimaryCourse();
     public void selectSecondaryCourse();

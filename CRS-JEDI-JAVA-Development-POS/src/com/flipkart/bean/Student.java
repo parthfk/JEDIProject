@@ -1,15 +1,24 @@
 package com.flipkart.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Student extends User {
-    private String DepartmentID;
+    private String departmentID;
     private boolean feeDone;
     private boolean statusApproval;
     private SemRegistration semRegistration;
     private List<Course> courseRegistered;
-
     private boolean gradeCardApproved;
+
+    public Student(String name,String email,String password,String departmentID){
+        super(name,password,email,"student");
+        this.departmentID=departmentID;
+        this.feeDone=false;
+        this.statusApproval=false;
+        this.courseRegistered=new ArrayList<>();
+        this.gradeCardApproved=false;
+    }
 
     public boolean isGradeCardApproved() {
         return gradeCardApproved;

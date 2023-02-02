@@ -5,7 +5,13 @@ public class RegisteredCourse {
 	private String studentID;
 	private Grade grade;
 	private String semesterID;
-	
+
+	public RegisteredCourse(String courseID, String studentID,String semesterID){
+		this.courseID = courseID;
+		this.studentID = studentID;
+		this.semesterID = semesterID;
+		this.grade = null;
+	}
 	public String getCourseID() {
 		return courseID;
 	}

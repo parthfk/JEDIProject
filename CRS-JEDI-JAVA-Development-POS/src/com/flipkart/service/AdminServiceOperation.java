@@ -8,11 +8,9 @@ import java.util.Scanner;
 
 public class AdminServiceOperation extends UserServiceOperation implements AdminService{
     private Scanner scanner;
-    CourseData courseData;
 
     public AdminServiceOperation() {
         scanner = new Scanner(System.in);
-        courseData = new CourseData();
     }
 
     public boolean addCourse() {
@@ -31,75 +29,142 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         try {
             Course newCourse = new Course(courseId, courseName, professorAssigned, seatsAvailable);
             CourseData.courseList.add(newCourse);
-            System.out.println("Your new course added: " + newCourse.toString());
+            System.out.println("Your new course added: " + newCourse);
         } catch (Exception e) {
             return false;
         }
         return true;
     }
 
-    public boolean removeCourse(String courseId)  {
-        System.out.println("Please enter course ID");
-        String courseIdToBeRemoved = scanner.nextLine();
+    public boolean removeCourse()  {
+        System.out.println("-----Below is the list of courses currently present-------");
+        for(Course c : CourseData.courseList)
+        {
+            System.out.println("Course Name : "+c.getName()+"  Course ID : "+c.getCourseID());
+        }
+        System.out.println("Enter the course ID to be deleted");
+        String  id_to_be_deleted=scanner.next();
+        boolean flag = false;
+        for(Course c : CourseData.courseList)
+        {
+            if(c.getCourseID().equals(id_to_be_deleted))
+            {
+                CourseData.courseList.remove(c);
+                System.out.println("Course Deleted");
+                flag=true;
+                break;
+            }
+
+        }
+        if(!flag)
+        {
+            System.out.println("No such Course Exist");
+            return false;
+        }
+
+        return true;
+    }
+
+    public void approveStudent() {
+
+        for(Student s:UserData.studentList)
+        {
+            if(!s.isStatusApproval())
+                System.out.println("Student User ID: "+s.getUserId()+"Student Name: "+s.getName()+"Student Department: "+s.getDepartmentID()+"Student Email: "+s.getEmail());
+        }
+        while(true)
+        {
+            System.out.println("Enter student UserID or Press # to exit");
+            String user_ID=scanner.next();
+            if(user_ID.equals("#"))
+                return;
+            for(Student s:UserData.studentList)
+            {
+                if(s.getUserId().equals(user_ID))
+                {
+                    s.setStatusApproval(true);
+                    System.out.println("Student Approved");
+                    break;
+                }
+            }
+        }
+    }
+
+
+    public void addProfessor() {
+
+
+        Professor newProf = new Professor();
+        System.out.println("Enter new Professor ID");
+        newProf.setUserId(scanner.next());
+        System.out.println("Enter new Professor Password");
+        newProf.setPassword(scanner.next());
+        System.out.println("Enter new Professor Name");
+        newProf.setName(scanner.next());
+        System.out.println("Enter new Professor Email");
+        newProf.setEmail(scanner.next());
+        System.out.println("Enter new Professor DepartmentID");
+        newProf.setDepartmentID(scanner.next());
+
+        newProf.setUserType("professor");
+
 
         try {
-            CourseData.removeCourse(courseId);
-        } catch (Exception e) {
-            return false;
+            UserData.professorList.add(newProf);
+            System.out.println("New professor added!");
+        } catch (Exception ignored) {
         }
-        return true;
     }
 
-    public void approveStudent(Student student) {
-        System.out.println("The profile of student is : \n"+
-                "Student Name: "+student.getName() + "\n" +
-                "Student Email: " + student.getEmail() + "\n" +
-                "Student Department: " + student.getDepartmentID());
+    public boolean addAdmin() {
+        Admin newAdmin = new Admin();
+        System.out.println("Enter new Admin ID");
+        newAdmin.setUserId(scanner.next());
 
-        System.out.println("1. Approve \n"+
-                           "2. Disapprove");
+        System.out.println("Enter new Admin Password");
+        newAdmin.setPassword(scanner.next());
+        System.out.println("Enter new Admin Name");
+        newAdmin.setName(scanner.next());
+        System.out.println("Enter new Admin Email");
+        newAdmin.setEmail(scanner.next());
+        newAdmin.setUserType("admin");
 
-        int opt = scanner.nextInt();
-
-        if(opt == 1) {
-            student.setStatusApproval(true);
-            UserData.userList.add(student);
-        }else {
-            student.setStatusApproval(false);
-        }
-
-
-        System.out.println("Student status updated !!!");
-    }
-
-
-    public boolean addProfessor(Professor professor) {
-        professor.setUserType("Professor");
-        try {
-            UserData.userList.add(professor);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
-
-    public boolean addAdmin(Admin admin) {
-        admin.setUserType("Admin");
         try{
-            UserData.userList.add(admin);
+            UserData.adminList.add(newAdmin);
         }catch (Exception e){
             return false;
         }
         return true;
     }
 
-    public void approveGradeCard(Student student) {
-        System.out.println("1. Approve \n"+
-                "2. Disapprove");
-
-        int opt = scanner.nextInt();
-        student.setGradeCardApproved(opt == 1);
-
-        System.out.println("Grade card approval status updated!!");
+    //functionality remaining
+    public void generateGradeCard() {
+        while(true) {
+            for(Student s: UserData.studentList)
+            {
+                if(s.isStatusApproval() && !s.isGradeCardApproved())
+                    System.out.println("Name of student : "+ s.getName()+"UserID : "+ s.getUserId()+"Email "+s.getEmail()+"Department Registered in "+s.getDepartmentID());
+            }
+            System.out.println("Enter UserID of student to approve Grade Gard or Press # to exit");
+            String userId_of_approved_gradeCard = scanner.next();
+            if(userId_of_approved_gradeCard.equals("#"))
+            {
+                return;
+            }
+            boolean userFound = false;
+            for(Student s: UserData.studentList)
+            {
+                if(s.getUserId().equals(userId_of_approved_gradeCard))
+                {
+                    s.setGradeCardApproved(true);
+                    System.out.println("Grade Card Generated");
+                    userFound = true;
+                    break;
+                }
+            }
+            if(!userFound){
+                System.out.println("Not a valid ID, Try again!");
+            }
+        }
     }
 }
