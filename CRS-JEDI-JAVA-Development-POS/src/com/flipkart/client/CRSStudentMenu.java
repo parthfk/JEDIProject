@@ -31,7 +31,7 @@ public class CRSStudentMenu {
                 service.registerForSem();
                 break;
             case 2:
-                service.reqGradeCard();
+                service.displayGradeCard();
                 break;
             case 3:
                 return;

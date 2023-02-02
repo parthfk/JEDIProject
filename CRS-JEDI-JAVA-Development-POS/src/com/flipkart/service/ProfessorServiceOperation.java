@@ -14,7 +14,8 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
     private Professor professor;
 
     Scanner in = new Scanner(System.in);
-    ProfessorServiceOperation(Professor professor){
+    public ProfessorServiceOperation(Professor professor){
+
         this.professor =professor;
     }
     public List<String> readCourseAndSemesterIds(){
@@ -118,6 +119,7 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         professor.setCoursesTaken(courseList);
     }
     public List<Course> viewCourseList(){
+        this.printCourseList(professor.getCoursesTaken());
         return professor.getCoursesTaken();
     }
 }

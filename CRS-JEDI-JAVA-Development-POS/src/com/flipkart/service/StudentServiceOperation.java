@@ -9,6 +9,7 @@ import com.flipkart.data.UserData;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.List;
 
 public class StudentServiceOperation extends UserServiceOperation implements StudentService  {
 
@@ -112,10 +113,32 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void addCourse() {
+        Scanner in = new Scanner(System.in);
 
+        if(student.getCourseRegistered().size()>=4)
+        {
+            System.out.println("Course limit reached, please drop a course to add another");
+            return;
+        }
 
+        System.out.println("Enter course Id to add : ");
+        String courseToAdd = in.nextLine();
 
+        List<Course> courses = CourseData.courseList;
+        for(int i=0;i<courses.size();i++){
+            if(courses.get(i).getCourseID().matches(courseToAdd) && courses.get(i).getAvailableSeats()>0 )
+            {
+                List<Course> courselist=student.getCourseRegistered();
+                courselist.add(courses.get(i));
+                courses.get(i).setAvailableSeats(courses.get(i).getAvailableSeats()-1);
+                student.setCourseRegistered(courselist);
+                System.out.println("Course added successfully ");
+
+                return;
+            }
+        }
     }
+
     public void dropCourse() {
         System.out.println("Enter course Id to drop : ");
         Scanner in = new Scanner(System.in);
@@ -130,8 +153,12 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         }
         if (toBeDropped != null) {
             student.getCourseRegistered().remove(toBeDropped);
+            System.out.println("Course dropped successfully");
         }
-        SY
+        else {
+            System.out.println("No such registered course exists");
+
+        }
     }
     
     public void payFee() {

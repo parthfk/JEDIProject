@@ -40,7 +40,7 @@ public class CRSAdminMenu {
     private void displayAdminMenu(Admin admin) {
         while(true) {
             int input=in.nextInt();
-            AdminServiceOperation adminObj=new AdminServiceOperation();
+            AdminService adminObj=new AdminServiceOperation();
 
             switch (input) {
                 case 1:
