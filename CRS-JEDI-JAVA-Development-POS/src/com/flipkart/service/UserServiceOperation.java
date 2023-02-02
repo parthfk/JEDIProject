@@ -32,14 +32,13 @@ public class UserServiceOperation implements UserService {
                         emailValidated = true;
                     }
                 }
-            }else{
-                System.out.println("Email doesn't exist !");
             }
+            if(!emailValidated)
+                System.out.println("Email entered is incorrect !");
         }
         while(!passWordEnteredIsCorrect){
             System.out.println("Please enter your password: (or press 1 to exit)");
             passwordEntered = in.nextLine();
-            inputEmail = in.nextLine();
             if(passwordEntered.equals("1")) {
                 return false;
             }

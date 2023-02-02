@@ -17,13 +17,13 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
 
     public boolean addCourse() {
         System.out.println("Please enter course ID");
-        String courseId = scanner.next();
+        String courseId = scanner.nextLine();
 
         System.out.println("Please enter course name");
-        String courseName = scanner.next();
+        String courseName = scanner.nextLine();
 
         System.out.println("Please enter professor assigned");
-        String professorAssigned = scanner.next();
+        String professorAssigned = scanner.nextLine();
 
         System.out.println("Please enter available seats");
         int seatsAvailable = scanner.nextInt();
@@ -40,7 +40,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
 
     public boolean removeCourse(String courseId)  {
         System.out.println("Please enter course ID");
-        String courseIdToBeRemoved = scanner.next();
+        String courseIdToBeRemoved = scanner.nextLine();
 
         try {
             CourseData.removeCourse(courseId);
