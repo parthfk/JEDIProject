@@ -44,7 +44,11 @@ public class CRSProfessorMenu {
 
             switch (input) {
                 case 1:
-                    userService.viewCourseCatalogue();
+                    System.out.println("These are the courses currently available: ");
+                    List<Course> courses = CourseData.courseList;
+                    for(int i=0;i<courses.size();i++){
+                        System.out.println("CourseID: " + courses.get(i).getCourseID() + " Course Name: " + courses.get(i).getName());
+                    }
                     List<Course> courseList = CourseData.courseList;
                     while(true){
                         System.out.println("Please enter the courseId to teach or # to exit.");

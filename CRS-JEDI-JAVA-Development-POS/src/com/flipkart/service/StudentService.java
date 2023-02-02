@@ -11,6 +11,7 @@ public interface StudentService {
     public void addCourse();
     public void dropCourse();
     public void payFee();
+    public void displayRegisteredCourses();
     public GradeCard displayGradeCard ();
 
 }

@@ -6,7 +6,7 @@ public class GradeCard {
 	private String studentID;
 	private float SGPA;
 	private String semesterID;
-	private List<RegisteredCourse> courseList;
+	private List<String> courseList;
 	private List<Grade> grades;
 	
 	public String getStudentID() {
@@ -33,11 +33,11 @@ public class GradeCard {
 		this.semesterID = semesterID;
 	}
 
-	public List<RegisteredCourse> getCourseList() {
+	public List<String> getCourseList() {
 		return courseList;
 	}
 
-	public void setCourseList(List<RegisteredCourse> courseList) {
+	public void setCourseList(List<String> courseList) {
 		this.courseList = courseList;
 	}
 

@@ -2,8 +2,10 @@ package com.flipkart.service;
 
 import com.flipkart.bean.*;
 import com.flipkart.data.CourseData;
+import com.flipkart.data.RegisteredCourseData;
 import com.flipkart.data.UserData;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AdminServiceOperation extends UserServiceOperation implements AdminService{
@@ -152,17 +154,79 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
                 return;
             }
             boolean userFound = false;
+            Boolean gradeNotAssigned=false;
             for(Student s: UserData.studentList)
             {
+
                 if(s.getUserId().equals(userId_of_approved_gradeCard))
                 {
+
+
+                    GradeCard gradeCard = new GradeCard();
+                    gradeCard.setStudentID(userId_of_approved_gradeCard);
+                    // RegisteredCourseData.regCourseList
+                    float gradeTotal=0;
+                    int num=0;
+                    ArrayList<String> courseList=new ArrayList<>();
+                    ArrayList<Grade> gradeList=new ArrayList<>();
+
+
+                    for(RegisteredCourse c : RegisteredCourseData.regCourseList)
+                     {
+                         if(c.getStudentID().matches(userId_of_approved_gradeCard)){
+                             Grade grade=c.getGrade();
+                             if(grade == null)
+                             {
+                                 gradeNotAssigned=true;
+                                 break;
+                             }
+                                // continue;
+                             String gradeSymbol=grade.getGrade();
+                             if(gradeSymbol.matches("A+"))
+                             {
+                                 gradeTotal+=10;
+                             } else if (gradeSymbol.matches("A-")) {
+                                  gradeTotal+=9;
+                             }
+                             else if (gradeSymbol.matches("B+")) {
+                                  gradeTotal+=8;
+                             }
+                             else if (gradeSymbol.matches("B-")) {
+                                  gradeTotal+=7;
+                             }
+                             else if (gradeSymbol.matches("C+")) {
+                                  gradeTotal+=6;
+                             }
+                             else if (gradeSymbol.matches("C-")) {
+                                  gradeTotal+=5;
+                             }
+                             else if (gradeSymbol.matches("D+")) {
+                                  gradeTotal+=4;
+                             }
+
+
+                             num+=1;
+                             courseList.add(c.getCourseID());
+                             gradeList.add(c.getGrade());
+
+                         }
+                     }
+                    if(gradeNotAssigned)
+                    {
+                        System.out.println("Cannot generate Grade Card, few courses are yet to be assigned grades for this student ");
+                        break;
+                    }
+                    gradeCard.setCourseList(courseList);
+                    gradeCard.setGrades(gradeList);
+                    gradeCard.setSGPA(gradeTotal/num);
+                    s.setGradeCard(gradeCard);
                     s.setGradeCardApproved(true);
                     System.out.println("Grade Card Generated");
                     userFound = true;
                     break;
                 }
             }
-            if(!userFound){
+            if(!userFound && !gradeNotAssigned){
                 System.out.println("Not a valid ID, Try again!");
             }
         }

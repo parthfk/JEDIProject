@@ -124,9 +124,6 @@ public class UserServiceOperation implements UserService {
         System.out.println("Please enter your Role: ");
         String role = in.nextLine().toLowerCase();
 
-        System.out.println("Enter your Email Id: ");
-
-
         boolean emailValidated = false,passWordEnteredIsCorrect = false;
         String inputEmail = null, passwordEntered=null;
         User userObj = null;

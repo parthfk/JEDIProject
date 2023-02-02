@@ -10,6 +10,7 @@ public class Student extends User {
     private SemRegistration semRegistration;
     private List<Course> courseRegistered;
     private boolean gradeCardApproved;
+    private GradeCard gradeCard;
 
     public Student(String name,String email,String password,String departmentID){
         super(name,password,email,"student");
@@ -65,5 +66,13 @@ public class Student extends User {
 
     public void setCourseRegistered(List<Course> courseRegistered) {
         this.courseRegistered = courseRegistered;
+    }
+
+    public GradeCard getGradeCard() {
+        return gradeCard;
+    }
+
+    public void setGradeCard(GradeCard gradeCard) {
+        this.gradeCard = gradeCard;
     }
 }
