@@ -22,6 +22,9 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
         boolean registering = true;
         while(registering) {
+            System.out.println();
+            System.out.println("**************************************************");
+            System.out.println();
             System.out.println("Press 1 to view course catalog");
             System.out.println("Press 2 to add Primary Courses");
             System.out.println("Press 3 to add Secondary Courses");
@@ -37,7 +40,9 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                 System.out.println("Press 10 to delete a Courses");
             }
             System.out.println("Press # to go back to student menu");
-
+            System.out.println();
+            System.out.println("**************************************************");
+            System.out.println();
             Scanner in = new Scanner(System.in);
             String input = in.nextLine();
             switch (input) {
@@ -73,7 +78,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                     break;
                 case "#":
                     registering = false;
-                    return;
+                    break;
                 default:
                     break;
             }
@@ -101,7 +106,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         Scanner in = new Scanner(System.in);
         ArrayList<Course> primaryCourses = student.getSemRegistration().getPrimaryCourses();
 
-        while (primaryCourses.size() < 4) {
+        while (primaryCourses.size() <= 4) {
             if (primaryCourses.size() == 4) {
                 student.getSemRegistration().setPrimaryCourses(primaryCourses);
                 System.out.println("Primary courses added successfully");
@@ -122,6 +127,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                     System.out.println("No course with the provided ID!");
                 } else {
                     primaryCourses.add(course);
+                    System.out.println("Course " + course.getCourseID() + " is added successfully!");
                 }
             }
         }
@@ -176,7 +182,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
         secondaryCourses.add(course1);
         secondaryCourses.add(course2);
-        student.getSemRegistration().setPrimaryCourses(secondaryCourses);
+        student.getSemRegistration().setSecondaryCourses(secondaryCourses);
         System.out.println("Secondary courses added successfully");
     }
 
@@ -273,14 +279,23 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         double amountToPay = paymentServiceOperation.calculateAmount();
         System.out.println("Hello, your fees due is " + amountToPay);
         Payment studentPayment = new Payment(student.getUserId());
+        System.out.println();
+        System.out.println("**************************************************");
+        System.out.println();
         System.out.println("How would you like to pay the fees?");
         System.out.println("Press 1 for Online Transaction");
         System.out.println("Press 2 for Offline Transaction");
+        System.out.println();
+        System.out.println("**************************************************");
+        System.out.println();
 
         System.out.println("Which mode of payment would you like to use?");
         Scanner sc = new Scanner(System.in);
         int choice = sc.nextInt();
 
+        System.out.println();
+        System.out.println("**************************************************");
+        System.out.println();
         if(choice == 1){
             System.out.println("Press 1 for UPI Payment");
             System.out.println("Press 2 for Debit Card");
@@ -290,7 +305,9 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             System.out.println("Press 5 for Cash Transaction");
             System.out.println("Press 6 for Cheque Transaction");
         }
-
+        System.out.println();
+        System.out.println("**************************************************");
+        System.out.println();
         int mode = sc.nextInt();
         String message = "";
         switch(mode){
@@ -353,12 +370,17 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
     }
     public GradeCard displayGradeCard() {
-
+        if(!student.isGradeCardApproved())
+        {
+            System.out.println("Your gradeCard has not been generated yet. Please contact your admin.");
+            return null;
+        }
         GradeCard gradeCard=student.getGradeCard();
         System.out.println("Student id: "+ gradeCard.getStudentID());
+        System.out.println("Semester id: " + gradeCard.getSemesterID());
         System.out.println("SGPA : "+ gradeCard.getSGPA());
         System.out.println("Courses :"+ gradeCard.getCourseList());
-        System.out.println("Grades :");
+        System.out.print("Grades :");
         for(Grade g : gradeCard.getGrades())
         {
             System.out.print(g.getGrade()+", ");

@@ -81,7 +81,9 @@ public class CRSAdminMenu {
 
     public void displayMenu() {
 
-
+        System.out.println();
+        System.out.println("**************************************************");
+        System.out.println();
         System.out.println("Welcome to admin portal, " + this.adminUsername);
         System.out.println("Press 1 to approve student ");
         System.out.println("Press 2 to add professor");
@@ -91,6 +93,8 @@ public class CRSAdminMenu {
         System.out.println("Press 6 to remove course");
         System.out.println("Press 7 to View Course Catalogue");
         System.out.println("Press 8 to logout");
-
+        System.out.println();
+        System.out.println("**************************************************");
+        System.out.println();
     }
 }

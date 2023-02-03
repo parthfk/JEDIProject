@@ -169,7 +169,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
                     int num=0;
                     ArrayList<String> courseList=new ArrayList<>();
                     ArrayList<Grade> gradeList=new ArrayList<>();
-
+                    String semID="0";
 
                     for(RegisteredCourse c : RegisteredCourseData.regCourseList)
                      {
@@ -180,6 +180,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
                                  gradeNotAssigned=true;
                                  break;
                              }
+                             semID = c.getSemesterID();
                                 // continue;
                              String gradeSymbol=grade.getGrade();
                              if(gradeSymbol.matches("A+"))
@@ -219,6 +220,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
                     gradeCard.setCourseList(courseList);
                     gradeCard.setGrades(gradeList);
                     gradeCard.setSGPA(gradeTotal/num);
+                    gradeCard.setSemesterID(semID);
                     s.setGradeCard(gradeCard);//is this line okay
                     s.setGradeCardApproved(true);
                     //System.out.println("hello"+ gradeCard.getGrades());

@@ -21,10 +21,16 @@ public class CRSApplication {
         User userObj = null;
 
         while (!endApplication) {
+            System.out.println();
+            System.out.println("**************************************************");
+            System.out.println();
             System.out.println("Welcome to the CRS Application! choose the Option given below !" +
                     "\n  Main Menu :->\n 1. Login\n 2." +
                     " Registration of the Student\n " +
                     "3. update password\n 4. Exit\n");
+            System.out.println();
+            System.out.println("**************************************************");
+            System.out.println();
             //endApplication = true;
             int optionSelected = in.nextInt();
             switch (optionSelected) {

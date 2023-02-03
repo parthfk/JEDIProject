@@ -21,11 +21,16 @@ public class CRSStudentMenu {
     public void displayMenu() {
         boolean studentMenu = true;
         while (studentMenu) {
+            System.out.println();
+            System.out.println("**************************************************");
+            System.out.println();
             System.out.println("Welcome to student portal, " + this.studentUsername);
             System.out.println("Press 1 to proceed with Sem Registration, view catalog, and pay fees");
             System.out.println("Press 2 to request grade card");
             System.out.println("Press 3 to logout");
-
+            System.out.println();
+            System.out.println("**************************************************");
+            System.out.println();
             Scanner in = new Scanner(System.in);
             int input = in.nextInt();
             switch (input) {

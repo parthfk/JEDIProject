@@ -88,11 +88,17 @@ public class CRSProfessorMenu {
     }
 
     private void consolePrints() {
+        System.out.println();
+        System.out.println("**************************************************");
+        System.out.println();
         System.out.println("Welcome to professor portal -> " + this.professorUsername);
         System.out.println("Press 1 to select courses to teach");
         System.out.println("Press 2 to view selected courses");
         System.out.println("Press 3 to view enrolled students");
         System.out.println("Press 4 to add grades");
         System.out.println("Press 5 to logout");
+        System.out.println();
+        System.out.println("**************************************************");
+        System.out.println();
     }
 }
