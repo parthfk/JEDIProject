@@ -10,9 +10,12 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.List;
 
-public class StudentServiceOperation extends UserServiceOperation implements StudentService  {
+public class StudentServiceOperation extends UserServiceOperation implements StudentService {
     private Student student;
-    public StudentServiceOperation() {}
+
+    public StudentServiceOperation() {
+    }
+
     public StudentServiceOperation(Student student) {
         this.student = student;
     }
@@ -21,7 +24,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         student.setSemRegistration(new SemRegistration(student));
 
         boolean registering = true;
-        while(registering) {
+        while (registering) {
             System.out.println();
             System.out.println("**************************************************");
             System.out.println();
@@ -109,14 +112,14 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         while (primaryCourses.size() <= 4) {
             if (primaryCourses.size() == 4) {
                 student.getSemRegistration().setPrimaryCourses(primaryCourses);
-                System.out.println("Primary courses added successfully");
+                System.out.println("Primary courses added to cart successfully");
                 return;
             }
             String input = in.nextLine();
             if (input.matches("#")) {
                 if (primaryCourses.size() > 0) {
                     student.getSemRegistration().setPrimaryCourses(primaryCourses);
-                    System.out.println("Primary courses added successfully");
+                    System.out.println("Primary courses added to cart successfully");
                 } else {
                     System.out.println("Exited without adding any courses");
                 }
@@ -127,7 +130,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                     System.out.println("No course with the provided ID!");
                 } else {
                     primaryCourses.add(course);
-                    System.out.println("Course " + course.getCourseID() + " is added successfully!");
+                    System.out.println("Course " + course.getCourseID() + " is added successfully to your cart!");
                 }
             }
         }
@@ -135,7 +138,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
     public void removeCourseFromCart(String type) {
         List<Course> courses = (type.matches("primary")) ?
-                student.getSemRegistration().getPrimaryCourses():
+                student.getSemRegistration().getPrimaryCourses() :
                 student.getSemRegistration().getSecondaryCourses();
 
         if (courses.size() == 0) {
@@ -146,7 +149,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         Scanner in = new Scanner(System.in);
         String courseId = in.nextLine();
         Course toBeDeleted = null;
-        for (Course c: courses) {
+        for (Course c : courses) {
             if (c.getCourseID().matches(courseId)) {
                 toBeDeleted = c;
                 break;
@@ -165,8 +168,8 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     private Course getCourseFromId(String courseId) {
-        for (Course c: CourseData.courseList) {
-            if(c.getCourseID().matches(courseId)) {
+        for (Course c : CourseData.courseList) {
+            if (c.getCourseID().matches(courseId)) {
                 return c;
             }
         }
@@ -174,21 +177,41 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void selectSecondaryCourse() {
-        System.out.println("Enter 2 Course Id's to be added as your secondary course");
-        Scanner in=new Scanner(System.in);
-        ArrayList<Course> secondaryCourses=new ArrayList<Course>();
-        Course course1=getCourseFromId(in.nextLine());
-        Course course2=getCourseFromId(in.nextLine());
+        System.out.println("Enter Course Id's to be added as your secondary course and press enter.");
+        System.out.println("Press # when you are done adding courses!");
+        Scanner in = new Scanner(System.in);
+        ArrayList<Course> secondaryCourses = student.getSemRegistration().getSecondaryCourses();
 
-        secondaryCourses.add(course1);
-        secondaryCourses.add(course2);
-        student.getSemRegistration().setSecondaryCourses(secondaryCourses);
-        System.out.println("Secondary courses added successfully");
+        while (secondaryCourses.size() <= 2) {
+            if (secondaryCourses.size() == 2) {
+                student.getSemRegistration().setPrimaryCourses(secondaryCourses);
+                System.out.println("Secondary courses added to cart successfully");
+                return;
+            }
+            String input = in.nextLine();
+            if (input.matches("#")) {
+                if (secondaryCourses.size() > 0) {
+                    student.getSemRegistration().setSecondaryCourses(secondaryCourses);
+                    System.out.println("Secondary courses added to cart successfully");
+                } else {
+                    System.out.println("Exited without adding any courses");
+                }
+                break;
+            } else {
+                Course course = getCourseFromId(input);
+                if (course == null) {
+                    System.out.println("No course with the provided ID!");
+                } else {
+                    secondaryCourses.add(course);
+                    System.out.println("Course " + course.getCourseID() + " is added successfully to your (secondary) cart!");
+                }
+            }
+        }
     }
 
     public void confirmRegistration() {
         // Proceed with business logic for course verification.
-        for (Course c: student.getSemRegistration().getPrimaryCourses()) {
+        for (Course c : student.getSemRegistration().getPrimaryCourses()) {
             if (c.getAvailableSeats() <= 0) {
                 System.out.println("Primary Course " + c.getCourseID() + " not available.");
             } else {
@@ -198,7 +221,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         }
 
         if (student.getCourseRegistered().size() < 4) {
-            for (Course c: student.getSemRegistration().getSecondaryCourses()) {
+            for (Course c : student.getSemRegistration().getSecondaryCourses()) {
                 if (c.getAvailableSeats() <= 0) {
                     System.out.println("Secondary Course " + c.getCourseID() + " not available.");
                     continue;
@@ -209,7 +232,8 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         }
         student.getSemRegistration().setRegDone(true);
         System.out.println("You are now registered for the following courses: ");
-        for (Course c: student.getCourseRegistered()) {
+        for (Course c : student.getCourseRegistered()) {
+            c.setAvailableSeats(c.getAvailableSeats() - 1);
             System.out.println(c);
         }
     }
@@ -217,8 +241,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     public void addCourse() {
         Scanner in = new Scanner(System.in);
 
-        if(student.getCourseRegistered().size()>=4)
-        {
+        if (student.getCourseRegistered().size() >= 4) {
             System.out.println("Course limit reached, please drop a course to add another");
             return;
         }
@@ -231,12 +254,11 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         }
 
         List<Course> courses = CourseData.courseList;
-        for(int i=0;i<courses.size();i++){
-            if(courses.get(i).getCourseID().matches(courseToAdd) && courses.get(i).getAvailableSeats()>0 )
-            {
-                List<Course> courselist=student.getCourseRegistered();
+        for (int i = 0; i < courses.size(); i++) {
+            if (courses.get(i).getCourseID().matches(courseToAdd) && courses.get(i).getAvailableSeats() > 0) {
+                List<Course> courselist = student.getCourseRegistered();
                 courselist.add(courses.get(i));
-                courses.get(i).setAvailableSeats(courses.get(i).getAvailableSeats()-1);
+                courses.get(i).setAvailableSeats(courses.get(i).getAvailableSeats() - 1);
                 student.setCourseRegistered(courselist);
                 System.out.println("Course added successfully ");
 
@@ -251,7 +273,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         String courseId = in.nextLine();
 
         Course toBeDropped = null;
-        for (Course c: student.getCourseRegistered()) {
+        for (Course c : student.getCourseRegistered()) {
             if (c.getCourseID().matches(courseId)) {
                 toBeDropped = c;
                 break;
@@ -260,18 +282,17 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         if (toBeDropped != null) {
             student.getCourseRegistered().remove(toBeDropped);
             System.out.println("Course dropped successfully");
-        }
-        else {
+        } else {
             System.out.println("No such registered course exists");
         }
     }
 
     public void payFee() {
-        if(!student.getSemRegistration().getRegDone()){
+        if (!student.getSemRegistration().getRegDone()) {
             System.out.println("Please complete semester registration first.");
             return;
         }
-        if(student.isFeeDone()){
+        if (student.isFeeDone()) {
             System.out.println("Fees already paid!");
             return;
         }
@@ -296,12 +317,12 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         System.out.println();
         System.out.println("**************************************************");
         System.out.println();
-        if(choice == 1){
+        if (choice == 1) {
             System.out.println("Press 1 for UPI Payment");
             System.out.println("Press 2 for Debit Card");
             System.out.println("Press 3 for Credit Card");
             System.out.println("Press 4 for Net banking");
-        }else if(choice == 2){
+        } else if (choice == 2) {
             System.out.println("Press 5 for Cash Transaction");
             System.out.println("Press 6 for Cheque Transaction");
         }
@@ -310,19 +331,19 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         System.out.println();
         int mode = sc.nextInt();
         String message = "";
-        switch(mode){
+        switch (mode) {
             case 1:
-                message = "Fees paid online through"+ " UPI !" ;
+                message = "Fees paid online through" + " UPI !";
                 studentPayment.setModeOfPayment(PaymentMode.UPI);
                 paymentServiceOperation.payUPI();
                 break;
             case 2:
-                message = "Fees paid online through"+ " debit card !" ;
+                message = "Fees paid online through" + " debit card !";
                 studentPayment.setModeOfPayment(PaymentMode.DEBIT_CARD);
                 paymentServiceOperation.payDebitCard();
                 break;
             case 3:
-                message = "Fees paid online through"+ " credit card !" ;
+                message = "Fees paid online through" + " credit card !";
                 studentPayment.setModeOfPayment(PaymentMode.CREDIT_CARD);
                 paymentServiceOperation.payCreditCard();
                 break;
@@ -331,12 +352,12 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                 paymentServiceOperation.payNetBanking();
                 break;
             case 5:
-                message = "Fees paid offline through"+ " cash !" ;
+                message = "Fees paid offline through" + " cash !";
                 studentPayment.setModeOfPayment(PaymentMode.CASH);
                 paymentServiceOperation.payCash();
                 break;
             case 6:
-                message = "Fees paid offline through"+ " cheque !" ;
+                message = "Fees paid offline through" + " cheque !";
                 studentPayment.setModeOfPayment(PaymentMode.CHEQUE);
                 paymentServiceOperation.payCheque();
                 break;
@@ -344,47 +365,42 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                 System.out.println("Invalid key, try again!");
                 break;
         }
-            if(paymentServiceOperation.paymentApproved()){
+        if (paymentServiceOperation.paymentApproved()) {
 
-                paymentServiceOperation.sendNotification(
-                        student.getUserId(),paymentServiceOperation.calculateAmount(), studentPayment.getPaymentId(),message);
-            }else{
-                System.out.println("Sorry,Payment Failed ! Please try again or contact admin.");
-            }
+            paymentServiceOperation.sendNotification(
+                    student.getUserId(), paymentServiceOperation.calculateAmount(), studentPayment.getPaymentId(), message);
+        } else {
+            System.out.println("Sorry,Payment Failed ! Please try again or contact admin.");
+        }
     }
 
-    public void displayRegisteredCourses(){
+    public void displayRegisteredCourses() {
         System.out.println("List of Registered courses:");
-        int i=1;
-        boolean flag =true;
-        for(Course c:student.getCourseRegistered())
-        {
-            System.out.println(i+". Course Name :"+c.getName()+", Course ID : "+c.getCourseID());
+        int i = 1;
+        boolean flag = true;
+        for (Course c : student.getCourseRegistered()) {
+            System.out.println(i + ". Course Name :" + c.getName() + ", Course ID : " + c.getCourseID());
             i++;
             flag = false;
         }
-        if(flag)
-        {
+        if (flag) {
             System.out.println("There are no Registered Courses");
         }
-
     }
+
     public GradeCard displayGradeCard() {
-        if(!student.isGradeCardApproved())
-        {
+        if (!student.isGradeCardApproved()) {
             System.out.println("Your gradeCard has not been generated yet. Please contact your admin.");
             return null;
         }
-        GradeCard gradeCard=student.getGradeCard();
-        System.out.println("Student id: "+ gradeCard.getStudentID());
+        GradeCard gradeCard = student.getGradeCard();
+        System.out.println("Student id: " + gradeCard.getStudentID());
         System.out.println("Semester id: " + gradeCard.getSemesterID());
-        System.out.println("SGPA : "+ gradeCard.getSGPA());
-        System.out.println("Courses :"+ gradeCard.getCourseList());
+        System.out.println("SGPA : " + gradeCard.getSGPA());
+        System.out.println("Courses :" + gradeCard.getCourseList());
         System.out.print("Grades :");
-        for(Grade g : gradeCard.getGrades())
-        {
-            System.out.print(g.getGrade()+", ");
-
+        for (Grade g : gradeCard.getGrades()) {
+            System.out.print(g.getGrade() + ", ");
         }
 
         return gradeCard;
