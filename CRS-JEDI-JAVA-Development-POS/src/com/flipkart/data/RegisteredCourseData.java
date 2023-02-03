@@ -9,7 +9,7 @@ public class RegisteredCourseData {
     static {
         regCourseList = new ArrayList<>();
         regCourseList.add(new RegisteredCourse("122", "2", "1"));
-        regCourseList.add(new RegisteredCourse("123", "2", "1"));
+       // regCourseList.add(new RegisteredCourse("123", "2", "1"));
         regCourseList.add(new RegisteredCourse("124", "5", "1"));
         regCourseList.add(new RegisteredCourse("125", "5", "1"));
         regCourseList.add(new RegisteredCourse("125", "8", "1"));

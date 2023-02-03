@@ -353,6 +353,18 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
     }
     public GradeCard displayGradeCard() {
-        return null;
+
+        GradeCard gradeCard=student.getGradeCard();
+        System.out.println("Student id: "+ gradeCard.getStudentID());
+        System.out.println("SGPA : "+ gradeCard.getSGPA());
+        System.out.println("Courses :"+ gradeCard.getCourseList());
+        System.out.println("Grades :");
+        for(Grade g : gradeCard.getGrades())
+        {
+            System.out.print(g.getGrade()+", ");
+
+        }
+
+        return gradeCard;
     }
 }

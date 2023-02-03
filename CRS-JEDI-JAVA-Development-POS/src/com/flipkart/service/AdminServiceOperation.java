@@ -219,8 +219,9 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
                     gradeCard.setCourseList(courseList);
                     gradeCard.setGrades(gradeList);
                     gradeCard.setSGPA(gradeTotal/num);
-                    s.setGradeCard(gradeCard);
+                    s.setGradeCard(gradeCard);//is this line okay
                     s.setGradeCardApproved(true);
+                    //System.out.println("hello"+ gradeCard.getGrades());
                     System.out.println("Grade Card Generated");
                     userFound = true;
                     break;
