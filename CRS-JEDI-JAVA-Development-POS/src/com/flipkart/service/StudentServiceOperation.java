@@ -1,10 +1,13 @@
 package com.flipkart.service;
 
 import com.flipkart.bean.*;
+import com.flipkart.constant.IDNumber;
 import com.flipkart.constant.PaymentMode;
+import com.flipkart.dao.StudentDAOImpl;
 import com.flipkart.data.CourseData;
 import com.flipkart.data.UserData;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -98,9 +101,19 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         String password = in.nextLine();
         System.out.println("Enter your Department Id");
         String departmentId = in.nextLine();
-        Student newStudent = new Student(name, emailEntered, password, departmentId);
-        newStudent.setUserId(Integer.toString(new Random().nextInt(100)));
-        UserData.studentList.add(newStudent);
+        System.out.println("Enter your address");
+        String address = in.nextLine();
+        System.out.println("Enter your mobile number");
+        String mobileNumber = in.nextLine();
+        System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
+        String dob = in.nextLine();
+        Date dobParsed = Date.valueOf(dob);
+
+        Student newStudent = new Student(name, emailEntered, password, departmentId,
+                address, mobileNumber, dobParsed);
+
+        newStudent.setUserId("s" + Integer.toString(IDNumber.ID_NUMBER++));
+        new StudentDAOImpl(student).signup();
     }
 
     public void selectPrimaryCourse() {

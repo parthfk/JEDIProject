@@ -1,6 +1,8 @@
 package com.flipkart.service;
 
 import com.flipkart.bean.*;
+import com.flipkart.dao.ProfessorDAO;
+import com.flipkart.dao.ProfessorDAOImpl;
 import com.flipkart.data.RegisteredCourseData;
 import com.flipkart.data.UserData;
 
@@ -114,10 +116,12 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         return enrolledStudentList;
     }
     public void selectCourse(Course course){
-        course.setProfessorID(professor.getUserId());
         List<Course> courseList = professor.getCoursesTaken();
         courseList.add(course);
+        course.setProfessorID(professor.getUserId());
         professor.setCoursesTaken(courseList);
+        //dao
+        new ProfessorDAOImpl(professor).selectCourseDAO(course);
     }
     public List<Course> viewCourseList(){
         this.printCourseList(professor.getCoursesTaken());

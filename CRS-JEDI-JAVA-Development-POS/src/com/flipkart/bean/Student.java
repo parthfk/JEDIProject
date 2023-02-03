@@ -1,5 +1,6 @@
 package com.flipkart.bean;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +12,21 @@ public class Student extends User {
     private List<Course> courseRegistered;
     private boolean gradeCardApproved;
     private GradeCard gradeCard;
+    private String address;
+    private String mobileNumber;
+    private Date dob;
 
-    public Student(String name,String email,String password,String departmentID){
+    public Student(String name, String email, String password, String departmentID,
+                   String address, String mobileNumber, Date dob){
         super(name,password,email,"student");
         this.departmentID=departmentID;
         this.feeDone=false;
         this.statusApproval=false;
         this.courseRegistered=new ArrayList<>();
         this.gradeCardApproved=false;
+        this.address = address;
+        this.mobileNumber = mobileNumber;
+        this.dob = dob;
     }
     public boolean isGradeCardApproved() {
         return gradeCardApproved;
@@ -74,5 +82,23 @@ public class Student extends User {
 
     public void setGradeCard(GradeCard gradeCard) {
         this.gradeCard = gradeCard;
+    }
+
+    public String getAddress() {return this.address;}
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
     }
 }
