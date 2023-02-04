@@ -34,7 +34,7 @@ public class UserData {
                 professor.setUserType("Professor");
                 professorList.add(professor);
             } else {
-                Student student = new Student(i + "jagaa",i + "@gmail.com",i + "abc","qwertyui");
+                Student student = new Student(i + "jagaa",i + "@gmail.com",i + "abc","qwertyui",null,null,null);
                 student.setUserId(String.valueOf(i));
                 student.setUserType("Student");
                 if (i == 2) student.setStatusApproval(true);

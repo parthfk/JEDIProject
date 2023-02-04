@@ -14,12 +14,14 @@ import java.util.Scanner;
 public class ProfessorServiceOperation extends UserServiceOperation implements ProfessorService{
 
     private Professor professor;
+    private ProfessorDAO profDAO;
 
     Scanner in = new Scanner(System.in);
     public ProfessorServiceOperation(Professor professor){
-
         this.professor =professor;
+        profDAO = new ProfessorDAOImpl(professor);
     }
+
     public List<String> readCourseAndSemesterIds(){
         System.out.println("Please enter the course id ");
         String courseId = in.nextLine();
@@ -94,7 +96,11 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         List<String> courseAndSemIds = this.readCourseAndSemesterIds();
         String courseId = courseAndSemIds.get(0);
         String semesterId = courseAndSemIds.get(1);
-        return this.getEnrolledStudentList(courseId,semesterId);
+
+        //dao
+        profDAO.viewEnrolledStudentListDao(courseId,semesterId);
+//        return this.getEnrolledStudentList(courseId,semesterId);
+        return null;
     }
     public List<Student> getEnrolledStudentList (String courseId,String semesterId){
         List<RegisteredCourse> regCourseList = RegisteredCourseData.regCourseList;
@@ -121,7 +127,7 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         course.setProfessorID(professor.getUserId());
         professor.setCoursesTaken(courseList);
         //dao
-        new ProfessorDAOImpl(professor).selectCourseDAO(course);
+        profDAO.selectCourseDAO(course);
     }
     public List<Course> viewCourseList(){
         this.printCourseList(professor.getCoursesTaken());

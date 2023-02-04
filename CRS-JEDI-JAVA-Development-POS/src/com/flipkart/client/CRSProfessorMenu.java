@@ -70,8 +70,10 @@ public class CRSProfessorMenu {
                     break;
                 case 3:
                     List<Student> studentList = profService.viewEnrolledStudentList();
+                    if(studentList != null){
                     for(Student s : studentList){
                         System.out.println("Name - " + s.getName() + " , ID - " + s.getUserId());
+                    }
                     }
                     break;
                 case 4:

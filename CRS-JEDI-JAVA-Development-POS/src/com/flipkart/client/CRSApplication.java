@@ -12,7 +12,6 @@ import java.io.Console;
 import java.util.Scanner;
 
 public class CRSApplication {
-
     public static void main (String[] args) {
         Scanner in = new Scanner(System.in);
 
