@@ -15,7 +15,7 @@ public class StudentDAOImpl implements StudentDAO {
     private PreparedStatement stmt = null;
     private Student student;
 
-    public StudentDAOImpl(Student student) {
+    private StudentDAOImpl(Student student) {
         this.student = student;
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -24,9 +24,18 @@ public class StudentDAOImpl implements StudentDAO {
         }
     }
 
+
+    // Singleton Pattern
+    private static StudentDAOImpl dao = null;
+    public static StudentDAOImpl getInstance(Student student) {
+        if (dao != null) return dao;
+        return dao = new StudentDAOImpl(student);
+    }
+
     @Override
     public void signup() {
         try {
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             // Fields for new User record
             String studentId, userId, name, password, email;
             int roleId;
@@ -84,19 +93,24 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     public void selectPrimaryCourse(ArrayList<Course> primaryCourses) {
         try {
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             // Fields for new SemRegistration record
             String userEntryQuery = "INSERT into SemRegistration values (?,?,?,?,?,?,?,?)";
 
             String studentId = this.student.getUserId();
+            System.out.println("Student: " + this.student);
+            System.out.println("ID " + this.student.getUserId());
             boolean regDone = false;
-            String pc1, pc2, pc3, pc4;
-            pc1 = primaryCourses.get(0).getCourseID();
-            pc2 = primaryCourses.get(1).getCourseID();
-            pc3 = primaryCourses.get(2).getCourseID();
-            pc4 = primaryCourses.get(3).getCourseID();
+            String pc1 = "", pc2 = "", pc3 = "", pc4 = "";
+            try {
+                pc1 = primaryCourses.get(0).getCourseID();
+                pc2 = primaryCourses.get(1).getCourseID();
+                pc3 = primaryCourses.get(2).getCourseID();
+                pc4 = primaryCourses.get(3).getCourseID();
+            } catch (Exception ignored) {}
 
             stmt = conn.prepareStatement(userEntryQuery);
-            stmt.setString(1, studentId);  // This would set age
+            stmt.setString(1, studentId);
             stmt.setBoolean(2, regDone);
             stmt.setString(3, pc1);
             stmt.setString(4, pc2);
@@ -106,6 +120,7 @@ public class StudentDAOImpl implements StudentDAO {
             stmt.setString(8, "");
 
             stmt.executeUpdate();
+            System.out.println("HERE2");
             stmt.close();
             conn.close();
         } catch (SQLException e) {
@@ -117,16 +132,20 @@ public class StudentDAOImpl implements StudentDAO {
     public ArrayList<String> viewPrimaryCourses() {
         ArrayList<String> primaryCourses = new ArrayList<>();
         try {
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String viewPrimaryCoursesQuery = "SELECT pc1, pc2, pc3, pc4 from SemRegistration " +
                     "WHERE studentId=" + student.getUserId();
 
+            stmt = conn.prepareStatement(viewPrimaryCoursesQuery);
             ResultSet rs = stmt.executeQuery(viewPrimaryCoursesQuery);
             while (rs.next()) {
-                String pc1, pc2, pc3, pc4;
-                pc1 = rs.getString("pc1");
-                pc2 = rs.getString("pc2");
-                pc3 = rs.getString("pc3");
-                pc4 = rs.getString("pc4");
+                String pc1 = "", pc2 = "", pc3 = "", pc4 = "";
+                try {
+                    pc1 = rs.getString("pc1");
+                    pc2 = rs.getString("pc2");
+                    pc3 = rs.getString("pc3");
+                    pc4 = rs.getString("pc4");
+                } catch (Exception ignored) {}
                 primaryCourses.add(pc1);
                 primaryCourses.add(pc2);
                 primaryCourses.add(pc3);

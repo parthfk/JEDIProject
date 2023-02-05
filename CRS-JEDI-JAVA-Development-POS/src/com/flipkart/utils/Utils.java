@@ -1,7 +1,6 @@
 package com.flipkart.utils;
 
-import com.flipkart.bean.Course;
-import com.flipkart.bean.User;
+import com.flipkart.bean.*;
 import com.flipkart.constant.RoleIdMapping;
 
 import java.sql.*;
@@ -36,6 +35,104 @@ public class Utils {
         return null;
     }
 
+    public static List<Student> getStudentList() {
+        ArrayList<Student> students = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String getUsersQuery = "SELECT * from User join Student on userId=studentId";
+            PreparedStatement stmt = conn.prepareStatement(getUsersQuery);
+            ResultSet rs = stmt.executeQuery(getUsersQuery);
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String departmentId = rs.getString("departmentId");
+                String address = rs.getString("address");
+                String mobileNumber = rs.getString("mobileNumber");
+                Date dob = rs.getDate("dob");
+
+                Student s = new Student(name, email, password, departmentId, address, mobileNumber, dob);
+                s.setStatusApproval(rs.getBoolean("statusApproval"));
+                s.setFeeDone(rs.getBoolean("feeDone"));
+                s.setGradeCardApproved(rs.getBoolean("gradeCardApproved"));
+                s.setUserId(rs.getString("userId"));
+
+                students.add(s);
+            }
+            stmt.close();
+            conn.close();
+
+            return students;
+        } catch (SQLException e) {
+            System.out.println("Something went wrong on DB side!");
+        }
+        return null;
+    }
+
+    public static List<Professor> getProfessorList() {
+        ArrayList<Professor> professors = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String getUsersQuery = "SELECT * from User join Professor on userId=profId";
+            PreparedStatement stmt = conn.prepareStatement(getUsersQuery);
+            ResultSet rs = stmt.executeQuery(getUsersQuery);
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String email = rs.getString("password");
+                String password = rs.getString("email");
+                String departmentId = rs.getString("departmentId");
+                String address = rs.getString("address");
+                String mobileNumber = rs.getString("mobileNumber");
+                Date dob = rs.getDate("dob");
+
+                // todo add new Professor with data received. PLEASE CREATE CONSTRUCTOR
+                // See the DB and add required fields in professor class, create constructor
+            }
+            stmt.close();
+            conn.close();
+
+            return professors;
+        } catch (SQLException e) {
+            System.out.println("Something went wrong on DB side!");
+        }
+        return null;
+    }
+
+    public static List<Admin> getAdminList() {
+        ArrayList<Admin> admins = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String getUsersQuery = "SELECT * from User join Admin on userId=adminId";
+            PreparedStatement stmt = conn.prepareStatement(getUsersQuery);
+            ResultSet rs = stmt.executeQuery(getUsersQuery);
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String email = rs.getString("password");
+                String password = rs.getString("email");
+                String departmentId = rs.getString("departmentId");
+                String address = rs.getString("address");
+                String mobileNumber = rs.getString("mobileNumber");
+                Date dob = rs.getDate("dob");
+
+                // todo add new Admin with data received. PLEASE CREATE CONSTRUCTOR
+                // See the DB and add required fields in admin class, create constructor
+            }
+            stmt.close();
+            conn.close();
+
+            return admins;
+        } catch (SQLException e) {
+            System.out.println("Something went wrong on DB side!");
+        }
+        return null;
+    }
+
+    /*
+        This function might not be needed. Use the specific ones instead
+     */
     public static List<User> getUserList(String type) {
         ArrayList<User> users = new ArrayList<>();
         try {

@@ -21,7 +21,8 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
     public StudentServiceOperation(Student student) {
         this.student = student;
-        this.studentDao = new StudentDAOImpl(this.student);
+        this.studentDao = StudentDAOImpl.getInstance(this.student);
+        System.out.println(this.studentDao);
     }
 
     public void registerForSem() {

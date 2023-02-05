@@ -33,7 +33,7 @@ public class SemRegistration {
 
     public void setPrimaryCourses(ArrayList<Course> primaryCourses) {
         this.primaryCourses = primaryCourses;
-        new StudentDAOImpl(this.student).selectPrimaryCourse(primaryCourses);
+        StudentDAOImpl.getInstance(this.student).selectPrimaryCourse(primaryCourses);
     }
 
     public ArrayList<Course> getSecondaryCourses() {

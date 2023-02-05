@@ -3,6 +3,7 @@ package com.flipkart.service;
 import com.flipkart.bean.*;
 import com.flipkart.data.CourseData;
 import com.flipkart.data.UserData;
+import com.flipkart.utils.Utils;
 
 import java.util.List;
 import java.util.Scanner;
@@ -47,7 +48,7 @@ public class UserServiceOperation implements UserService {
 
                 }
                 else if(role.equals("student")) {
-                    List<Student> studentList = UserData.studentList;
+                    List<Student> studentList = Utils.getStudentList();
                     for (Student u : studentList) {
                         if (u.getEmail().equals(inputEmail)) {
                             userObj = u;

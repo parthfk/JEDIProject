@@ -13,6 +13,23 @@ public class Student extends User {
     private boolean gradeCardApproved;
     private GradeCard gradeCard;
     private String address;
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "departmentID='" + departmentID + '\'' +
+                ", feeDone=" + feeDone +
+                ", statusApproval=" + statusApproval +
+                ", semRegistration=" + semRegistration +
+                ", courseRegistered=" + courseRegistered +
+                ", gradeCardApproved=" + gradeCardApproved +
+                ", gradeCard=" + gradeCard +
+                ", address='" + address + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
+                ", dob=" + dob +
+                '}';
+    }
+
     private String mobileNumber;
     private Date dob;
 
@@ -28,6 +45,7 @@ public class Student extends User {
         this.mobileNumber = mobileNumber;
         this.dob = dob;
     }
+
     public boolean isGradeCardApproved() {
         return gradeCardApproved;
     }
