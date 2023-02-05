@@ -5,22 +5,23 @@ import com.flipkart.constant.IDNumber;
 import com.flipkart.constant.PaymentMode;
 import com.flipkart.dao.StudentDAOImpl;
 import com.flipkart.data.CourseData;
-import com.flipkart.data.UserData;
+import com.flipkart.utils.Utils;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.List;
 
 public class StudentServiceOperation extends UserServiceOperation implements StudentService {
     private Student student;
+    private StudentDAOImpl studentDao;
 
     public StudentServiceOperation() {
     }
 
     public StudentServiceOperation(Student student) {
         this.student = student;
+        this.studentDao = new StudentDAOImpl(this.student);
     }
 
     public void registerForSem() {
@@ -112,15 +113,21 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         Student newStudent = new Student(name, emailEntered, password, departmentId,
                 address, mobileNumber, dobParsed);
 
-        newStudent.setUserId("s" + Integer.toString(IDNumber.ID_NUMBER++));
-        new StudentDAOImpl(student).signup();
+        newStudent.setUserId("s" + IDNumber.ID_NUMBER++);
+
+        this.studentDao.signup();
     }
 
     public void selectPrimaryCourse() {
         System.out.println("Enter Course Id's to be added as your primary course and press enter.");
         System.out.println("Press # when you are done adding courses!");
         Scanner in = new Scanner(System.in);
-        ArrayList<Course> primaryCourses = student.getSemRegistration().getPrimaryCourses();
+
+        ArrayList<String> primaryCourseIds = this.studentDao.viewPrimaryCourses();
+        ArrayList<Course> primaryCourses = new ArrayList<>();
+        primaryCourseIds.forEach((courseId) -> {
+            primaryCourses.add(Utils.getCourseFromCourseId(courseId));
+        });
 
         while (primaryCourses.size() <= 4) {
             if (primaryCourses.size() == 4) {

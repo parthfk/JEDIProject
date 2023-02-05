@@ -1,14 +1,18 @@
 package com.flipkart.bean;
 
+import com.flipkart.dao.StudentDAOImpl;
+
 import java.util.ArrayList;
 
 public class SemRegistration {
+    private Student student;
     private String studentId;
     private ArrayList<Course> primaryCourses;
     private ArrayList<Course> secondaryCourses;
     private Boolean regDone;
 
     public SemRegistration(Student student) {
+        this.student = student;
         this.studentId = student.getUserId();
         this.primaryCourses = new ArrayList<>();
         this.secondaryCourses = new ArrayList<>();
@@ -29,6 +33,7 @@ public class SemRegistration {
 
     public void setPrimaryCourses(ArrayList<Course> primaryCourses) {
         this.primaryCourses = primaryCourses;
+        new StudentDAOImpl(this.student).selectPrimaryCourse(primaryCourses);
     }
 
     public ArrayList<Course> getSecondaryCourses() {
