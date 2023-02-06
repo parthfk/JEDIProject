@@ -13,9 +13,10 @@ public class Utils {
     private static Connection conn;
     private static PreparedStatement stmt = null;
     public static Course getCourseFromCourseId (String courseId) {
+        System.out.println("HERE1");
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            String getCoursesQuery = "SELECT semesterId, professorId, availableSeats from Catalogue JOIN Course WHERE courseId=" + courseId;
+            String getCoursesQuery = "SELECT * from Catalogue JOIN Course WHERE Catalogue.courseId=" + courseId + " LIMIT 1";
             PreparedStatement stmt = conn.prepareStatement(getCoursesQuery);
             ResultSet rs = stmt.executeQuery(getCoursesQuery);
             if (rs.next()) {
@@ -24,12 +25,14 @@ public class Utils {
                 String professorId = rs.getString("professorId");
                 int availableSeats = rs.getInt("availableSeats");
 
+                System.out.println(courseName);
                 return new Course(courseId, courseName, professorId, availableSeats);
             }
             stmt.close();
             conn.close();
 
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             System.out.println("Something went wrong on DB side!");
         }
         return null;

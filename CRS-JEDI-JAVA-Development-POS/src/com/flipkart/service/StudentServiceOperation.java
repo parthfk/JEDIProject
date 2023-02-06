@@ -125,11 +125,14 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         Scanner in = new Scanner(System.in);
 
         ArrayList<String> primaryCourseIds = this.studentDao.viewPrimaryCourses();
+
         ArrayList<Course> primaryCourses = new ArrayList<>();
         primaryCourseIds.forEach((courseId) -> {
-            primaryCourses.add(Utils.getCourseFromCourseId(courseId));
+            if (!(courseId.matches("") || courseId == null))
+                primaryCourses.add(Utils.getCourseFromCourseId(courseId));
         });
 
+        System.out.println(primaryCourses);
         while (primaryCourses.size() <= 4) {
             if (primaryCourses.size() == 4) {
                 student.getSemRegistration().setPrimaryCourses(primaryCourses);

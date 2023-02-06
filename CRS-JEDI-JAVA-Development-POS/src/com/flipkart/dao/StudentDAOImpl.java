@@ -134,7 +134,7 @@ public class StudentDAOImpl implements StudentDAO {
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String viewPrimaryCoursesQuery = "SELECT pc1, pc2, pc3, pc4 from SemRegistration " +
-                    "WHERE studentId=" + student.getUserId();
+                    "WHERE studentId='" + student.getUserId() + "'";
 
             stmt = conn.prepareStatement(viewPrimaryCoursesQuery);
             ResultSet rs = stmt.executeQuery(viewPrimaryCoursesQuery);
@@ -153,18 +153,9 @@ public class StudentDAOImpl implements StudentDAO {
             }
             stmt.close();
             conn.close();
-
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             System.out.println("Something went wrong on DB side!");
-        } finally{
-            try {
-                if (stmt != null) stmt.close();
-            } catch (SQLException ignored){}
-            try{
-                if (conn != null) conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
         }
         return primaryCourses;
     }
