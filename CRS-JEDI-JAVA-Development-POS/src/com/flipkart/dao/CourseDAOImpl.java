@@ -15,6 +15,7 @@ public class CourseDAOImpl implements CourseDAO {
     {
         try{
             Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
         }
         catch (Exception e)
         {
@@ -28,15 +29,11 @@ public class CourseDAOImpl implements CourseDAO {
 
         try {
 
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            String sql = "SELECT COUNT(*) FROM Course WHERE courseId = " + courseID;
-
+            String sql = "SELECT COUNT(*) FROM Course WHERE courseId = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1,courseID);
 
             ResultSet rs = stmt.executeQuery(sql);
-
-            conn.close();
 
             if(rs.next()) {
                 if(rs.getInt(1)==0) {
@@ -46,7 +43,6 @@ public class CourseDAOImpl implements CourseDAO {
                     return true;
                 }
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -60,14 +56,18 @@ public class CourseDAOImpl implements CourseDAO {
         try{
 
             System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-            String sql = "INSERT INTO Course VALUES ("+course.getCourseID()+","+course.getName()+"," +")";
+            String sql = "INSERT INTO Course VALUES (?, ?)";
             stmt=conn.prepareStatement(sql);
+            stmt.setString(1, course.getCourseID());
+            stmt.setString(2,course.getName());
 
-            ResultSet rs = stmt.executeQuery(sql);
-
-            conn.close();
+            if(stmt.executeUpdate()==1){
+                System.out.println("Insertion in Course db successful !");
+            }
+            else {
+                System.out.println("Insertion in Course db  failed !");
+            }
         }
         catch (Exception e) {
             throw new RuntimeException(e);

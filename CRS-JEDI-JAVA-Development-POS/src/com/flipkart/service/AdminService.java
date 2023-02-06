@@ -3,6 +3,7 @@ package com.flipkart.service;
 import com.flipkart.bean.Admin;
 import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
+import com.flipkart.exception.CourseNotFoundException;
 
 public interface AdminService {
     /**
@@ -15,7 +16,7 @@ public interface AdminService {
      * Method to remove a course by the admin
      * @return boolean
      */
-    boolean removeCourse();
+    boolean removeCourse() throws CourseNotFoundException;
 
     /**
      * Method to approve a student by admin.

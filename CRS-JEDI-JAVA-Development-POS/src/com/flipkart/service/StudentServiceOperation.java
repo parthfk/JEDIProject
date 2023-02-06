@@ -3,6 +3,7 @@ package com.flipkart.service;
 import com.flipkart.bean.*;
 import com.flipkart.constant.IDNumber;
 import com.flipkart.constant.PaymentMode;
+import com.flipkart.dao.CatalogueDAOImpl;
 import com.flipkart.dao.PaymentDAOImpl;
 import com.flipkart.dao.StudentDAOImpl;
 import com.flipkart.data.CourseData;
@@ -202,14 +203,6 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         }
     }
 
-    private Course getCourseFromId(String courseId) {
-        for (Course c : CourseData.courseList) {
-            if (c.getCourseID().matches(courseId)) {
-                return c;
-            }
-        }
-        return null;
-    }
 
     public void selectSecondaryCourse() {
         System.out.println("Enter Course Id's to be added as your secondary course and press enter.");
@@ -312,21 +305,15 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
         System.out.println("Enter course Id to add : ");
         String courseToAdd = in.nextLine();
-        if (getCourseFromId(courseToAdd) == null) {
+        if (Utils.getCourseFromCourseId(courseToAdd) == null) {
             System.out.println("No course with the given ID!");
             return;
         }
 
-        List<Course> courses = CourseData.courseList;
+        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue();
         for (int i = 0; i < courses.size(); i++) {
             if (courses.get(i).getCourseID().matches(courseToAdd) && courses.get(i).getAvailableSeats() > 0) {
-                List<Course> courselist = student.getCourseRegistered();
-                courselist.add(courses.get(i));
-                courses.get(i).setAvailableSeats(courses.get(i).getAvailableSeats() - 1);
-                student.setCourseRegistered(courselist);
-                System.out.println("Course added successfully ");
-
-                return;
+                studentDao.addCourse(courses.get(i).getCourseID());
             }
         }
     }
@@ -345,6 +332,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         }
         if (toBeDropped != null) {
             student.getCourseRegistered().remove(toBeDropped);
+            studentDao.dropCourse(toBeDropped.getCourseID());
             System.out.println("Course dropped successfully");
         } else {
             System.out.println("No such registered course exists");

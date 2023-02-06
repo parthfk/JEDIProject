@@ -11,11 +11,26 @@ import java.sql.SQLException;
 
 public interface AdminDAO {
 
+    /**
+     * @param admin
+     */
     public void addAdminDAO(Admin admin);
+
+    /**
+     * @param professor
+     */
     public void addProfessorDAO(Professor professor);
+
+    /**
+     *
+     */
     public void approveStudentDAO();
 
 
-    public void generateGradeCard(Student);
+    /**
+     *
+     */
+    public void generateGradeCardDAO();
+
 
 }

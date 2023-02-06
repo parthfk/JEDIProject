@@ -6,6 +6,7 @@ import com.flipkart.bean.Student;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.flipkart.constant.DBConnection.*;
@@ -13,7 +14,7 @@ import static com.flipkart.constant.DBConnection.*;
 public class ProfessorDAOImpl implements ProfessorDAO{
     private Professor prof;
     private Connection conn;
-    
+
     public ProfessorDAOImpl(Professor prof) {
         this.prof = prof;
         conn = null;
@@ -23,8 +24,8 @@ public class ProfessorDAOImpl implements ProfessorDAO{
     public void selectCourseDAO(Course course) {
         String profId = prof.getUserId();
         String courseId = course.getCourseID();
-        String updateCourseQuery = "UPDATE Catalogue SET professorId="+ profId + " WHERE courseId="+ courseId;
-        
+        String updateCourseQuery = "UPDATE Catalogue SET professorId='"+ profId + "' WHERE courseId='"+ courseId+"'";
+
         try{
             Statement st = establishConnection();
 
@@ -43,8 +44,7 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
     @Override
     public List<Student> viewEnrolledStudentListDao(String courseId, String semesterId) {
-        String getStudentIdListQuery = "SELECT studentId FROM RegisteredCourse WHERE courseId=" + courseId + " AND semesterId="+semesterId;
-        Connection conn = null;
+        String getStudentIdListQuery = "SELECT studentId FROM RegisteredCourse WHERE courseId='" + courseId + "' AND semesterId='"+semesterId +"'";
         try{
             Statement st = establishConnection();
             ResultSet rs = st.executeQuery(getStudentIdListQuery);
@@ -56,7 +56,7 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
             List<Student> studentList = new ArrayList<>();
             for(String id : studentIds){
-                String getStudentDetailsList = "SELECT * FROM User JOIN Student ON userId=studentId AND studentId=" + id;
+                String getStudentDetailsList = "SELECT * FROM User JOIN Student ON userId=studentId AND studentId='" + id +"'";
                 ResultSet rs2 = st.executeQuery(getStudentDetailsList);
                 while(rs2.next()){
                     String name = rs2.getString("name");
@@ -71,7 +71,6 @@ public class ProfessorDAOImpl implements ProfessorDAO{
                 }
             }
             st.close();
-            conn.close();
             return studentList;
         } catch (Exception e) {
             //Handle errors for Class.forName
@@ -82,29 +81,30 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
     @Override
     public List<Course> viewCourseListDao(String id) {
-        String getCourseListQuery = "SELECT courseId FROM Catalogue WHERE professorId="+id;
-        Connection conn = null;
+        String getCourseListQuery = "SELECT courseId,availableSeats FROM Catalogue WHERE professorId='"+id +"'";
         try{
             Statement st = establishConnection();
             ResultSet rs = st.executeQuery(getCourseListQuery);
             List<String> courseIds = new ArrayList<>();
+            HashMap<String,Integer> courseToAvailableSeatsMapping = new HashMap<>();
             while (rs.next()){
                 String courseID = rs.getString("courseId");
+                int availableSeats = rs.getInt("availableSeats");
+                courseToAvailableSeatsMapping.put(courseID,availableSeats);
                 courseIds.add(courseID);
             }
 
             List<Course> courseList = new ArrayList<>();
             for(String courseID : courseIds){
-                String getCourseDetailsQuery = "SELECT name FROM Course WHERE courseId="+courseID;
+                String getCourseDetailsQuery = "SELECT name FROM Course WHERE courseId='"+courseID +"'";
                 ResultSet rs2 = st.executeQuery(getCourseDetailsQuery);
                 while(rs2.next()){
                     String name = rs2.getString("name");
-                    Course c = new Course(courseID,name,id,0);
+                    Course c = new Course(courseID,name,id,courseToAvailableSeatsMapping.get(courseID));
                     courseList.add(c);
                 }
             }
             st.close();
-            conn.close();
             return courseList;
         } catch (Exception e) {
             //Handle errors for Class.forName
@@ -115,8 +115,8 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
     @Override
     public void addGrade(String studentId, String semId, String courseId, String grade) {
-        String updateRegisteredCourse = "UPDATE RegisteredCourse SET grade=" + grade + " WHERE studentId="+studentId + " courseId=" + courseId + " semesterId="+semId;
-        Connection conn = null;
+        String updateRegisteredCourse = "UPDATE RegisteredCourse SET grade='" + grade + "' WHERE studentId='"+studentId + "' AND courseId='"
+                + courseId + "' AND semesterId='"+semId +"'";
         try{
             Statement st = establishConnection();
 
@@ -126,7 +126,6 @@ public class ProfessorDAOImpl implements ProfessorDAO{
             }else System.out.println("Update failed");
 
             st.close();
-            conn.close();
         } catch (Exception e) {
             //Handle errors for Class.forName
             e.printStackTrace();

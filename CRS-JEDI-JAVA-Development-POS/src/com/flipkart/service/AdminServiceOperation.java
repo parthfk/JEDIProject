@@ -5,9 +5,12 @@ import com.flipkart.data.CourseData;
 import com.flipkart.data.RegisteredCourseData;
 import com.flipkart.data.UserData;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Scanner;
 import com.flipkart.dao.*;
+import com.flipkart.exception.CourseNotFoundException;
+
 import java.util.List;
 public class AdminServiceOperation extends UserServiceOperation implements AdminService {
     private Scanner scanner;
@@ -46,7 +49,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         return true;
     }
 
-    public boolean removeCourse() {
+    public boolean removeCourse() throws CourseNotFoundException {
         System.out.println("-----Below is the list of courses currently present-------");
         CatalogueDAOImpl catalogueDAO = new CatalogueDAOImpl();
         List<Course> courseList = catalogueDAO.fetchCatalogue();
@@ -54,7 +57,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
             System.out.println("Course Name : " + c.getName() + "  Course ID : " + c.getCourseID());
         }
         System.out.println("Enter the course ID to be deleted");
-        String id_to_be_deleted = scanner.next();
+        String id_to_be_deleted = scanner.nextLine();
         boolean flag = false;
         for (Course c :courseList) {
             if (c.getCourseID().equals(id_to_be_deleted)) {
@@ -111,12 +114,21 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         System.out.println("Enter new Professor DepartmentID");
         newProf.setDepartmentID(scanner.next());
         newProf.setUserType("professor");
-
+        System.out.println("Enter your address");
+        String address = scanner.next();
+        newProf.setAddress(address);
+        System.out.println("Enter your mobile number");
+        String mobileNumber = scanner.next();
+        newProf.setMobileNumber(mobileNumber);
+        System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
+        String dob = scanner.next();
+        Date dobParsed = Date.valueOf(dob);
+        newProf.setDob(dobParsed);
         try {
             AdminDAOImpl obj=new AdminDAOImpl();
             obj.addProfessorDAO(newProf);
         } catch (Exception e) {
-            System.out.println("Something went wrong");
+            System.out.println("Something went wrong" + e.getMessage());
         }
     }
 
@@ -132,6 +144,16 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         System.out.println("Enter new Admin Email");
         newAdmin.setEmail(scanner.next());
         newAdmin.setUserType("admin");
+        System.out.println("Enter your address");
+        String address = scanner.next();
+        newAdmin.setAddress(address);
+        System.out.println("Enter your mobile number");
+        String mobileNumber = scanner.next();
+        newAdmin.setMobileNumber(mobileNumber);
+        System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
+        String dob = scanner.next();
+        Date dobParsed = Date.valueOf(dob);
+        newAdmin.setDob(dobParsed);
 
         try {
             AdminDAOImpl obj=new AdminDAOImpl();

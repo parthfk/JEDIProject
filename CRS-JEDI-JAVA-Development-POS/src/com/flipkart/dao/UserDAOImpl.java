@@ -10,9 +10,10 @@ public class UserDAOImpl implements UserDAO{
     private PreparedStatement stmt = null;
     UserDAOImpl(){
         try {
+            Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-        } catch (SQLException e) {
-            System.out.println("Something went wrong on the DB side");
+        } catch(Exception e){
+                e.printStackTrace();
         }
     }
 

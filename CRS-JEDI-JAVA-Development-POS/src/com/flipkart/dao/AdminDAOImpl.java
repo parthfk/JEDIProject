@@ -1,5 +1,6 @@
 package com.flipkart.dao;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import java.sql.Connection;
@@ -18,6 +19,7 @@ import static com.flipkart.constant.DBConnection.*;
 public class AdminDAOImpl implements AdminDAO{
 
     private  static int noOfUsers;
+    Scanner scanner;
     public void addAdminDAO(Admin admin){
         //  public static void main(String args[]){
         Connection conn = null;
@@ -78,23 +80,20 @@ public class AdminDAOImpl implements AdminDAO{
             stmt = conn.prepareStatement(sql);
             // how to check user already exist??
             stmt.setString(1, Integer.toString(noOfUsers));  // This would set adminId
-            stmt.setDate(2,new Date(336614400000L));   // this would set "DOB"
-            stmt.setString(3, "address_0f_admin");
-            stmt.setString(4, "1234567890");
+            stmt.setDate(2,admin.getDob());   // this would set "DOB"
+            stmt.setString(3, admin.getAddress());
+            stmt.setString(4,admin.getMobileNumber());
 
             stmt.executeUpdate();
 
 
 			   /*
-
 			   // Let us update age of the record with ID = 102;
 			      int rows = stmt.executeUpdate();
 			      System.out.println("Rows impacted : " + rows );
-
 			      // Let us select all the records and display them.
 			      sql = "SELECT id, name ,address, location FROM employeefc";
 			      ResultSet rs = stmt.executeQuery(sql);
-
 			      //STEP 5: Extract data from result set
 			      while(rs.next()){
 			         //Retrieve by column name
@@ -102,7 +101,6 @@ public class AdminDAOImpl implements AdminDAO{
 			         String name1 = rs.getString("name");
 			         String address1 = rs.getString("address");
 			         String location1 = rs.getString("location");
-
 			         //Display values
 			         System.out.print("ID: " + eid);
 			         System.out.print(", Age: " + name1);
@@ -198,9 +196,9 @@ public class AdminDAOImpl implements AdminDAO{
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, Integer.toString(noOfUsers));  // This would set adminId
-            stmt.setDate(2,new Date(336614400000L));   // this would set "DOB"
-            stmt.setString(3, "address_0f_admin");
-            stmt.setString(4, "9112345678");
+            stmt.setDate(2,professor.getDob());   // this would set "DOB"
+            stmt.setString(3,professor.getAddress());
+            stmt.setString(4,professor.getMobileNumber());
             stmt.setString(5, professor.getDepartmentID());
 
 
@@ -208,15 +206,12 @@ public class AdminDAOImpl implements AdminDAO{
 
 
 			   /*
-
 			   // Let us update age of the record with ID = 102;
 			      int rows = stmt.executeUpdate();
 			      System.out.println("Rows impacted : " + rows );
-
 			      // Let us select all the records and display them.
 			      sql = "SELECT id, name ,address, location FROM employeefc";
 			      ResultSet rs = stmt.executeQuery(sql);
-
 			      //STEP 5: Extract data from result set
 			      while(rs.next()){
 			         //Retrieve by column name
@@ -224,7 +219,6 @@ public class AdminDAOImpl implements AdminDAO{
 			         String name1 = rs.getString("name");
 			         String address1 = rs.getString("address");
 			         String location1 = rs.getString("location");
-
 			         //Display values
 			         System.out.print("ID: " + eid);
 			         System.out.print(", Age: " + name1);
@@ -282,7 +276,7 @@ public class AdminDAOImpl implements AdminDAO{
             // Let us select all the records and display them.
 
             while(true) {
-                String sql = "SELECT * FROM Student JOIN User ON Student.studentId = User.userId WHERE Student.statusApproval=false";
+                String sql = "SELECT * FROM Student JOIN User ON Student.studentId = User.userId WHERE Student.statusApproval=0";
 
                 stmt = conn.prepareStatement(sql);
                 ResultSet rs = stmt.executeQuery(sql);
@@ -313,7 +307,7 @@ public class AdminDAOImpl implements AdminDAO{
                     break;
                 }
 
-                sql = "UPDATE student SET statusApproval=true WHERE studentId=" + "'" + studentid + "'";
+                sql = "UPDATE Student SET statusApproval=1 WHERE studentId=" + "'" + studentid + "'";
                 stmt = conn.prepareStatement(sql);
                 int rs1=stmt.executeUpdate(sql);
                 if(rs1==0)
@@ -350,7 +344,112 @@ public class AdminDAOImpl implements AdminDAO{
     }
 
 
+    public void generateGradeCardDAO(){
 
+        Connection conn;
+        PreparedStatement stmt;
+
+
+
+        try{
+
+            Class.forName("com.mysql.jdbc.Driver");
+
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            // fetch student list
+            // select * from student
+
+            String sql = "select name, studentId, email, departmentId from Student where gradeCardApproved = 0 "+
+                    "and statusApproval = 1";
+
+            stmt = conn.prepareStatement(sql);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                System.out.println("Name of student : " + rs.getString(1) + " UserID : " +
+                        rs.getString(2) + " Email " + rs.getString(3) +
+                        " Department Registered in " + rs.getString(4));
+            }
+
+            rs.close();
+
+            System.out.println("Enter UserID of student to approve Grade Gard or Press # to exit");
+            String userId_of_approved_gradeCard = scanner.next();
+            if (userId_of_approved_gradeCard.equals("#")) {
+                return;
+            }
+
+            sql = "select grade, semesterId from `RegisteredCourse` where studentId = "+userId_of_approved_gradeCard;
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+
+            float gradeTotal = 0;
+            int num = 0;
+            String semID = rs.getString(2);
+            boolean gradeNotAssigned = false;
+
+            while(rs.next())
+            {
+                String tempgrade = rs.getString(1);
+                if(tempgrade == null){
+                    gradeNotAssigned = true;
+                    break;
+                }
+                if (tempgrade.matches("A+")) {
+                    gradeTotal += 10;
+                } else if (tempgrade.matches("A-")) {
+                    gradeTotal += 9;
+                } else if (tempgrade.matches("B+")) {
+                    gradeTotal += 8;
+                } else if (tempgrade.matches("B-")) {
+                    gradeTotal += 7;
+                } else if (tempgrade.matches("C+")) {
+                    gradeTotal += 6;
+                } else if (tempgrade.matches("C-")) {
+                    gradeTotal += 5;
+                } else if (tempgrade.matches("D+")) {
+                    gradeTotal += 4;
+                }
+
+                num += 10;
+            }
+
+            rs.close();
+
+            if(gradeNotAssigned)
+            {
+                System.out.println("Cannot generate Grade Card, few courses are yet to be assigned grades for this student ");
+                return;
+            }
+
+            sql = "select count(*) from `GradeCard`";
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            int records = rs.getInt(1);
+            rs.close();
+
+            sql = "insert into `GradeCard` values ("+records+","+userId_of_approved_gradeCard+","+
+                    gradeTotal / num +","+
+                    semID+")";
+
+            stmt = conn.prepareStatement(sql);
+
+            rs = stmt.executeQuery();
+
+            rs.close();
+
+            System.out.println("GradeCard generated!");
+
+        } catch (Exception e){
+            System.out.println(e);
+        }
+
+
+    }
 
 
 

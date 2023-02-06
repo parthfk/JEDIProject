@@ -18,9 +18,18 @@ public class PaymentDAOImpl implements PaymentDAO{
 
     private int paymentID=1;
     private static PaymentDAOImpl dao;
+    private Connection conn = null;
+    private PreparedStatement stmt = null;
 
     private PaymentDAOImpl() {
-
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
     }
     public static PaymentDAOImpl getInstance() {
         if (dao != null) return dao;
@@ -29,11 +38,7 @@ public class PaymentDAOImpl implements PaymentDAO{
 
     public String generatePaymentId()
     {
-        Connection conn = null;
-        PreparedStatement stmt = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String sql = "select count(*) from Payment";
             stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery(sql);
@@ -45,19 +50,13 @@ public class PaymentDAOImpl implements PaymentDAO{
         } catch(Exception e){
             //Handle errors for Class.forName
             e.printStackTrace();
-        }finally {
-            return Integer.toString(paymentID);
         }
+            return Integer.toString(paymentID);
     }
 
     public void sendNotification(String studentId,double paymentAmount,String paymentId,String message)
     {
-        Connection conn = null;
-        PreparedStatement stmt = null;
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String insertPaymentNotificationQuery = "insert into PaymentNotification values(?,?,?,?)";
             stmt = conn.prepareStatement(insertPaymentNotificationQuery);
 
@@ -65,23 +64,35 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(2, studentId);
             stmt.setDouble(3, paymentAmount);
             stmt.setString(4, message);
-            stmt.executeUpdate();
 
-            String fetchquery = "SELECT studentId, paymentId ,paymentAmount, message FROM PaymentNotification where studentId="+studentId;
+            if(stmt.executeUpdate()==1){
+                System.out.println("Insertion in PaymentNotification successful !");
+            }
+            else {
+                System.out.println("Insertion in PaymentNotification failed!");
+                return;
+            }
+
+            String fetchquery = "SELECT studentId, paymentId ,paymentAmount, message FROM PaymentNotification where studentId= ?";
+            stmt = conn.prepareStatement(fetchquery);
+
+            stmt.setString(1,studentId);
             ResultSet rs = stmt.executeQuery(fetchquery);
 
-            String studentId1  = rs.getString("studentId");
-            String paymentId1= rs.getString("paymentId");
-            double amountPaid  = rs.getDouble("paymentAmount");
-            String message1 = rs.getString("message");
+            if(rs.next()) {
+                String studentId1 = rs.getString("studentId");
+                String paymentId1 = rs.getString("paymentId");
+                double amountPaid = rs.getDouble("paymentAmount");
+                String message1 = rs.getString("message");
 
-            System.out.println("Student Id:"+studentId1);
-            System.out.println("Payment Id:"+paymentId1);
-            System.out.println("Amount Paid:"+amountPaid);
-            System.out.println(message);
-
-            stmt.close();
-            conn.close();
+                System.out.println("Student Id:" + studentId1);
+                System.out.println("Payment Id:" + paymentId1);
+                System.out.println("Amount Paid:" + amountPaid);
+                System.out.println(message);
+            }
+            else{
+                System.out.println("Reading from Payment Notification failed !");
+            }
         }
         catch(SQLException se){
             //Handle errors for JDBC
@@ -106,14 +117,7 @@ public class PaymentDAOImpl implements PaymentDAO{
         System.out.println("Please enter expiry date");
         String exDate = scanner.nextLine();
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
-
         try{
-
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String sql  = "insert into Payment values(?,?,?,?)";
             stmt = conn.prepareStatement(sql);
 
@@ -124,7 +128,12 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(2, student.getUserId());
             stmt.setString(3, String.valueOf(PaymentMode.CREDIT_CARD));
             stmt.setDate(4, java.sql.Date.valueOf(dmy));
-            stmt.executeUpdate(sql);
+            if(stmt.executeUpdate(sql)==1){
+                System.out.println("Insertion in Payment successful !");
+            }else{
+                System.out.println("Insertion in Payment unsuccessful !");
+                return;
+            }
 
             String paymentDetailQuery = "insert into PaymentDetails values(?,?,?,?,?,?,?,?,?,?)";
             stmt = conn.prepareStatement(paymentDetailQuery);
@@ -139,10 +148,13 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(8, null);
             stmt.setString(9, null);
             stmt.setString(10,null);
-            stmt.executeUpdate(paymentDetailQuery);
 
-            stmt.close();
-            conn.close();
+            if(stmt.executeUpdate(paymentDetailQuery)==1){
+                System.out.println("Insertion in PaymentDetails successful !");
+            }else{
+                System.out.println("Insertion in PaymentDetails unsuccessful !");
+            }
+
         }
         catch(SQLException se){
             //Handle errors for JDBC
@@ -166,13 +178,7 @@ public class PaymentDAOImpl implements PaymentDAO{
         System.out.println("Please enter expiry date");
         String exDate = scanner.nextLine();
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
-
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String sql  = "insert into Payment values(?,?,?,?)";
             stmt = conn.prepareStatement(sql);
 
@@ -183,7 +189,13 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(2, student.getUserId());
             stmt.setString(3, String.valueOf(PaymentMode.DEBIT_CARD));
             stmt.setDate(4, java.sql.Date.valueOf(dmy));
-            stmt.executeUpdate(sql);
+
+            if(stmt.executeUpdate(sql)==1){
+                System.out.println("Insertion in Payment successful !");
+            }else{
+                System.out.println("Insertion in Payment unsuccessful !");
+                return;
+            }
 
             String paymentDetailQuery = "insert into PaymentDetails values(?,?,?,?,?,?,?,?,?,?)";
             stmt = conn.prepareStatement(paymentDetailQuery);
@@ -198,10 +210,13 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(8, null);
             stmt.setString(9, null);
             stmt.setString(10,null);
-            stmt.executeUpdate(paymentDetailQuery);
 
-            stmt.close();
-            conn.close();
+            if(stmt.executeUpdate(paymentDetailQuery)==1){
+                System.out.println("Insertion in PaymentDetails successful !");
+            }else{
+                System.out.println("Insertion in PaymentDetails unsuccessful !");
+            }
+
         }
         catch(SQLException se){
             //Handle errors for JDBC
@@ -222,14 +237,8 @@ public class PaymentDAOImpl implements PaymentDAO{
         System.out.println("Please enter Upi Id");
         String UPIId = scanner.nextLine();
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
 
         try{
-
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String sql  = "insert into Payment values(?,?,?,?)";
             stmt = conn.prepareStatement(sql);
 
@@ -240,7 +249,13 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(2, student.getUserId());
             stmt.setString(3, String.valueOf(PaymentMode.UPI));
             stmt.setDate(4, java.sql.Date.valueOf(dmy));
-            stmt.executeUpdate(sql);
+
+            if(stmt.executeUpdate(sql)==1){
+                System.out.println("Insertion in Payment successful !");
+            }else{
+                System.out.println("Insertion in Payment unsuccessful !");
+                return;
+            }
 
             String paymentDetailQuery = "insert into PaymentDetails values(?,?,?,?,?,?,?,?,?,?)";
             stmt = conn.prepareStatement(paymentDetailQuery);
@@ -255,10 +270,13 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(8, null);
             stmt.setString(9, null);
             stmt.setString(10,null);
-            stmt.executeUpdate(paymentDetailQuery);
 
-            stmt.close();
-            conn.close();
+            if(stmt.executeUpdate(paymentDetailQuery)==1){
+                System.out.println("Insertion in PaymentDetails successful !");
+            }else{
+                System.out.println("Insertion in PaymentDetails unsuccessful !");
+            }
+
         }
         catch(SQLException se){
             //Handle errors for JDBC
@@ -281,13 +299,8 @@ public class PaymentDAOImpl implements PaymentDAO{
         System.out.println("please enter your password");
         String password = scanner.nextLine();
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
 
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String sql  = "insert into Payment values(?,?,?,?)";
             stmt = conn.prepareStatement(sql);
 
@@ -298,7 +311,13 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(2, student.getUserId());
             stmt.setString(3, String.valueOf(PaymentMode.NET_BANKING));
             stmt.setDate(4, java.sql.Date.valueOf(dmy));
-            stmt.executeUpdate(sql);
+
+            if(stmt.executeUpdate(sql)==1){
+                System.out.println("Insertion in Payment successful !");
+            }else{
+                System.out.println("Insertion in Payment unsuccessful !");
+                return;
+            }
 
             String paymentDetailQuery = "insert into PaymentDetails values(?,?,?,?,?,?,?,?,?,?)";
             stmt = conn.prepareStatement(paymentDetailQuery);
@@ -313,10 +332,13 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(8, password);
             stmt.setString(9, null);
             stmt.setString(10,null);
-            stmt.executeUpdate(paymentDetailQuery);
 
-            stmt.close();
-            conn.close();
+            if(stmt.executeUpdate(paymentDetailQuery)==1){
+                System.out.println("Insertion in PaymentDetails successful !");
+            }else{
+                System.out.println("Insertion in PaymentDetails unsuccessful !");
+            }
+
         }
         catch(SQLException se){
             //Handle errors for JDBC
@@ -334,13 +356,7 @@ public class PaymentDAOImpl implements PaymentDAO{
         System.out.println("Please enter receipt number");
         String receiptNumber = scanner.nextLine();
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
         try{
-
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String sql  = "insert into Payment values(?,?,?,?)";
             stmt = conn.prepareStatement(sql);
 
@@ -351,7 +367,13 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(2, student.getUserId());
             stmt.setString(3, String.valueOf(PaymentMode.CASH));
             stmt.setDate(4, java.sql.Date.valueOf(dmy));
-            stmt.executeUpdate(sql);
+
+            if(stmt.executeUpdate(sql)==1){
+                System.out.println("Insertion in Payment successful !");
+            }else{
+                System.out.println("Insertion in Payment unsuccessful !");
+                return;
+            }
 
             String paymentDetailQuery = "insert into PaymentDetails values(?,?,?,?,?,?,?,?,?,?)";
             stmt = conn.prepareStatement(paymentDetailQuery);
@@ -366,10 +388,12 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(8, null);
             stmt.setString(9, null);
             stmt.setString(10,receiptNumber);
-            stmt.executeUpdate(paymentDetailQuery);
 
-            stmt.close();
-            conn.close();
+            if(stmt.executeUpdate(paymentDetailQuery)==1){
+                System.out.println("Insertion in PaymentDetails successful !");
+            }else{
+                System.out.println("Insertion in PaymentDetails unsuccessful !");
+            }
         }
         catch(SQLException se){
             //Handle errors for JDBC
@@ -392,14 +416,7 @@ public class PaymentDAOImpl implements PaymentDAO{
         System.out.println("Please enter receipt number");
         String receiptNumber = scanner.nextLine();
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
-
         try{
-
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String sql  = "insert into Payment values(?,?,?,?)";
             stmt = conn.prepareStatement(sql);
 
@@ -410,7 +427,13 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(2, student.getUserId());
             stmt.setString(3, String.valueOf(PaymentMode.CHEQUE));
             stmt.setDate(4, java.sql.Date.valueOf(dmy));
-            stmt.executeUpdate(sql);
+
+            if(stmt.executeUpdate(sql)==1){
+                System.out.println("Insertion in Payment successful !");
+            }else{
+                System.out.println("Insertion in Payment unsuccessful !");
+                return;
+            }
 
             String paymentDetailQuery = "insert into PaymentDetails values(?,?,?,?,?,?,?,?,?,?)";
             stmt = conn.prepareStatement(paymentDetailQuery);
@@ -425,10 +448,12 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(8, null);
             stmt.setString(9, chequeNumber);
             stmt.setString(10,receiptNumber);
-            stmt.executeUpdate(paymentDetailQuery);
 
-            stmt.close();
-            conn.close();
+            if(stmt.executeUpdate(paymentDetailQuery)==1){
+                System.out.println("Insertion in PaymentDetails successful !");
+            }else{
+                System.out.println("Insertion in PaymentDetails unsuccessful !");
+            }
         }
         catch(SQLException se){
             //Handle errors for JDBC
@@ -442,26 +467,22 @@ public class PaymentDAOImpl implements PaymentDAO{
     }
 
     public boolean paymentApproved(Student student){
-
-        Connection conn = null;
-        PreparedStatement stmt = null;
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            //System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String studentId=student.getUserId();
             boolean feeDone=true;
 
-            String setFeeDoneQuery = "\"UPDATE Student SET feeDone=\"+ feeDone + \" WHERE studentId=\"+ studentId";
+            String setFeeDoneQuery = "UPDATE Student SET feeDone = 1 WHERE studentId = ?";
             stmt = conn.prepareStatement(setFeeDoneQuery);
+            stmt.setString(1,studentId);
 
             int m = stmt.executeUpdate(setFeeDoneQuery);
             if (m == 1){
                 System.out.println("FeeDone Updated successfully");
+                return true;
             }
-            else System.out.println("Update failed");
-            stmt.close();
-            conn.close();
+            else {
+                System.out.println("Update failed");
+            }
         }
         catch(SQLException se){
             //Handle errors for JDBC
@@ -471,6 +492,6 @@ public class PaymentDAOImpl implements PaymentDAO{
             //Handle errors for Class.forName
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 }

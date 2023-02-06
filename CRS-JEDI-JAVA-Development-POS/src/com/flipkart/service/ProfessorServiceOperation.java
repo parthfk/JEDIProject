@@ -54,17 +54,17 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
            e.printStackTrace();
        }
         System.out.println("Please select one of the following grades for each student: A,A-,B,B-,C,C-,D,D-,E,F");
-       List<Student> enrolledStudents = profDAO.viewEnrolledStudentListDao(courseToGrade.getCourseID(), semesterId);
-       List<RegisteredCourse> registeredCourseList = RegisteredCourseData.regCourseList;
+       try {
+           List<Student> enrolledStudents = profDAO.viewEnrolledStudentListDao(courseToGrade.getCourseID(), semesterId);
 
-       for(Student student:enrolledStudents){
-           boolean gradeValidated = false;
-           while(!gradeValidated){
-               System.out.println("Enter grade for studentID: "+student.getUserId());
-               String gradeString = in.nextLine();
-               gradeValidated = this.validateGrade(gradeString);
-               if(gradeValidated){
-                   profDAO.addGrade(student.getUserId(),semesterId,courseToGrade.getCourseID(),gradeString);
+           for (Student student : enrolledStudents) {
+               boolean gradeValidated = false;
+               while (!gradeValidated) {
+                   System.out.println("Enter grade for studentID: " + student.getUserId());
+                   String gradeString = in.nextLine();
+                   gradeValidated = this.validateGrade(gradeString);
+                   if (gradeValidated) {
+                       profDAO.addGrade(student.getUserId(), semesterId, courseToGrade.getCourseID(), gradeString);
 //                   Grade gradeObj= new Grade();
 //                    gradeObj.setGrade(gradeString);
 //                   for(RegisteredCourse registration: registeredCourseList){
@@ -76,13 +76,16 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
 //                            break;
 //                       }
 //                   }
-               }else{
-                   System.out.println("Please enter one of the following grades: A" +
-                           ",A-,B,B-,C,C-,D,D-,E,F");
+                   } else {
+                       System.out.println("Please enter one of the following grades: A" +
+                               ",A-,B,B-,C,C-,D,D-,E,F");
+                   }
                }
            }
+           System.out.println("Grading for courseID: " + courseToGrade.getCourseID() + " done successfully !");
+       }catch(Exception e){
+           e.printStackTrace();
        }
-       System.out.println("Grading for courseID: "+courseToGrade.getCourseID()+" done successfully !");
     }
     public boolean validateGrade(String gradeEntered){
         List<String> possibleGrades = new ArrayList<>(Arrays.asList("A","A-",
