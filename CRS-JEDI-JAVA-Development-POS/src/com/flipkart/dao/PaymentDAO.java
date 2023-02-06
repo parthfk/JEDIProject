@@ -5,11 +5,11 @@ public interface PaymentDAO {
 
     public void sendNotification(String studentId,double paymentAmount,String paymentId,String message);
     public void payCreditCard(Student student);
-    public void payDebitCard();
-    public void payUPI();
-    public void payNetBanking();
-    public void payCash();
-    public void payCheque();
+    public void payDebitCard(Student student);
+    public void payUPI(Student student);
+    public void payNetBanking(Student student);
+    public void payCash(Student student);
+    public void payCheque(Student student);
     public String generatePaymentId();
     public boolean paymentApproved(Student student);
 

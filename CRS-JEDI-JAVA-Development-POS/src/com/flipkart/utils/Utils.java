@@ -88,9 +88,9 @@ public class Utils {
                 String mobileNumber = rs.getString("mobileNumber");
                 Date dob = rs.getDate("dob");
 
-                // todo add new Professor with data received. PLEASE CREATE CONSTRUCTOR
-                // See the DB and add required fields in professor class, create constructor
-                
+                Professor p = new Professor(name, email, password, departmentId, address, mobileNumber, dob);
+                p.setUserId(rs.getString("userId"));
+                professors.add(p);
             }
             stmt.close();
             conn.close();
@@ -119,8 +119,10 @@ public class Utils {
                 String mobileNumber = rs.getString("mobileNumber");
                 Date dob = rs.getDate("dob");
 
-                // todo add new Admin with data received. PLEASE CREATE CONSTRUCTOR
-                // See the DB and add required fields in admin class, create constructor
+                Admin a = new Admin(name,email,password,address,mobileNumber,dob);
+                a.setUserId(rs.getString("userId"));
+                admins.add(a);
+
             }
             stmt.close();
             conn.close();

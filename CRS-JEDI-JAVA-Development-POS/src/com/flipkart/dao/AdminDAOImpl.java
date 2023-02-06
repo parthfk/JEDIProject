@@ -1,5 +1,6 @@
 package com.flipkart.dao;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import java.sql.Connection;
@@ -17,30 +18,33 @@ import static com.flipkart.constant.DBConnection.*;
 
 public class AdminDAOImpl implements AdminDAO{
 
-    private  static int noOfUsers;
+    private Connection conn = null;
+    private PreparedStatement stmt = null;
+    AdminDAOImpl(){
+        try {
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        } catch (SQLException e) {
+            System.out.println("Something went wrong on the DB side");
+        }
+    }
+
+    private static AdminDAOImpl dao = null;
+    public static AdminDAOImpl getInstance(){
+        if(dao == null){
+            dao =  new AdminDAOImpl();
+        }
+        return dao;
+    }
+private  static int noOfUsers=0;
     public void addAdminDAO(Admin admin){
-        //  public static void main(String args[]){
         Connection conn = null;
         PreparedStatement stmt = null;
 
         try{
 
-            // Step 3 Regiater Driver here and create connection
+            stmt= conn.prepareStatement("SELECT COUNT(*) FROM User");
 
-            Class.forName("com.mysql.jdbc.Driver");
-
-            // Step 4 make/open  a connection
-
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            //STEP 4: Execute a query
-            System.out.println("Creating statement...");
-
-            String ss="SELECT COUNT(*) FROM User";
-            stmt=conn.prepareStatement(ss);
-
-            ResultSet rs = stmt.executeQuery(ss);
+            ResultSet rs = stmt.executeQuery();
             if(rs.next())
                 noOfUsers=rs.getInt("COUNT(*)");
 
@@ -70,7 +74,6 @@ public class AdminDAOImpl implements AdminDAO{
 
             stmt.executeUpdate();
 
-            System.out.println("Creating statement...");
             sql="insert into Admin values(?,?,?,?)";
             //String sql = "UPDATE Admin set age=? WHERE id=?";
             // String sql1="delete from employee where id=?";

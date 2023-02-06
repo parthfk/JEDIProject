@@ -1,6 +1,9 @@
 package com.flipkart.service;
 
 import com.flipkart.bean.*;
+import com.flipkart.dao.CatalogueDAOImpl;
+import com.flipkart.dao.UserDAO;
+import com.flipkart.dao.UserDAOImpl;
 import com.flipkart.data.CourseData;
 import com.flipkart.data.UserData;
 import com.flipkart.utils.Utils;
@@ -28,71 +31,68 @@ public class UserServiceOperation implements UserService {
             String regex = "^(.+)@(.+)$";
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(inputEmail);
-            boolean studentApproved=false;
-            if (matcher.matches())
-            {
-                if(role.equals("admin"))
-                {
-                    List<Admin> adminList = UserData.adminList;
-                    for(Admin u : adminList){
-                        if(u.getEmail().equals(inputEmail)){
-                            userObj = u;
-                            emailValidated = true;
-                            break;
-                        }
-                    }
-                    if(!emailValidated) {
-                        System.out.println("Invalid Credentials. Please try again");
-                        return null;
-                    }
 
-                }
-                else if(role.equals("student")) {
-                    List<Student> studentList = Utils.getStudentList();
-                    for (Student u : studentList) {
-                        if (u.getEmail().equals(inputEmail)) {
-                            userObj = u;
-                            System.out.println(u.getEmail());
-                            System.out.println(u.isStatusApproval());
-                            if (!u.isStatusApproval()) {
-                                System.out.println("Registration not approved. Please contact admin");
-                                return null;
-                            } else {
-                                studentApproved = true;
+            if (matcher.matches()) {
+                try {
+                    if (role.equals("admin")) {
+                        List<Admin> adminList = Utils.getAdminList();
+                        for (Admin u : adminList) {
+                            if (u.getEmail().equals(inputEmail)) {
+                                userObj = u;
+                                emailValidated = true;
+                                break;
                             }
-                            emailValidated = true;
-                            break;
+                        }
+                        if (!emailValidated) {
+                            System.out.println("Invalid Credentials. Please try again");
+                            return null;
+                        }
+                    } else if (role.equals("student")) {
+                        List<Student> studentList = Utils.getStudentList();
+                        for (Student u : studentList) {
+                            if (u.getEmail().equals(inputEmail)) {
+                                userObj = u;
+                                System.out.println(u.getEmail());
+                                System.out.println(u.isStatusApproval());
+                                if (!u.isStatusApproval()) {
+                                    System.out.println("Registration not approved. Please contact admin");
+                                    return null;
+                                }
+                                emailValidated = true;
+                                break;
+                            }
+                        }
+                        if (!emailValidated) {
+                            System.out.println("Invalid Credentials. Please try again");
+                            return null;
+                        }
+                    } else if (role.equals("professor")) {
+                        List<Professor> professorList = Utils.getProfessorList();
+                        boolean flag = false;
+                        assert professorList != null;
+                        for (Professor u : professorList) {
+                            if (u.getEmail().equals(inputEmail)) {
+                                userObj = u;
+                                emailValidated = true;
+                                //flag = true;
+                                break;
+                            }
+                        }
+                        if (!emailValidated) {
+                            System.out.println("Invalid Credentials. Please try again");
+                            return null;
                         }
                     }
-                    if (!emailValidated && studentApproved){
-                        System.out.println("Invalid Credentials. Please try again");
+                } catch (NullPointerException e) {
+                    System.out.println("Failure in reading the db : \n" + e.getMessage());
+                }
+            }
+                else {
+                        System.out.println("Invalid formatted email!");
                         return null;
                     }
-                }
-                else if(role.equals("professor"))
-                {
-                    List<Professor> professorList = UserData.professorList;
-                    boolean flag = false;
-                    for(Professor u : professorList){
-                        if(u.getEmail().equals(inputEmail)){
-                            userObj = u;
-                            emailValidated = true;
-                            //flag = true;
-                            break;
-                        }
-                    }
-                    if(!emailValidated){
-                        System.out.println("Invalid Credentials. Please try again");
-                        return null;
-                    }
-                }
-
-            } else {
-                System.out.println("Invalid formatted email!");
-                return null;
             }
 
-        }
         while(!passWordEnteredIsCorrect){
             if(passwordEntered.equals(userObj.getPassword())){
                 passWordEnteredIsCorrect=true;
@@ -112,12 +112,12 @@ public class UserServiceOperation implements UserService {
 
     public List<Course> viewCourseCatalogue() {
         System.out.println("These are the courses currently available: ");
-        List<Course> courses = CourseData.courseList;
+        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue();
         for(int i=0;i<courses.size();i++){
             System.out.println("CourseID: " + courses.get(i).getCourseID() + " Course Name: " + courses.get(i).getName()+
                     " Professor: "+courses.get(i).getProfessorID());
         }
-        return CourseData.courseList;
+        return courses;
     }
 
     public boolean updatePassword(){
@@ -140,41 +140,39 @@ public class UserServiceOperation implements UserService {
             String regex = "^(.+)@(.+)$";
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(inputEmail);
-            if (matcher.matches()){
-                if(role.equals("admin"))
-                {
-                    List<Admin> adminList = UserData.adminList;
-                    for(User u : adminList){
-                        if(u.getEmail().equals(inputEmail)){
-                            userObj = u;
-                            emailValidated = true;
-                            break;
+            if (matcher.matches()) {
+                try {
+                    if (role.equals("admin")) {
+                        List<Admin> adminList = Utils.getAdminList();
+                        for (User u : adminList) {
+                            if (u.getEmail().equals(inputEmail)) {
+                                userObj = u;
+                                emailValidated = true;
+                                break;
+                            }
+                        }
+                    } else if (role.equals("student")) {
+                        List<Student> studentList = Utils.getStudentList();
+                        for (User u : studentList) {
+                            if (u.getEmail().equals(inputEmail)) {
+                                userObj = u;
+                                emailValidated = true;
+                                break;
+                            }
+                        }
+                    } else if (role.equals("professor")) {
+                        List<Professor> professorList = Utils.getProfessorList();
+                        for (User u : professorList) {
+                            if (u.getEmail().equals(inputEmail)) {
+                                userObj = u;
+                                emailValidated = true;
+                                break;
+                            }
                         }
                     }
+                }catch(NullPointerException e){
+                    System.out.println("Error in reading db :"+e.getMessage());
                 }
-                else if(role.equals("student"))
-                {
-                    List<Student> studentList = UserData.studentList;
-                    for(User u : studentList){
-                        if(u.getEmail().equals(inputEmail)){
-                            userObj = u;
-                            emailValidated = true;
-                            break;
-                        }
-                    }
-                }
-                else if(role.equals("professor"))
-                {
-                    List<Professor> professorList = UserData.professorList;
-                    for(User u : professorList){
-                        if(u.getEmail().equals(inputEmail)){
-                            userObj = u;
-                            emailValidated = true;
-                            break;
-                        }
-                    }
-                }
-
             }
             if(!emailValidated)
                 System.out.println("Email entered is invalid!");
@@ -200,8 +198,7 @@ public class UserServiceOperation implements UserService {
         }
         else
         {
-            userObj.setPassword(newPasswordEntered);
-            return true;
+             return UserDAOImpl.getInstance().updatePassword(userObj.getUserId(),newPasswordEntered);
         }
 
 

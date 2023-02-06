@@ -5,15 +5,38 @@ import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
 
 public interface AdminService {
-    public boolean addCourse();
+    /**
+     * Method to add a course by the admin
+     * @return boolean
+     */
+    boolean addCourse();
 
-    public boolean removeCourse();
+    /**
+     * Method to remove a course by the admin
+     * @return boolean
+     */
+    boolean removeCourse();
 
-    public void approveStudent();
-    public void addProfessor();
+    /**
+     * Method to approve a student by admin.
+     */
+    void approveStudent();
 
-    public boolean addAdmin();
+    /**
+     * Method to add a professor to the system by the admin
+     *
+     */
+    void addProfessor();
 
-    public void generateGradeCard();
+    /**
+     * Method to add another admin
+     * @return boolean
+     */
+    boolean addAdmin();
+
+    /**
+     * Method to generate grade card of the student
+     */
+    void generateGradeCard();
 
 }

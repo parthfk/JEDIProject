@@ -1,10 +1,8 @@
 package com.flipkart.dao;
 
 import com.flipkart.bean.Course;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,20 +66,46 @@ public class CatalogueDAOImpl implements CatalogueDAO{
         try{
 
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            String sql = "select Catalogue.courseid, Course.name, Catalogue.professorid from Catalogue, Course where Catalogue.courseid = Course.courseid";
+            String sql = "select Catalogue.courseId, Course.name, Catalogue.professorId, Catalogue.availableSeats from Catalogue, Course where Catalogue.courseId = Course.courseId";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next())
             {
-//                Course tempcourse = new Course();
-
+                Course tempcourse = new Course(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4));
+                courseList.add(tempcourse);
             }
+
+            rs.close();
+            return courseList;
+
         }
         catch (Exception e){
-            System.out.println(e);
+            e.printStackTrace();
         }
 
         return courseList;
+    }
+
+    @Override
+    public void deleteCourseInDB(String courseId) {
+        Connection conn = null;
+
+
+        try {
+
+            PreparedStatement stmt = null;
+
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            String sql = "delete from Catalogue where courseid = "+courseId;
+            stmt = conn.prepareStatement(sql);
+
+            stmt.executeUpdate();
+            conn.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -15,4 +15,7 @@ public interface AdminDAO {
     public void addProfessorDAO(Professor professor);
     public void approveStudentDAO();
 
+
+    public void generateGradeCard(Student);
+
 }

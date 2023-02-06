@@ -10,13 +10,20 @@ public class SemRegistration {
     private ArrayList<Course> secondaryCourses;
     private Boolean regDone;
 
+    private String semesterId;
     public SemRegistration(Student student) {
         this.studentId = student.getUserId();
         this.primaryCourses = new ArrayList<>();
         this.secondaryCourses = new ArrayList<>();
         this.regDone = false;
     }
+    public String getSemesterId() {
+        return semesterId;
+    }
 
+    public void setSemesterId(String semesterId) {
+        this.semesterId = semesterId;
+    }
     public String getStudentId() {
         return studentId;
     }

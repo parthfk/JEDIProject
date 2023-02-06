@@ -7,7 +7,8 @@ public class User {
     private String email;
 
     public User(){
-        
+
+
     }
     public User(String name, String password, String email, String userType) {
         this.name = name;

@@ -6,8 +6,24 @@ import com.flipkart.bean.Student;
 import java.util.List;
 
 public interface ProfessorService {
-    public void addGrade();
-    public List<Student> viewEnrolledStudentList();
-    public void selectCourse(Course course);
-    public List<Course> viewCourseList();
+    /**
+     * Method to add grade for a student by the professor
+     */
+    void addGrade();
+
+    /**
+     * Method to retrieve all the students enrolled for a particular course.
+	 * @return List of Students
+	 */
+    List<Student> viewEnrolledStudentList();
+    /**
+     * Method to select a particular course  to teach for the  professor.
+     * @param course object
+     */
+    void selectCourse(Course course);
+    /**
+     * Method to get all the courses for professor.
+     * @return List of Course
+     */
+    List<Course> viewCourseList();
 }

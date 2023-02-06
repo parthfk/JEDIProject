@@ -1,51 +1,45 @@
 package com.flipkart.service;
 
 import com.flipkart.bean.*;
-import com.flipkart.dao.CatalogueDAO;
-import com.flipkart.dao.CatalogueDAOImpl;
-import com.flipkart.dao.CourseDAO;
-import com.flipkart.dao.CourseDAOImpl;
 import com.flipkart.data.CourseData;
 import com.flipkart.data.RegisteredCourseData;
 import com.flipkart.data.UserData;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import com.flipkart.dao.*;
+import java.util.List;
 public class AdminServiceOperation extends UserServiceOperation implements AdminService {
     private Scanner scanner;
-    CatalogueDAO catalogue = new CatalogueDAOImpl();
 
     public AdminServiceOperation() {
         scanner = new Scanner(System.in);
     }
 
     public boolean addCourse() {
+        System.out.println("Please enter semesterId :");
+        String semesterId = scanner.nextLine();
+
         System.out.println("Please enter course ID");
         String courseId = scanner.nextLine();
 
         System.out.println("Please enter course name");
         String courseName = scanner.nextLine();
 
-        System.out.println("Please enter semester ID");
-        String semID = scanner.nextLine();
-
         System.out.println("Please enter available seats");
         int seatsAvailable = scanner.nextInt();
 
         try {
-            Course newCourse = new Course(courseId, courseName, null, seatsAvailable);
-
-            CourseDAO courseDAO = new CourseDAOImpl();
+            Course newCourse = new Course(courseId, courseName,null, seatsAvailable);
             CatalogueDAO catalogueDAO = new CatalogueDAOImpl();
-
-            if(courseDAO.doesCourseExist(courseId)){
-                catalogueDAO.addCourseInDB(newCourse,semID);
-            }
-            else {
+            CourseDAO courseDAO = new CourseDAOImpl();
+            if(!courseDAO.doesCourseExist(courseId)){
                 courseDAO.addCourseToDB(newCourse);
             }
+            catalogueDAO.addCourseInDB(newCourse,semesterId);
 
+
+            System.out.println("Your new course added: " + newCourse);
         } catch (Exception e) {
             return false;
         }
@@ -54,15 +48,17 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
 
     public boolean removeCourse() {
         System.out.println("-----Below is the list of courses currently present-------");
-        for (Course c : CourseData.courseList) {
+        CatalogueDAOImpl catalogueDAO = new CatalogueDAOImpl();
+        List<Course> courseList = catalogueDAO.fetchCatalogue();
+        for (Course c :courseList) {
             System.out.println("Course Name : " + c.getName() + "  Course ID : " + c.getCourseID());
         }
         System.out.println("Enter the course ID to be deleted");
         String id_to_be_deleted = scanner.next();
         boolean flag = false;
-        for (Course c : CourseData.courseList) {
+        for (Course c :courseList) {
             if (c.getCourseID().equals(id_to_be_deleted)) {
-                CourseData.courseList.remove(c);
+                catalogueDAO.deleteCourseInDB(id_to_be_deleted);
                 System.out.println("Course Deleted");
                 flag = true;
                 break;
@@ -70,7 +66,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
 
         }
         if (!flag) {
-            System.out.println("No such Course Exist");
+            System.out.println("No such Course exists !");
             return false;
         }
 
@@ -79,23 +75,26 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
 
     public void approveStudent() {
 
-        for (Student s : UserData.studentList) {
-            if (!s.isStatusApproval())
-                System.out.println("Student User ID: " + s.getUserId() + " Student Name: " + s.getName() + " Student Department: " + s.getDepartmentID() + " Student Email: " + s.getEmail());
-        }
-        while (true) {
-            System.out.println("Enter student UserID or Press # to exit");
-            String user_ID = scanner.next();
-            if (user_ID.equals("#"))
-                return;
-            for (Student s : UserData.studentList) {
-                if (s.getUserId().equals(user_ID)) {
-                    s.setStatusApproval(true);
-                    System.out.println("Student Approved");
-                    break;
-                }
-            }
-        }
+        AdminDAOImpl obj = new AdminDAOImpl();
+        obj.approveStudentDAO();
+
+//        for (Student s : UserData.studentList) {
+//            if (!s.isStatusApproval())
+//                System.out.println("Student User ID: " + s.getUserId() + " Student Name: " + s.getName() + " Student Department: " + s.getDepartmentID() + " Student Email: " + s.getEmail());
+//        }
+//        while (true) {
+//            System.out.println("Enter student UserID or Press # to exit");
+//            String user_ID = scanner.next();
+//            if (user_ID.equals("#"))
+//                return;
+//            for (Student s : UserData.studentList) {
+//                if (s.getUserId().equals(user_ID)) {
+//                    s.setStatusApproval(true);
+//                    System.out.println("Student Approved");
+//                    break;
+//                }
+//            }
+//        }
     }
 
 
@@ -114,8 +113,8 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         newProf.setUserType("professor");
 
         try {
-            UserData.professorList.add(newProf);
-            System.out.println("New professor added!");
+            AdminDAOImpl obj=new AdminDAOImpl();
+            obj.addProfessorDAO(newProf);
         } catch (Exception e) {
             System.out.println("Something went wrong");
         }
@@ -135,7 +134,8 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         newAdmin.setUserType("admin");
 
         try {
-            UserData.adminList.add(newAdmin);
+            AdminDAOImpl obj=new AdminDAOImpl();
+            obj.addAdminDAO(newAdmin);
         } catch (Exception e) {
             return false;
         }

@@ -399,31 +399,31 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             case 1:
                 message = "Fees paid online through" + " UPI !";
                 studentPayment.setModeOfPayment(PaymentMode.UPI);
-                paymentServiceOperation.payUPI();
+                PaymentDAOImpl.getInstance().payUPI(student);
                 break;
             case 2:
                 message = "Fees paid online through" + " debit card !";
                 studentPayment.setModeOfPayment(PaymentMode.DEBIT_CARD);
-                paymentServiceOperation.payDebitCard();
+                PaymentDAOImpl.getInstance().payDebitCard(student);
                 break;
             case 3:
                 message = "Fees paid online through" + " credit card !";
                 studentPayment.setModeOfPayment(PaymentMode.CREDIT_CARD);
-                paymentServiceOperation.payCreditCard();
+                PaymentDAOImpl.getInstance().payCreditCard(student);
                 break;
             case 4:
                 studentPayment.setModeOfPayment(PaymentMode.NET_BANKING);
-                paymentServiceOperation.payNetBanking();
+                PaymentDAOImpl.getInstance().payNetBanking(student);
                 break;
             case 5:
                 message = "Fees paid offline through" + " cash !";
                 studentPayment.setModeOfPayment(PaymentMode.CASH);
-                paymentServiceOperation.payCash();
+                PaymentDAOImpl.getInstance().payCash(student);
                 break;
             case 6:
                 message = "Fees paid offline through" + " cheque !";
                 studentPayment.setModeOfPayment(PaymentMode.CHEQUE);
-                paymentServiceOperation.payCheque();
+                PaymentDAOImpl.getInstance().payCheque(student);
                 break;
             default:
                 System.out.println("Invalid key, try again!");
