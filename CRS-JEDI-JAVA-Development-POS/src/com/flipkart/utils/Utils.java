@@ -13,7 +13,6 @@ public class Utils {
     private static Connection conn;
     private static PreparedStatement stmt = null;
     public static Course getCourseFromCourseId (String courseId) {
-        System.out.println("HERE1");
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String getCoursesQuery = "SELECT * from Catalogue JOIN Course WHERE Catalogue.courseId=" + courseId + " LIMIT 1";
@@ -24,8 +23,6 @@ public class Utils {
                 String semesterId = rs.getString("semesterId");
                 String professorId = rs.getString("professorId");
                 int availableSeats = rs.getInt("availableSeats");
-
-                System.out.println(courseName);
                 return new Course(courseId, courseName, professorId, availableSeats);
             }
             stmt.close();
@@ -68,6 +65,7 @@ public class Utils {
 
             return students;
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             System.out.println("Something went wrong on DB side!");
         }
         return null;
@@ -176,5 +174,26 @@ public class Utils {
             System.out.println("Something went wrong on DB side!");
         }
         return null;
+    }
+
+    public static void updateCourseSeats(Course c) {
+        try {
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            // Fields for new SemRegistration record
+            String userEntryQuery =
+                    "UPDATE Catalogue SET availableSeats=? WHERE courseId=?";
+
+            String courseId = c.getCourseID();
+            int availableSeatsUpdated = c.getAvailableSeats() - 1;
+            stmt = conn.prepareStatement(userEntryQuery);
+            stmt.setInt(1, availableSeatsUpdated);
+            stmt.setString(2, courseId);
+            stmt.executeUpdate();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }
