@@ -135,21 +135,21 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         System.out.println(primaryCourses);
         while (primaryCourses.size() <= 4) {
             if (primaryCourses.size() == 4) {
-                student.getSemRegistration().setPrimaryCourses(primaryCourses);
+                this.studentDao.selectPrimaryCourse(primaryCourses);
                 System.out.println("Primary courses added to cart successfully");
                 return;
             }
             String input = in.nextLine();
             if (input.matches("#")) {
                 if (primaryCourses.size() > 0) {
-                    student.getSemRegistration().setPrimaryCourses(primaryCourses);
+                    this.studentDao.selectPrimaryCourse(primaryCourses);
                     System.out.println("Primary courses added to cart successfully");
                 } else {
                     System.out.println("Exited without adding any courses");
                 }
                 break;
             } else {
-                Course course = getCourseFromId(input);
+                Course course = Utils.getCourseFromCourseId(input);
                 if (course == null) {
                     System.out.println("No course with the provided ID!");
                 } else {
@@ -161,9 +161,15 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void removeCourseFromCart(String type) {
-        List<Course> courses = (type.matches("primary")) ?
-                student.getSemRegistration().getPrimaryCourses() :
-                student.getSemRegistration().getSecondaryCourses();
+        List<String> courseIds = (type.matches("primary")) ?
+                this.studentDao.viewPrimaryCourses() :
+                this.studentDao.viewSecondaryCourses();
+
+        ArrayList<Course> courses = new ArrayList<>();
+        courseIds.forEach((courseId) -> {
+            if (!(courseId.matches("") || courseId == null))
+                courses.add(Utils.getCourseFromCourseId(courseId));
+        });
 
         if (courses.size() == 0) {
             System.out.println("You have not added any " + type + " courses yet");
@@ -185,10 +191,14 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         }
         courses.remove(toBeDeleted);
 
-        if (type.matches("primary"))
+        if (type.matches("primary")) {
+            this.studentDao.selectPrimaryCourse(courses);
             System.out.println("Course " + toBeDeleted + " removed from your primary courses");
-        else if (type.matches("secondary"))
+        }
+        else if (type.matches("secondary")) {
+            this.studentDao.selectSecondaryCourse(courses);
             System.out.println("Course " + toBeDeleted + " removed from your secondary courses");
+        }
     }
 
     private Course getCourseFromId(String courseId) {
@@ -204,25 +214,31 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         System.out.println("Enter Course Id's to be added as your secondary course and press enter.");
         System.out.println("Press # when you are done adding courses!");
         Scanner in = new Scanner(System.in);
-        ArrayList<Course> secondaryCourses = student.getSemRegistration().getSecondaryCourses();
+
+        ArrayList<String> courseIds = this.studentDao.viewSecondaryCourses();
+        ArrayList<Course> secondaryCourses = new ArrayList<>();
+        courseIds.forEach((courseId) -> {
+            if (!(courseId.matches("") || courseId == null))
+                secondaryCourses.add(Utils.getCourseFromCourseId(courseId));
+        });
 
         while (secondaryCourses.size() <= 2) {
             if (secondaryCourses.size() == 2) {
-                student.getSemRegistration().setPrimaryCourses(secondaryCourses);
+                this.studentDao.selectSecondaryCourse(secondaryCourses);
                 System.out.println("Secondary courses added to cart successfully");
                 return;
             }
             String input = in.nextLine();
             if (input.matches("#")) {
                 if (secondaryCourses.size() > 0) {
-                    student.getSemRegistration().setSecondaryCourses(secondaryCourses);
+                    this.studentDao.selectSecondaryCourse(secondaryCourses);
                     System.out.println("Secondary courses added to cart successfully");
                 } else {
                     System.out.println("Exited without adding any courses");
                 }
                 break;
             } else {
-                Course course = getCourseFromId(input);
+                Course course = Utils.getCourseFromCourseId(input);
                 if (course == null) {
                     System.out.println("No course with the provided ID!");
                 } else {
@@ -235,31 +251,54 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
     public void confirmRegistration() {
         // Proceed with business logic for course verification.
-        for (Course c : student.getSemRegistration().getPrimaryCourses()) {
+        ArrayList<String> primaryCourseIds = this.studentDao.viewPrimaryCourses();
+        ArrayList<String> secondaryCourseIds = this.studentDao.viewSecondaryCourses();
+        ArrayList<String> registeredCourseIds = this.studentDao.displayRegisteredCourses();
+        ArrayList<Course> primaryCourses = new ArrayList<>();
+        ArrayList<Course> secondaryCourses = new ArrayList<>();
+        ArrayList<Course> registeredCourses = new ArrayList<>();
+
+        primaryCourseIds.forEach((courseId) -> {
+            if (!(courseId.matches("") || courseId == null))
+                primaryCourses.add(Utils.getCourseFromCourseId(courseId));
+        });
+        secondaryCourseIds.forEach((courseId) -> {
+            if (!(courseId.matches("") || courseId == null))
+                secondaryCourses.add(Utils.getCourseFromCourseId(courseId));
+        });
+        registeredCourseIds.forEach((courseId) -> {
+            if (!(courseId.matches("") || courseId == null))
+                registeredCourses.add(Utils.getCourseFromCourseId(courseId));
+        });
+
+        for (Course c : primaryCourses) {
             if (c.getAvailableSeats() <= 0) {
                 System.out.println("Primary Course " + c.getCourseID() + " not available.");
             } else {
                 System.out.println("Primary Course " + c.getCourseID() + " allotted for you!");
-                student.getCourseRegistered().add(c);
+                registeredCourses.add(c);
             }
         }
 
-        if (student.getCourseRegistered().size() < 4) {
-            for (Course c : student.getSemRegistration().getSecondaryCourses()) {
+        if (registeredCourses.size() < 4) {
+            for (Course c : secondaryCourses) {
                 if (c.getAvailableSeats() <= 0) {
                     System.out.println("Secondary Course " + c.getCourseID() + " not available.");
                     continue;
                 }
-                if (student.getCourseRegistered().size() >= 4) break;
-                student.getCourseRegistered().add(c);
+                if (registeredCourses.size() >= 4) break;
+                registeredCourses.add(c);
             }
         }
         student.getSemRegistration().setRegDone(true);
         System.out.println("You are now registered for the following courses: ");
-        for (Course c : student.getCourseRegistered()) {
+        for (Course c : registeredCourses) {
+            Utils.updateCourseSeats(c);
             c.setAvailableSeats(c.getAvailableSeats() - 1);
             System.out.println(c);
         }
+        studentDao.setRegisteredCourses(registeredCourses);
+        studentDao.confirmRegistration();
     }
 
     public void addCourse() {
