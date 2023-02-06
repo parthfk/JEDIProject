@@ -35,6 +35,7 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
                     +" Name: "+courseList.get(i).getName());
         }
     }
+
     public void addGrade(){
        List<Course> coursesList = this.viewCourseList();
        Course courseToGrade = null;
@@ -46,14 +47,14 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
        System.out.println("Please select Serial number to add course grade out of " +coursesList.size());
        int courseIdx = -1;
        try {
-             courseIdx = Integer.parseInt(in.nextLine());
+            courseIdx = Integer.parseInt(in.nextLine());
             courseToGrade = coursesList.get(courseIdx-1);
        }
        catch(Exception e){
            e.printStackTrace();
        }
         System.out.println("Please select one of the following grades for each student: A,A-,B,B-,C,C-,D,D-,E,F");
-       List<Student> enrolledStudents = this.getEnrolledStudentList(courseToGrade.getCourseID(),semesterId);
+       List<Student> enrolledStudents = profDAO.viewEnrolledStudentListDao(courseToGrade.getCourseID(), semesterId);
        List<RegisteredCourse> registeredCourseList = RegisteredCourseData.regCourseList;
 
        for(Student student:enrolledStudents){
@@ -63,17 +64,18 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
                String gradeString = in.nextLine();
                gradeValidated = this.validateGrade(gradeString);
                if(gradeValidated){
-                   Grade gradeObj= new Grade();
-                    gradeObj.setGrade(gradeString);
-                   for(RegisteredCourse registration: registeredCourseList){
-                       if(registration.getStudentID().equals(student.getUserId()) &&
-                               registration.getSemesterID().equals(semesterId) &&
-                               registration.getCourseID().equals(courseToGrade.getCourseID())
-                       ){
-                           registration.setGrade(gradeObj);
-                            break;
-                       }
-                   }
+                   profDAO.addGrade(student.getUserId(),semesterId,courseToGrade.getCourseID(),gradeString);
+//                   Grade gradeObj= new Grade();
+//                    gradeObj.setGrade(gradeString);
+//                   for(RegisteredCourse registration: registeredCourseList){
+//                       if(registration.getStudentID().equals(student.getUserId()) &&
+//                               registration.getSemesterID().equals(semesterId) &&
+//                               registration.getCourseID().equals(courseToGrade.getCourseID())
+//                       ){
+//                           registration.setGrade(gradeObj);
+//                            break;
+//                       }
+//                   }
                }else{
                    System.out.println("Please enter one of the following grades: A" +
                            ",A-,B,B-,C,C-,D,D-,E,F");
@@ -98,29 +100,28 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         String semesterId = courseAndSemIds.get(1);
 
         //dao
-        profDAO.viewEnrolledStudentListDao(courseId,semesterId);
+        return profDAO.viewEnrolledStudentListDao(courseId,semesterId);
 //        return this.getEnrolledStudentList(courseId,semesterId);
-        return null;
     }
-    public List<Student> getEnrolledStudentList (String courseId,String semesterId){
-        List<RegisteredCourse> regCourseList = RegisteredCourseData.regCourseList;
-        List<Student> enrolledStudentList = new ArrayList<Student>();
-        List<Student> studentList = UserData.studentList;
-
-        for(RegisteredCourse registeredCourse: regCourseList){
-            if(registeredCourse.getSemesterID().equals(semesterId) && registeredCourse.getCourseID().equals(courseId)){
-                String studentId = registeredCourse.getStudentID();
-                for(Student student: studentList) {
-                    if (student.getUserId().equals(studentId)) {
-                        enrolledStudentList.add(student);
-                        break;
-                    }
-                }
-
-            }
-        }
-        return enrolledStudentList;
-    }
+//    public List<Student> getEnrolledStudentList (String courseId,String semesterId){
+//        List<RegisteredCourse> regCourseList = RegisteredCourseData.regCourseList;
+//        List<Student> enrolledStudentList = new ArrayList<Student>();
+//        List<Student> studentList = UserData.studentList;
+//
+//        for(RegisteredCourse registeredCourse: regCourseList){
+//            if(registeredCourse.getSemesterID().equals(semesterId) && registeredCourse.getCourseID().equals(courseId)){
+//                String studentId = registeredCourse.getStudentID();
+//                for(Student student: studentList) {
+//                    if (student.getUserId().equals(studentId)) {
+//                        enrolledStudentList.add(student);
+//                        break;
+//                    }
+//                }
+//
+//            }
+//        }
+//        return enrolledStudentList;
+//    }
     public void selectCourse(Course course){
         List<Course> courseList = professor.getCoursesTaken();
         courseList.add(course);
@@ -130,7 +131,8 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         profDAO.selectCourseDAO(course);
     }
     public List<Course> viewCourseList(){
-        this.printCourseList(professor.getCoursesTaken());
-        return professor.getCoursesTaken();
+        List<Course> courseList = profDAO.viewCourseListDao(professor.getUserId());
+        this.printCourseList(courseList);
+        return courseList;
     }
 }

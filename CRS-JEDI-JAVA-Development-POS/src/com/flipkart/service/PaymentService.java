@@ -1,9 +1,11 @@
 package com.flipkart.service;
 
+import com.flipkart.bean.Student;
+
 public interface PaymentService {
     public double calculateAmount();
 
-    public boolean paymentApproved();
+    public boolean paymentApproved(Student student);
 
     public void payCreditCard();
     public void payDebitCard();
@@ -12,5 +14,5 @@ public interface PaymentService {
     public void payCash();
     public void payCheque();
 
-    public void sendNotification(String studentId,double paymentAmount,String notificationId,String message);
+    public void sendNotification(String studentId,double paymentAmount,String paymentId,String message);
 }

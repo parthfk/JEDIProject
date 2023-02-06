@@ -1,5 +1,11 @@
 package com.flipkart.bean;
 
-public class Admin extends User {
+import java.sql.Date;
 
+public class Admin extends User {
+    private Date dob;
+    private String address;
+    private String mobileNumber;
+
+    public Date getDate(){return dob;}
 }

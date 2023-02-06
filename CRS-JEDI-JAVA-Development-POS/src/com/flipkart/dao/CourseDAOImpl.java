@@ -6,18 +6,27 @@ import java.sql.*;
 
 import static com.flipkart.constant.DBConnection.*;
 
-public class CourseDAOImpl implements CourseDAO{
+public class CourseDAOImpl implements CourseDAO {
 
     Connection conn = null;
     PreparedStatement stmt = null;
+
+    public CourseDAOImpl()
+    {
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+    }
 
     @Override
     public boolean doesCourseExist(String courseID) {
 
 
         try {
-
-            Class.forName("com.mysql.jdbc.Driver");
 
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
@@ -29,26 +38,26 @@ public class CourseDAOImpl implements CourseDAO{
 
             conn.close();
 
-            if(rs.getInt(1)==0)
-            {
-                return false;
+            if(rs.next()) {
+                if(rs.getInt(1)==0) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
-            else return true;
 
-        } catch (ClassNotFoundException e) {
-            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-
+            return false;
     }
 
     @Override
     public void addCourseToDB(Course course) {
 
         try{
-            Class.forName("com.mysql.jdbc.Driver");
 
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
@@ -58,14 +67,11 @@ public class CourseDAOImpl implements CourseDAO{
 
             ResultSet rs = stmt.executeQuery(sql);
 
-
-
             conn.close();
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
-        }
-
     }
 }
+

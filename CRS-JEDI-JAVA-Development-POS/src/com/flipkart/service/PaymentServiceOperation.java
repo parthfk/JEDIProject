@@ -1,8 +1,11 @@
 package com.flipkart.service;
 
 
+
+
 import com.flipkart.bean.Payment;
 import com.flipkart.bean.PaymentNotification;
+import com.flipkart.bean.Student;
 
 import java.util.Scanner;
 
@@ -10,18 +13,21 @@ import java.util.Scanner;
 public class PaymentServiceOperation implements PaymentService {
 
     private Scanner scanner;
+    private Student student;
 
-    public PaymentServiceOperation() {
+    public PaymentServiceOperation(Student student) {
         scanner = new Scanner(System.in);
+        this.student=student;
     }
 
     public double calculateAmount() {
         return 10000;
     }
 
-    public boolean paymentApproved() {
-    return true;
+    public boolean paymentApproved(Student student) {
+        return true;
     }
+
     public void payCreditCard(){
         System.out.println("Please enter credit card number");
         String creditCardNumber = scanner.nextLine();

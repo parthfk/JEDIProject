@@ -52,6 +52,8 @@ public class UserServiceOperation implements UserService {
                     for (Student u : studentList) {
                         if (u.getEmail().equals(inputEmail)) {
                             userObj = u;
+                            System.out.println(u.getEmail());
+                            System.out.println(u.isStatusApproval());
                             if (!u.isStatusApproval()) {
                                 System.out.println("Registration not approved. Please contact admin");
                                 return null;

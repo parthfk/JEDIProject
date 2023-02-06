@@ -3,6 +3,7 @@ package com.flipkart.service;
 import com.flipkart.bean.*;
 import com.flipkart.constant.IDNumber;
 import com.flipkart.constant.PaymentMode;
+import com.flipkart.dao.PaymentDAOImpl;
 import com.flipkart.dao.StudentDAOImpl;
 import com.flipkart.data.CourseData;
 import com.flipkart.utils.Utils;
@@ -359,7 +360,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             System.out.println("Fees already paid!");
             return;
         }
-        PaymentService paymentServiceOperation = new PaymentServiceOperation();
+        PaymentService paymentServiceOperation = new PaymentServiceOperation(student);
         double amountToPay = paymentServiceOperation.calculateAmount();
         System.out.println("Hello, your fees due is " + amountToPay);
         Payment studentPayment = new Payment(student.getUserId());
@@ -428,9 +429,9 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                 System.out.println("Invalid key, try again!");
                 break;
         }
-        if (paymentServiceOperation.paymentApproved()) {
+        if (PaymentDAOImpl.getInstance().paymentApproved(student)) {
 
-            paymentServiceOperation.sendNotification(
+            PaymentDAOImpl.getInstance().sendNotification(
                     student.getUserId(), paymentServiceOperation.calculateAmount(), studentPayment.getPaymentId(), message);
         } else {
             System.out.println("Sorry,Payment Failed ! Please try again or contact admin.");

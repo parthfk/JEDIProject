@@ -1,6 +1,10 @@
 package com.flipkart.service;
 
 import com.flipkart.bean.*;
+import com.flipkart.dao.CatalogueDAO;
+import com.flipkart.dao.CatalogueDAOImpl;
+import com.flipkart.dao.CourseDAO;
+import com.flipkart.dao.CourseDAOImpl;
 import com.flipkart.data.CourseData;
 import com.flipkart.data.RegisteredCourseData;
 import com.flipkart.data.UserData;
@@ -10,6 +14,7 @@ import java.util.Scanner;
 
 public class AdminServiceOperation extends UserServiceOperation implements AdminService {
     private Scanner scanner;
+    CatalogueDAO catalogue = new CatalogueDAOImpl();
 
     public AdminServiceOperation() {
         scanner = new Scanner(System.in);
@@ -22,16 +27,25 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         System.out.println("Please enter course name");
         String courseName = scanner.nextLine();
 
-        System.out.println("Please enter professor assigned");
-        String professorAssigned = scanner.nextLine();
+        System.out.println("Please enter semester ID");
+        String semID = scanner.nextLine();
 
         System.out.println("Please enter available seats");
         int seatsAvailable = scanner.nextInt();
 
         try {
-            Course newCourse = new Course(courseId, courseName, professorAssigned, seatsAvailable);
-            CourseData.courseList.add(newCourse);
-            System.out.println("Your new course added: " + newCourse);
+            Course newCourse = new Course(courseId, courseName, null, seatsAvailable);
+
+            CourseDAO courseDAO = new CourseDAOImpl();
+            CatalogueDAO catalogueDAO = new CatalogueDAOImpl();
+
+            if(courseDAO.doesCourseExist(courseId)){
+                catalogueDAO.addCourseInDB(newCourse,semID);
+            }
+            else {
+                courseDAO.addCourseToDB(newCourse);
+            }
+
         } catch (Exception e) {
             return false;
         }
@@ -64,6 +78,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
     }
 
     public void approveStudent() {
+
         for (Student s : UserData.studentList) {
             if (!s.isStatusApproval())
                 System.out.println("Student User ID: " + s.getUserId() + " Student Name: " + s.getName() + " Student Department: " + s.getDepartmentID() + " Student Email: " + s.getEmail());

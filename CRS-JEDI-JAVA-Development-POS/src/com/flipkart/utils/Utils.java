@@ -90,6 +90,7 @@ public class Utils {
 
                 // todo add new Professor with data received. PLEASE CREATE CONSTRUCTOR
                 // See the DB and add required fields in professor class, create constructor
+                
             }
             stmt.close();
             conn.close();
