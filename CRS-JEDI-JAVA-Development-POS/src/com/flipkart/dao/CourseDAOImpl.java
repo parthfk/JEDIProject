@@ -39,7 +39,7 @@ public class CourseDAOImpl implements CourseDAO {
             ;
 
             if(rs.next() && rs.getInt(1)==0) {
-                System.out.println("course doesnot exist");
+                System.out.println("course does not exist");
                     return false;
                 }
                 else {

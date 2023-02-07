@@ -238,6 +238,7 @@ public class AdminDAOImpl implements AdminDAO{
                     return;
                 }
                 System.out.println("List of Un-Approved Students");
+                System.out.println("Student ID \t  Name \t    E-Mail");
                 do{
                     //Retrieve by column name
 
@@ -245,9 +246,7 @@ public class AdminDAOImpl implements AdminDAO{
                     String eid = rs.getString("userId");
                     String name = rs.getString("name");
                     String email = rs.getString("email");
-                    System.out.print("Student ID: " + eid);
-                    System.out.print(" Name: " + name);
-                    System.out.println(" E-Mail: " + email);
+                    System.out.println(eid+"\t \t \t " +name+"\t"+email);
                 }while(rs.next());
 
 
@@ -306,7 +305,7 @@ public class AdminDAOImpl implements AdminDAO{
 
             Class.forName("com.mysql.jdbc.Driver");
 
-            System.out.println("Connecting to database...");
+           // System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // fetch student list
@@ -321,9 +320,9 @@ public class AdminDAOImpl implements AdminDAO{
 
             while(rs.next())
             {
-                System.out.println("Name of student : " + rs.getString(1) + " UserID : " +
-                        rs.getString(2) + " Email " + rs.getString(3) +
-                        " Department Registered in " + rs.getString(4));
+                System.out.println("Student Name \t UserID \t E-Mail \t Department");
+
+                System.out.println(rs.getString(1) +"    \t"+ rs.getString(2)  +"\t"+rs.getString(3) +"\t"+ rs.getString(4));
             }
 
             rs.close();

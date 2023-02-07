@@ -58,7 +58,8 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         CatalogueDAOImpl catalogueDAO = new CatalogueDAOImpl();
         List<Course> courseList = catalogueDAO.fetchCatalogue();
         for (Course c :courseList) {
-            System.out.println("Course Name : " + c.getName() + "  Course ID : " + c.getCourseID());
+            System.out.println("Course Name \t Course ID");
+            System.out.println(c.getName() + "\t" + c.getCourseID());
         }
         System.out.println("Enter the course ID to be deleted");
         String id_to_be_deleted = scanner.nextLine();
