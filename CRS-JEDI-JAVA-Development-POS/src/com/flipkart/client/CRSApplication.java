@@ -12,6 +12,10 @@ import java.io.Console;
 import java.util.Scanner;
 
 public class CRSApplication {
+    /**
+     * Main function which is the starting point of all functionality.
+     * @param args
+     */
     public static void main (String[] args) {
         Scanner in = new Scanner(System.in);
 

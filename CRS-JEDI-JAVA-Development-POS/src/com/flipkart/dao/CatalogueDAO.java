@@ -6,6 +6,7 @@ import com.flipkart.exception.CourseNotFoundException;
 import java.util.List;
 
 public interface CatalogueDAO {
+
     /** Method to add course in Catalogue using SQL commands
      * @param course
      * @param semID
@@ -17,7 +18,7 @@ public interface CatalogueDAO {
      */
     public List<Course> fetchCatalogue();
 
-    /**
+    /** Method to delete course from catalogue in DB using SQl commands
      * @param courseId ß
      * @throws CourseNotFoundException
      */

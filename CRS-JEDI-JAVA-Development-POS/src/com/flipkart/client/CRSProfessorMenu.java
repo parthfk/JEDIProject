@@ -22,6 +22,10 @@ public class CRSProfessorMenu {
     private Scanner scanner;
     private UserService userService;
 
+    /**
+     * constructor
+     * @param professor
+     */
     public CRSProfessorMenu(Professor professor) {
         this.professorUsername = professor.getName();
         scanner = new Scanner(System.in);
@@ -29,6 +33,10 @@ public class CRSProfessorMenu {
         displayMenu(professor);
     }
 
+    /**
+     * Method which implements different functions according to the option chosen by the professor
+     * @param professor
+     */
     public void displayMenu(Professor professor) {
 
         while(true) {
@@ -89,6 +97,9 @@ public class CRSProfessorMenu {
         }
     }
 
+    /**
+     * Methods which displays different option in the professor menu
+     */
     private void consolePrints() {
         System.out.println();
         System.out.println("**************************************************");

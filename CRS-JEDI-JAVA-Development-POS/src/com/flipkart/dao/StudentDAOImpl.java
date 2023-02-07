@@ -3,6 +3,7 @@ package com.flipkart.dao;
 import com.flipkart.bean.Course;
 import com.flipkart.bean.GradeCard;
 import com.flipkart.bean.Student;
+import com.flipkart.constant.DBConnection;
 import com.flipkart.constant.RoleId;
 
 import java.sql.*;
@@ -17,16 +18,13 @@ public class StudentDAOImpl implements StudentDAO {
 
     private StudentDAOImpl(Student student) {
         this.student = student;
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
+        try {
+            Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-        }
-        catch (Exception e)
-        {
-            System.out.println(e);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
-
 
     // Singleton Pattern
     private static StudentDAOImpl dao = null;

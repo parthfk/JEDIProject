@@ -11,12 +11,14 @@ import java.sql.SQLException;
 
 public interface AdminDAO {
 
-    /** Method to add admin using SQL commands
+    /**
+     * Method to add admin using SQL commands
      * @param admin
      */
     public void addAdminDAO(Admin admin);
 
-    /** Method to add professor using SQL commands
+    /**
+     * Method to add professor using SQL commands
      * @param professor
      */
     public void addProfessorDAO(Professor professor);

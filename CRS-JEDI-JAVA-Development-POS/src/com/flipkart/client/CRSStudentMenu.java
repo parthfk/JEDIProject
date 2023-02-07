@@ -12,12 +12,20 @@ public class CRSStudentMenu {
     // 3. logout
     private String studentUsername;
     private StudentServiceOperation service;
+
+    /**
+     * constructor
+     * @param student
+     */
     public CRSStudentMenu(Student student) {
         this.studentUsername = student.getName();
         service = new StudentServiceOperation(student);
         displayMenu();
     }
 
+    /**
+     * Method which implements different functions according to the option chosen by the student
+     */
     public void displayMenu() {
         boolean studentMenu = true;
         while (studentMenu) {
