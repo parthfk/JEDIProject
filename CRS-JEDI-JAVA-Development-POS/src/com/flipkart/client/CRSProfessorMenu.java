@@ -3,6 +3,7 @@ package com.flipkart.client;
 import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
+import com.flipkart.dao.CatalogueDAOImpl;
 import com.flipkart.data.CourseData;
 import com.flipkart.service.ProfessorService;
 import com.flipkart.service.ProfessorServiceOperation;
@@ -45,11 +46,10 @@ public class CRSProfessorMenu {
             switch (input) {
                 case 1:
                     System.out.println("These are the courses currently available: ");
-                    List<Course> courses = CourseData.courseList;
-                    for(int i=0;i<courses.size();i++){
-                        System.out.println("CourseID: " + courses.get(i).getCourseID() + " Course Name: " + courses.get(i).getName());
+                    List<Course> courseList = new CatalogueDAOImpl().fetchCatalogue();
+                    for(int i=0;i<courseList.size();i++){
+                        System.out.println("CourseID: " + courseList.get(i).getCourseID() + " Course Name: " + courseList.get(i).getName());
                     }
-                    List<Course> courseList = CourseData.courseList;
                     while(true){
                         System.out.println("Please enter the courseId to teach or # to exit.");
                         String inputCourseId = scanner.nextLine();
