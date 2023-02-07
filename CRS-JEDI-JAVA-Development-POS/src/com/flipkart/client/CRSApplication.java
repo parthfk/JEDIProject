@@ -42,19 +42,19 @@ public class CRSApplication {
                     userObj = userService.logIn();
                         if(userObj==null)
                         {
-                            //System.out.println("Please contact Admin for approval");
                             continue;
                         }
                     String role = userObj.getUserType().toLowerCase();
+
                     switch (role) {
                         case "student":
-                            CRSStudentMenu studentMenu = new CRSStudentMenu((Student)userObj);
+                            new CRSStudentMenu((Student)userObj);
                             break;
                         case "professor":
-                            CRSProfessorMenu professorMenu = new CRSProfessorMenu((Professor) userObj);
+                            new CRSProfessorMenu((Professor) userObj);
                             break;
                         case "admin":
-                            CRSAdminMenu adminMenu = new CRSAdminMenu((Admin) userObj);
+                            new CRSAdminMenu((Admin) userObj);
                             continue;
                         default:
                             System.out.println("Please enter a valid Role.");

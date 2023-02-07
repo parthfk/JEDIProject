@@ -1,12 +1,10 @@
 package com.flipkart.service;
 
 import com.flipkart.bean.*;
-import com.flipkart.constant.IDNumber;
 import com.flipkart.constant.PaymentMode;
 import com.flipkart.dao.CatalogueDAOImpl;
 import com.flipkart.dao.PaymentDAOImpl;
 import com.flipkart.dao.StudentDAOImpl;
-import com.flipkart.data.CourseData;
 import com.flipkart.exception.PaymentFailedException;
 import com.flipkart.utils.Utils;
 
@@ -111,6 +109,10 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         String address = in.nextLine();
         System.out.println("Enter your mobile number");
         String mobileNumber = in.nextLine();
+        while (!Utils.isPhoneNumberValid(mobileNumber)) {
+            System.out.println("Your mobile number is invalid. It must a 10 digit numeric. Please enter again:");
+            mobileNumber = in.nextLine();
+        }
         System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
         String dob = in.nextLine();
         Date dobParsed = Date.valueOf(dob);
@@ -118,7 +120,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         Student newStudent = new Student(name, emailEntered, password, departmentId,
                 address, mobileNumber, dobParsed);
 
-        newStudent.setUserId("s" + IDNumber.ID_NUMBER++);
+        newStudent.setUserId("s" + Utils.getStudentCount());
 
         this.student = newStudent;
         if (this.studentDao == null)

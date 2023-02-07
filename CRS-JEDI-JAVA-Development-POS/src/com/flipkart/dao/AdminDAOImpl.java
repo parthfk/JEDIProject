@@ -12,13 +12,14 @@ import java.sql.Date;
 
 import com.flipkart.bean.Admin;
 import com.flipkart.bean.Professor;
+import com.flipkart.constant.DBConnection;
 import com.flipkart.service.AdminService;
 
 import static com.flipkart.constant.DBConnection.*;
 
 public class AdminDAOImpl implements AdminDAO{
 
-    private  static int noOfUsers;
+    private static int noOfUsers;
     Scanner scanner;
     public void addAdminDAO(Admin admin){
         //  public static void main(String args[]){
@@ -86,29 +87,6 @@ public class AdminDAOImpl implements AdminDAO{
 
             stmt.executeUpdate();
 
-
-			   /*
-			   // Let us update age of the record with ID = 102;
-			      int rows = stmt.executeUpdate();
-			      System.out.println("Rows impacted : " + rows );
-			      // Let us select all the records and display them.
-			      sql = "SELECT id, name ,address, location FROM employeefc";
-			      ResultSet rs = stmt.executeQuery(sql);
-			      //STEP 5: Extract data from result set
-			      while(rs.next()){
-			         //Retrieve by column name
-			         int eid  = rs.getInt("id");
-			         String name1 = rs.getString("name");
-			         String address1 = rs.getString("address");
-			         String location1 = rs.getString("location");
-			         //Display values
-			         System.out.print("ID: " + eid);
-			         System.out.print(", Age: " + name1);
-			         System.out.print(", First: " + address1);
-			         System.out.println(", Last: " + location1);
-			      }*/
-            //STEP 6: Clean-up environment
-            // rs.close();
             stmt.close();
             conn.close();
         }catch(SQLException se){
@@ -144,11 +122,8 @@ public class AdminDAOImpl implements AdminDAO{
 
         try{
 
-            // Step 3 Regiater Driver here and create connection
+            Class.forName(JDBC_DRIVER);
 
-            Class.forName("com.mysql.jdbc.Driver");
-
-            // Step 4 make/open  a connection
 
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
@@ -156,7 +131,7 @@ public class AdminDAOImpl implements AdminDAO{
             //STEP 4: Execute a query
             System.out.println("Creating statement...");
 
-            String ss="SELECT COUNT(*) FROM User";
+            String ss="SELECT COUNT(*) FROM User WHERE roleId=2";
             stmt=conn.prepareStatement(ss);
 
             ResultSet rs = stmt.executeQuery(ss);
@@ -181,7 +156,7 @@ public class AdminDAOImpl implements AdminDAO{
 
             stmt = conn.prepareStatement(sql);
             // how to check already Admin exist
-            stmt.setString(1, Integer.toString(noOfUsers));  // This would set adminId
+            stmt.setString(1, "p" + Integer.toString(noOfUsers));  // This would set adminId
             stmt.setString(2,professor.getName());
             stmt.setString(3, professor.getPassword());
             stmt.setString(4, professor.getEmail());
@@ -204,30 +179,6 @@ public class AdminDAOImpl implements AdminDAO{
 
 
             stmt.executeUpdate();
-
-
-			   /*
-			   // Let us update age of the record with ID = 102;
-			      int rows = stmt.executeUpdate();
-			      System.out.println("Rows impacted : " + rows );
-			      // Let us select all the records and display them.
-			      sql = "SELECT id, name ,address, location FROM employeefc";
-			      ResultSet rs = stmt.executeQuery(sql);
-			      //STEP 5: Extract data from result set
-			      while(rs.next()){
-			         //Retrieve by column name
-			         int eid  = rs.getInt("id");
-			         String name1 = rs.getString("name");
-			         String address1 = rs.getString("address");
-			         String location1 = rs.getString("location");
-			         //Display values
-			         System.out.print("ID: " + eid);
-			         System.out.print(", Age: " + name1);
-			         System.out.print(", First: " + address1);
-			         System.out.println(", Last: " + location1);
-			      }*/
-            //STEP 6: Clean-up environment
-            // rs.close();
             stmt.close();
             conn.close();
         }catch(SQLException se){
@@ -263,17 +214,8 @@ public class AdminDAOImpl implements AdminDAO{
 
             // Step 3 Regiater Driver here and create connection
 
-            Class.forName("com.mysql.jdbc.Driver");
-
-            // Step 4 make/open  a connection
-
-            // Connecting to database...;
+            Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-
-            //Creating statement...;
-
-            // Let us select all the records and display them.
 
             while(true) {
                 String sql = "SELECT * FROM Student JOIN User ON Student.studentId = User.userId WHERE Student.statusApproval=0";

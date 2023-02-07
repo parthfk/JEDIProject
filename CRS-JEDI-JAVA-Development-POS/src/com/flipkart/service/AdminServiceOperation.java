@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import com.flipkart.dao.*;
 import com.flipkart.exception.CourseNotFoundException;
+import com.flipkart.utils.Utils;
 
 import java.util.List;
 public class AdminServiceOperation extends UserServiceOperation implements AdminService {
@@ -79,27 +80,8 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
     }
 
     public void approveStudent() {
-
         AdminDAOImpl obj = new AdminDAOImpl();
         obj.approveStudentDAO();
-
-//        for (Student s : UserData.studentList) {
-//            if (!s.isStatusApproval())
-//                System.out.println("Student User ID: " + s.getUserId() + " Student Name: " + s.getName() + " Student Department: " + s.getDepartmentID() + " Student Email: " + s.getEmail());
-//        }
-//        while (true) {
-//            System.out.println("Enter student UserID or Press # to exit");
-//            String user_ID = scanner.next();
-//            if (user_ID.equals("#"))
-//                return;
-//            for (Student s : UserData.studentList) {
-//                if (s.getUserId().equals(user_ID)) {
-//                    s.setStatusApproval(true);
-//                    System.out.println("Student Approved");
-//                    break;
-//                }
-//            }
-//        }
     }
 
 
@@ -116,11 +98,15 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         System.out.println("Enter new Professor DepartmentID");
         newProf.setDepartmentID(scanner.next());
         newProf.setUserType("professor");
-        System.out.println("Enter your address");
+        System.out.println("Enter professor's address");
         String address = scanner.next();
         newProf.setAddress(address);
-        System.out.println("Enter your mobile number");
+        System.out.println("Enter professor's mobile number");
         String mobileNumber = scanner.next();
+        while (!Utils.isPhoneNumberValid(mobileNumber)) {
+            System.out.println("Your mobile number is invalid. It must a 10 digit numeric. Please enter again");
+            mobileNumber = scanner.nextLine();
+        }
         newProf.setMobileNumber(mobileNumber);
         System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
         String dob = scanner.next();
@@ -146,11 +132,15 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         System.out.println("Enter new Admin Email");
         newAdmin.setEmail(scanner.next());
         newAdmin.setUserType("admin");
-        System.out.println("Enter your address");
+        System.out.println("Enter new admin's address");
         String address = scanner.next();
         newAdmin.setAddress(address);
-        System.out.println("Enter your mobile number");
+        System.out.println("Enter new admin's number");
         String mobileNumber = scanner.next();
+        while (!Utils.isPhoneNumberValid(mobileNumber)) {
+            System.out.println("Your mobile number is invalid. It must a 10 digit numeric. Please enter again");
+            mobileNumber = scanner.nextLine();
+        }
         newAdmin.setMobileNumber(mobileNumber);
         System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
         String dob = scanner.next();
@@ -166,7 +156,6 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         return true;
     }
 
-    //functionality remaining
     public void generateGradeCard() {
         AdminDAO adminDAO = new AdminDAOImpl();
         adminDAO.generateGradeCardDAO();

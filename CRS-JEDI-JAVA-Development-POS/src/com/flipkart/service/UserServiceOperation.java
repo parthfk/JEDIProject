@@ -8,6 +8,8 @@ import com.flipkart.data.CourseData;
 import com.flipkart.data.UserData;
 import com.flipkart.utils.Utils;
 
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.*;
@@ -44,8 +46,7 @@ public class UserServiceOperation implements UserService {
                             }
                         }
                         if (!emailValidated) {
-
-                            System.out.println("Invalid Credentials. Please try again");
+                            checkUserExists(inputEmail);
                             return null;
                         }
                     } else if (role.equals("student")) {
@@ -64,7 +65,7 @@ public class UserServiceOperation implements UserService {
                             }
                         }
                         if (!emailValidated) {
-                            System.out.println("Invalid Credentials. Please try again");
+                            checkUserExists(inputEmail);
                             return null;
                         }
                     } else if (role.equals("professor")) {
@@ -80,9 +81,12 @@ public class UserServiceOperation implements UserService {
                             }
                         }
                         if (!emailValidated) {
-                            System.out.println("Invalid Credentials. Please try again");
+                            checkUserExists(inputEmail);
                             return null;
                         }
+                    } else {
+                        System.out.println("Please enter a Valid role, which can be 'student', 'professor' or 'admin'!");
+                        return null;
                     }
                 } catch (NullPointerException e) {
                     System.out.println("Failure in reading the db : \n" + e.getMessage());
@@ -104,6 +108,18 @@ public class UserServiceOperation implements UserService {
         }
         System.out.println("You have logged in successfully !");
         return userObj;
+    }
+
+    private void checkUserExists(String inputEmail) {
+        List<User> userList = Utils.getUserList();
+        for (User u: userList) {
+            if (u.getEmail().matches(inputEmail)) {
+                System.out.println("You have entered the wrong role. Please try again, entering the appropriate role");
+                System.out.println("Your role is " + u.getUserType());
+                return;
+            }
+        }
+        System.out.println("No user exists with this email! Please contact admin for help!");
     }
 
     public boolean logOut(User user) {

@@ -71,7 +71,7 @@ public class PaymentDAOImpl implements PaymentDAO{
             java.util.Date javaDate = new java.util.Date();
             java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
 
-            String sql2  = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values("+paymentId+","+student.getUserId()+",4,"+mySQLDate.toString()+")";
+            String sql2  = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values("+paymentId+","+"'"+student.getUserId()+"'"+",4,"+mySQLDate.toString()+")";
 
             stmt = conn.prepareStatement(sql2);
 
@@ -124,7 +124,7 @@ public class PaymentDAOImpl implements PaymentDAO{
             java.util.Date javaDate = new java.util.Date();
             java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
 
-            String sql2  = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values("+paymentId+","+student.getUserId()+",5,"+mySQLDate.toString()+")";
+            String sql2  = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values("+paymentId+","+"'"+student.getUserId()+"'"+",5,"+mySQLDate.toString()+")";
 
             stmt = conn.prepareStatement(sql2);
 
@@ -177,7 +177,7 @@ public class PaymentDAOImpl implements PaymentDAO{
             java.util.Date javaDate = new java.util.Date();
             java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
 
-            String sql2  = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values("+paymentId+","+student.getUserId()+",3,"+mySQLDate.toString()+")";
+            String sql2  = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values("+paymentId+","+"'"+student.getUserId()+"'"+",3,"+mySQLDate.toString()+")";
 
             stmt = conn.prepareStatement(sql2);
 

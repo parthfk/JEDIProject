@@ -6,6 +6,7 @@ import com.flipkart.constant.RoleIdMapping;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static com.flipkart.constant.DBConnection.*;
 
@@ -15,7 +16,7 @@ public class Utils {
 
     Utils(){
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
         } catch(Exception e){
             e.printStackTrace();
@@ -146,46 +147,27 @@ public class Utils {
     /*
         This function might not be needed. Use the specific ones instead
      */
-    public static List<User> getUserList(String type) {
+    public static List<User> getUserList() {
         ArrayList<User> users = new ArrayList<>();
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            String queryRoleId = "all";
-            switch (type) {
-                case "student":
-                    queryRoleId = "3";
-                    break;
-                case "professor":
-                    queryRoleId = "2";
-                    break;
-                case "admin":
-                    queryRoleId = "1";
-                    break;
-                default:
-                    queryRoleId = "all";
-                    break;
-            }
-
-            String getUsersQuery = "SELECT * from User where roleId=" + queryRoleId;
+            String getUsersQuery = "SELECT * from User";
             PreparedStatement stmt = conn.prepareStatement(getUsersQuery);
             ResultSet rs = stmt.executeQuery(getUsersQuery);
-            if (rs.next()) {
-                String userId = rs.getString("userId");
+            while (rs.next()) {
                 String name = rs.getString("name");
                 String password = rs.getString("password");
                 String email = rs.getString("email");
                 int roleId = rs.getInt("roleId");
-
                 users.add(new User(name, password, email, RoleIdMapping.fromId(roleId)));
             }
             stmt.close();
             conn.close();
-
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             System.out.println("Something went wrong on DB side!");
         }
-        return null;
+        return users;
     }
 
     public static void updateCourseSeats(Course c) {
@@ -207,5 +189,35 @@ public class Utils {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    public static int getStudentCount() {
+        try {
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            // Fields for new SemRegistration record
+            String userEntryQuery =
+                    "SELECT COUNT(*) FROM User WHERE roleId=3";
+            stmt = conn.prepareStatement(userEntryQuery);
+
+            ResultSet rs = stmt.executeQuery(userEntryQuery);
+            if (rs.next()) {
+                int id = rs.getInt(1);
+                return id + 1;
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return new Random().nextInt(1000);
+    }
+
+    public static boolean isPhoneNumberValid(String mobileNumber) {
+        if (mobileNumber.length() != 10) return false;
+        for (int i=0; i<mobileNumber.length(); i++) {
+            if (mobileNumber.charAt(i) < '0' || mobileNumber.charAt(i) > '9') return false;
+        }
+        return true;
     }
 }

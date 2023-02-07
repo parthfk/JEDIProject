@@ -4,6 +4,7 @@ import com.flipkart.bean.Course;
 import com.flipkart.bean.Student;
 import com.flipkart.constant.DBConnection;
 import com.flipkart.constant.RoleId;
+import com.flipkart.constant.SQLConstants;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -46,17 +47,14 @@ public class StudentDAOImpl implements StudentDAO {
             email = student.getEmail();
             roleId = RoleId.STUDENT;
 
-            String userEntryQuery = "INSERT into User values (?,?,?,?,?)";
-            stmt = conn.prepareStatement(userEntryQuery);
+            stmt = conn.prepareStatement(SQLConstants.USER_ENTRY_QUERY);
             stmt.setString(1, userId);  // This would set age
             stmt.setString(2, name);
             stmt.setString(3, password);
             stmt.setString(4, email);
             stmt.setInt(5, roleId);
 
-            if(stmt.executeUpdate()==1){
-                System.out.println("Inserted into User successfully.");
-            }else {
+            if(stmt.executeUpdate()!=1){
                 System.out.println("Insertion into User failed !");
                 return;
             }
@@ -88,9 +86,9 @@ public class StudentDAOImpl implements StudentDAO {
             stmt.setInt(9, -1);
 
             if(stmt.executeUpdate()==1){
-                System.out.println("Inserted into Student successfully.");
-            }else {
-                System.out.println("Insertion into Student failed !");
+                System.out.println("You have been added successfully as Student. Please contact admin for approval");
+            } else {
+                System.out.println("Something went wrong. Please try again");
                 return;
             }
             stmt.close();

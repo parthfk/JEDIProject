@@ -70,11 +70,7 @@ public class CRSAdminMenu {
                     adminObj.addCourse();
                     break;
                 case 6:
-                    try{
-                        adminObj.removeCourse();
-                    }catch(CourseNotFoundException e){
-                        System.out.println("Error :"+ e.getMessage());
-                    }
+                    adminObj.removeCourse();
 
                     break;
                 case 7:
