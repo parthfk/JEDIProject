@@ -5,6 +5,7 @@ import com.flipkart.bean.Student;
 import com.flipkart.constant.DBConnection;
 import com.flipkart.constant.RoleId;
 import com.flipkart.constant.SQLConstants;
+import com.flipkart.utils.DbConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,13 +18,7 @@ public class StudentDAOImpl implements StudentDAO {
     private Student student;
 
     private StudentDAOImpl(Student student) {
-        this.student = student;
-        try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        this.conn = DbConnection.getConnectionInstance();
     }
 
     // Singleton Pattern
@@ -106,8 +101,7 @@ public class StudentDAOImpl implements StudentDAO {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             // Fields for updating SemRegistration record
             String userEntryQuery =
-                    "insert into SemRegistration values(?,?,?,?,?,?,?,?,?) " +
-                            "on duplicate key update pc1=?, pc2=?, pc3=?, pc4=?";
+                    "insert into SemRegistration values(?,?,?,?,?,?,?,?,?) on duplicate key update pc1=?, pc2=?, pc3=?, pc4=?";
 
             String studentId = this.student.getUserId();
             System.out.println("Student: " + this.student);
@@ -150,10 +144,10 @@ public class StudentDAOImpl implements StudentDAO {
         ArrayList<String> primaryCourses = new ArrayList<>();
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            String viewPrimaryCoursesQuery = "SELECT pc1, pc2, pc3, pc4 from SemRegistration " +
-                    "WHERE studentId='" + student.getUserId() + "'";
+            String viewPrimaryCoursesQuery = "SELECT pc1, pc2, pc3, pc4 from SemRegistration WHERE studentId='?'";
 
             stmt = conn.prepareStatement(viewPrimaryCoursesQuery);
+            stmt.setString(1, student.getUserId());
             ResultSet rs = stmt.executeQuery(viewPrimaryCoursesQuery);
             while (rs.next()) {
                 String pc1 = "", pc2 = "", pc3 = "", pc4 = "";

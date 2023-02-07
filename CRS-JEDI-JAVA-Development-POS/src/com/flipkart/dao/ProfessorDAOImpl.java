@@ -24,15 +24,17 @@ public class ProfessorDAOImpl implements ProfessorDAO{
     public void selectCourseDAO(Course course) {
         String profId = prof.getUserId();
         String courseId = course.getCourseID();
-        String updateCourseQuery = "UPDATE Catalogue SET professorId='"+ profId + "' WHERE courseId='"+ courseId+"'";
+        String updateCourseQuery = "UPDATE Catalogue SET professorId=? WHERE courseId=?";
 
         try{
-            Statement st = establishConnection();
+            PreparedStatement st = conn.prepareStatement(updateCourseQuery);
+            st.setString(1,profId);
+            st.setString(2,courseId);
 
-            int m = st.executeUpdate(updateCourseQuery);
-            if (m == 1){
-                System.out.println("Updated successfully : " + updateCourseQuery);
-            }else System.out.println("Update failed");
+            st.execute();
+//            if (m){
+//                System.out.println("Updated successfully : " + updateCourseQuery);
+//            }else System.out.println("Update failed");
 
             st.close();
             conn.close();
@@ -44,9 +46,13 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
     @Override
     public List<Student> viewEnrolledStudentListDao(String courseId, String semesterId) {
-        String getStudentIdListQuery = "SELECT studentId FROM RegisteredCourse WHERE courseId='" + courseId + "' AND semesterId='"+semesterId +"'";
+        String getStudentIdListQuery = "SELECT studentId FROM RegisteredCourse WHERE courseId=? AND semesterId=?";
         try{
-            Statement st = establishConnection();
+            PreparedStatement st = conn.prepareStatement(getStudentIdListQuery);
+            st.setString(1,courseId);
+            st.setString(2,semesterId);
+//            st.execute();
+//            Statement st = establishConnection();
             ResultSet rs = st.executeQuery(getStudentIdListQuery);
             List<String> studentIds = new ArrayList<>();
             while (rs.next()){
@@ -83,9 +89,12 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
     @Override
     public List<Course> viewCourseListDao(String id) {
-        String getCourseListQuery = "SELECT courseId,availableSeats FROM Catalogue WHERE professorId='"+id +"'";
+        String getCourseListQuery = "SELECT courseId,availableSeats FROM Catalogue WHERE professorId=?";
         try{
-            Statement st = establishConnection();
+            PreparedStatement st = conn.prepareStatement(getCourseListQuery);
+            st.setString(1,id);
+//            st.execute();
+//            Statement st = establishConnection();
             ResultSet rs = st.executeQuery(getCourseListQuery);
             List<String> courseIds = new ArrayList<>();
             HashMap<String,Integer> courseToAvailableSeatsMapping = new HashMap<>();
@@ -98,7 +107,9 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
             List<Course> courseList = new ArrayList<>();
             for(String courseID : courseIds){
-                String getCourseDetailsQuery = "SELECT name FROM Course WHERE courseId='"+courseID +"'";
+                String getCourseDetailsQuery = "SELECT name FROM Course WHERE courseId=?";
+                st = conn.prepareStatement(getCourseDetailsQuery);
+                st.setString(1,courseID);
                 ResultSet rs2 = st.executeQuery(getCourseDetailsQuery);
                 while(rs2.next()){
                     String name = rs2.getString("name");

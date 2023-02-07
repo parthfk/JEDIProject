@@ -2,15 +2,15 @@ package com.flipkart.exception;
 
 public class UserNotFoundException extends Exception{
 
-    private String userId;
+    private String emailId;
 
     /**
      * constructor
-     * @param userId
+     * @param emailId
      */
-    public UserNotFoundException(String userId) {
+    public UserNotFoundException(String emailId) {
         super();
-        this.userId = userId;
+        this.emailId = emailId;
     }
 
     /**
@@ -19,6 +19,6 @@ public class UserNotFoundException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "User with userId: " + userId + " is not found.";
+        return "User with userId: " + emailId + " is not found.";
     }
 }

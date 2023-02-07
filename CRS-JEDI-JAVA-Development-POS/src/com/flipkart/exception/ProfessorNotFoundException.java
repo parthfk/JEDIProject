@@ -1,15 +1,15 @@
 package com.flipkart.exception;
 
 public class ProfessorNotFoundException extends Exception{
-    private String professorId;
+    private String emailId;
 
     /**
      * constructor
-     * @param professorId
+     * @param emailId
      */
-    public ProfessorNotFoundException(String professorId) {
+    public ProfessorNotFoundException(String emailId) {
         super();
-        this.professorId = professorId;
+        this.emailId = emailId;
     }
 
     /**
@@ -18,6 +18,6 @@ public class ProfessorNotFoundException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Professor with professorId: " + professorId + " is not found.";
+        return "Professor with professorId: " + emailId + " is not found.";
     }
 }
