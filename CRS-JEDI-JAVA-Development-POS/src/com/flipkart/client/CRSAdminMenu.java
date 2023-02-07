@@ -27,7 +27,7 @@ public class CRSAdminMenu {
     Scanner in = new Scanner(System.in);
     UserService userService;
 
-    public CRSAdminMenu(Admin admin) {
+    public CRSAdminMenu(Admin admin) throws CourseNotFoundException {
         this.adminUsername = admin.getName();
         //displayMenu();
 
@@ -38,7 +38,7 @@ public class CRSAdminMenu {
 
     }
 
-    private void displayAdminMenu(Admin admin) {
+    private void displayAdminMenu(Admin admin) throws CourseNotFoundException {
         while(true) {
             displayMenu();
             int input=in.nextInt();

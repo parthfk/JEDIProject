@@ -362,6 +362,29 @@ public class StudentDAOImpl implements StudentDAO {
         return registeredCourses;
     }
 
+    public static boolean registrationIsDone(Student student) {
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String checkReg = "SELECT regDone from SemRegistration where studentId='" + student.getUserId() + "'";
+            PreparedStatement stmt = conn.prepareStatement(checkReg);
+            ResultSet checkRegRs = stmt.executeQuery(checkReg);
+            if (checkRegRs.next()) {
+                boolean regDone = checkRegRs.getBoolean("regDone");
+                if (regDone) {
+                    System.out.println("Your registration is already completed. You are not allowed to perform this operation!");
+                }
+                return regDone;
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Something went wrong on DB side");
+        }
+        return false;
+    }
+
     @Override
     public GradeCard displayGradeCard() {
         return null;
