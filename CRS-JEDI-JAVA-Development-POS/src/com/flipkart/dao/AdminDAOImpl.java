@@ -35,11 +35,11 @@ public class AdminDAOImpl implements AdminDAO{
 
             // Step 4 make/open  a connection
 
-            System.out.println("Connecting to database...");
+            //System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             //STEP 4: Execute a query
-            System.out.println("Creating statement...");
+            //System.out.println("Creating statement...");
 
             String ss1="SELECT * FROM User where emailId="+admin.getEmail();
             stmt=conn.prepareStatement(ss1);
@@ -317,13 +317,16 @@ public class AdminDAOImpl implements AdminDAO{
             stmt = conn.prepareStatement(sql);
 
             ResultSet rs = stmt.executeQuery();
-
-            while(rs.next())
-            {
-                System.out.println("Student Name \t UserID \t E-Mail \t Department");
-
-                System.out.println(rs.getString(1) +"    \t"+ rs.getString(2)  +"\t"+rs.getString(3) +"\t"+ rs.getString(4));
+            if(rs.next()==false){
+                System.out.println("No Grade card ready to be generated");
+                return;
             }
+
+            System.out.println("Student Name \t UserID \t E-Mail \t \t Department");
+
+            do {
+                System.out.println(rs.getString(1) +"\t \t"+ rs.getString(2)  +"\t \t \t"+rs.getString(3) +"\t"+ rs.getString(4));
+            }while(rs.next());
 
             rs.close();
 

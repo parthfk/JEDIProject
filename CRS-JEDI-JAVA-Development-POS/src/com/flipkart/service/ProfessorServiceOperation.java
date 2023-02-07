@@ -30,9 +30,13 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         return Arrays.asList(courseId,semesterId);
     }
     public void printCourseList(List<Course> courseList){
+        boolean flag =true;
         for(int i=0;i<courseList.size();i++){
-            System.out.println((i+1)+" CourseId: "+ courseList.get(i).getCourseID()
-                    +" Name: "+courseList.get(i).getName());
+            if(flag){
+            System.out.println("Sr No. \t Course ID \tName");
+            flag=true;
+            }
+            System.out.println((i+1)+"\t"+ courseList.get(i).getCourseID()+"\t\t" +courseList.get(i).getName());
         }
     }
 

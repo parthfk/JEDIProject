@@ -158,8 +158,8 @@ public class UserServiceOperation implements UserService {
         }
         System.out.println("These are the courses currently available: ");
         for(int i=0;i<courses.size();i++){
-            System.out.println("CourseID \t Course Name \t Professor ");
-            System.out.println(courses.get(i).getCourseID() + "        \t" + courses.get(i).getName()+ "\t             "+courses.get(i).getProfessorID());
+            System.out.println("CourseID \t Course Name \t Professor ID ");
+            System.out.println(courses.get(i).getCourseID() + "\t\t\t" + courses.get(i).getName()+ "\t"+courses.get(i).getProfessorID());
         }
         return courses;
     }
