@@ -27,10 +27,19 @@ public class CatalogueDAOImpl implements CatalogueDAO{
 
     @Override
     public void addCourseInDB(Course course, String semID) {
+//
+//    }
+//    public static void main(String args[]){
+//
+//         Connection conn = null;
+//         PreparedStatement stmt = null;
+//         Course course=new Course("123","","",5);
+//         int semID=5;
 
 
         try{
-            String sql = "insert into Catalogue values(?,?,?,?)";
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            String sql = "insert into Catalogue values (?,?,?,?)";
 
             stmt = conn.prepareStatement(sql);
 
@@ -81,7 +90,7 @@ public class CatalogueDAOImpl implements CatalogueDAO{
     }
 
     @Override
-    public void deleteCourseInDB(String courseId) throws CourseNotFoundException {
+    public void deleteCourseInDB(String courseId)  {
 
         try {
             String sql = "delete from Catalogue where courseId = ?";
@@ -89,12 +98,17 @@ public class CatalogueDAOImpl implements CatalogueDAO{
             stmt.setString(1,courseId);
 
             int row = stmt.executeUpdate();
+            stmt.close();
+            conn.close();
 
             if(row == 0) {
                 throw new CourseNotFoundException(courseId);
             }
 
+
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (CourseNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

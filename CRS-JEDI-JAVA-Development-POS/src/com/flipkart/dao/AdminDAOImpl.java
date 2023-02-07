@@ -47,7 +47,7 @@ public class AdminDAOImpl implements AdminDAO{
                 noOfUsers=rs.getInt("COUNT(*)");
 
             //System.out.println(noOfUsers);
-
+            noOfUsers++;
 
 
             String sql="insert into User values(?,?,?,?,?)";
@@ -162,6 +162,7 @@ public class AdminDAOImpl implements AdminDAO{
             ResultSet rs = stmt.executeQuery(ss);
             if(rs.next())
                 noOfUsers=rs.getInt("COUNT(*)");
+            noOfUsers++;
 
             //System.out.println(noOfUsers);
 
@@ -189,7 +190,7 @@ public class AdminDAOImpl implements AdminDAO{
             stmt.executeUpdate();
 
             System.out.println("Creating statement...");
-            sql="insert into Professor values(?,?,?,?)";
+            sql="insert into Professor values(?,?,?,?,?)";
             //String sql = "UPDATE Admin set age=? WHERE id=?";
             // String sql1="delete from employee where id=?";
             // stmt.setInt(1, 101);
@@ -255,7 +256,6 @@ public class AdminDAOImpl implements AdminDAO{
 
     public void approveStudentDAO(){
 
-
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -287,7 +287,7 @@ public class AdminDAOImpl implements AdminDAO{
                     return;
                 }
                 System.out.println("List of Un-Approved Students");
-                while (rs.next()) {
+                do{
                     //Retrieve by column name
 
 
@@ -297,7 +297,7 @@ public class AdminDAOImpl implements AdminDAO{
                     System.out.print("Student ID: " + eid);
                     System.out.print(" Name: " + name);
                     System.out.println(" E-Mail: " + email);
-                }
+                }while(rs.next());
 
 
                 System.out.println("Enter student ID to be Approved or Press # to exit");
@@ -361,7 +361,7 @@ public class AdminDAOImpl implements AdminDAO{
             // fetch student list
             // select * from student
 
-            String sql = "select name, studentId, email, departmentId from Student where gradeCardApproved = 0 "+
+            String sql = "select name, studentId, email, departmentId from Student JOIN User on userId = studentId where gradeCardApproved = 0 "+
                     "and statusApproval = 1";
 
             stmt = conn.prepareStatement(sql);
@@ -378,23 +378,26 @@ public class AdminDAOImpl implements AdminDAO{
             rs.close();
 
             System.out.println("Enter UserID of student to approve Grade Gard or Press # to exit");
+            scanner = new Scanner(System.in);
             String userId_of_approved_gradeCard = scanner.next();
             if (userId_of_approved_gradeCard.equals("#")) {
                 return;
             }
 
-            sql = "select grade, semesterId from `RegisteredCourse` where studentId = "+userId_of_approved_gradeCard;
+            sql = "select grade, semesterId from RegisteredCourse where studentId = '"+userId_of_approved_gradeCard +"'";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             float gradeTotal = 0;
             int num = 0;
-            String semID = rs.getString(2);
+
+            String semID="1";
             boolean gradeNotAssigned = false;
 
             while(rs.next())
             {
                 String tempgrade = rs.getString(1);
+                semID = rs.getString(2);
                 if(tempgrade == null){
                     gradeNotAssigned = true;
                     break;
@@ -426,26 +429,33 @@ public class AdminDAOImpl implements AdminDAO{
                 return;
             }
 
-            sql = "select count(*) from `GradeCard`";
+            sql = "select count(*) from GradeCard";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
-            int records = rs.getInt(1);
+            int records = 2312;
+            if(rs.next())
+                    records = rs.getInt(1);
+
             rs.close();
 
-            sql = "insert into `GradeCard` values ("+records+","+userId_of_approved_gradeCard+","+
-                    gradeTotal / num +","+
-                    semID+")";
+            float sgpa = (gradeTotal/num) * 10;
+            sql = "insert into GradeCard values ('"+records+"','"+userId_of_approved_gradeCard+"',"+
+                    sgpa +",'"+
+                    semID+"')";
 
             stmt = conn.prepareStatement(sql);
 
-            rs = stmt.executeQuery();
+            stmt.executeUpdate();
+            stmt.close();
 
-            rs.close();
+            sql = "UPDATE Student set gradeCardApproved = 1 WHERE studentId = '" + userId_of_approved_gradeCard +"'";
+            stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
 
             System.out.println("GradeCard generated!");
 
         } catch (Exception e){
-            System.out.println(e);
+            e.printStackTrace();
         }
 
 
