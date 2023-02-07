@@ -44,6 +44,8 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
 
             System.out.println("Your new course added: " + newCourse);
         } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
             return false;
         }
         return true;
@@ -166,78 +168,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
 
     //functionality remaining
     public void generateGradeCard() {
-        while (true) {
-            for (Student s : UserData.studentList) {
-                if (s.isStatusApproval() && !s.isGradeCardApproved())
-                    System.out.println("Name of student : " + s.getName() + " UserID : " + s.getUserId() + " Email " + s.getEmail() + " Department Registered in " + s.getDepartmentID());
-            }
-            System.out.println("Enter UserID of student to approve Grade Gard or Press # to exit");
-            String userId_of_approved_gradeCard = scanner.next();
-            if (userId_of_approved_gradeCard.equals("#")) {
-                return;
-            }
-            boolean userFound = false;
-            Boolean gradeNotAssigned = false;
-            for (Student s : UserData.studentList) {
-                if (s.getUserId().equals(userId_of_approved_gradeCard)) {
-                    GradeCard gradeCard = new GradeCard();
-                    gradeCard.setStudentID(userId_of_approved_gradeCard);
-
-                    float gradeTotal = 0;
-                    int num = 0;
-                    ArrayList<String> courseList = new ArrayList<>();
-                    ArrayList<Grade> gradeList = new ArrayList<>();
-                    String semID = "0";
-
-                    for (RegisteredCourse c : RegisteredCourseData.regCourseList) {
-                        if (c.getStudentID().matches(userId_of_approved_gradeCard)) {
-                            Grade grade = c.getGrade();
-                            if (grade == null) {
-                                gradeNotAssigned = true;
-                                break;
-                            }
-                            semID = c.getSemesterID();
-                            // continue;
-                            String gradeSymbol = grade.getGrade();
-                            if (gradeSymbol.matches("A+")) {
-                                gradeTotal += 10;
-                            } else if (gradeSymbol.matches("A-")) {
-                                gradeTotal += 9;
-                            } else if (gradeSymbol.matches("B+")) {
-                                gradeTotal += 8;
-                            } else if (gradeSymbol.matches("B-")) {
-                                gradeTotal += 7;
-                            } else if (gradeSymbol.matches("C+")) {
-                                gradeTotal += 6;
-                            } else if (gradeSymbol.matches("C-")) {
-                                gradeTotal += 5;
-                            } else if (gradeSymbol.matches("D+")) {
-                                gradeTotal += 4;
-                            }
-
-                            num += 10;
-                            courseList.add(c.getCourseID());
-                            gradeList.add(c.getGrade());
-                        }
-                    }
-                    if (gradeNotAssigned) {
-                        System.out.println("Cannot generate Grade Card, few courses are yet to be assigned grades for this student ");
-                        break;
-                    }
-                    gradeCard.setCourseList(courseList);
-                    gradeCard.setGrades(gradeList);
-                    gradeCard.setSGPA(gradeTotal / num);
-                    gradeCard.setSemesterID(semID);
-                    s.setGradeCard(gradeCard);
-                    s.setGradeCardApproved(true);
-                    System.out.println("Grade Card Generated");
-                    userFound = true;
-                    break;
-                }
-            }
-            if (!userFound && !gradeNotAssigned) {
-                System.out.println("Not a valid ID, Try again!");
-            }
-        }
+        AdminDAO adminDAO = new AdminDAOImpl();
+        adminDAO.generateGradeCardDAO();
     }
 }

@@ -66,7 +66,7 @@ public interface StudentDAO {
     /**
      * @return the student's gradecard, as a GradeCard object
      */
-    public GradeCard displayGradeCard ();
+    public void displayGradeCard ();
 
     /**
      * Sets a new record in the RegisteredCourse table, using the given list below

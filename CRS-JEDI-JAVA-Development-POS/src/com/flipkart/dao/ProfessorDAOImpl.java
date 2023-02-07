@@ -68,6 +68,7 @@ public class ProfessorDAOImpl implements ProfessorDAO{
                     Date date = rs2.getDate("dob");
 
                     Student s = new Student(name,email,pass,departmentId,address,m_no,date);
+                    s.setUserId(id);
                     studentList.add(s);
                 }
             }

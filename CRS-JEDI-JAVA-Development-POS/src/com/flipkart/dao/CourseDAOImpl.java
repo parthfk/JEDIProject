@@ -29,25 +29,27 @@ public class CourseDAOImpl implements CourseDAO {
 
         try {
 
-            String sql = "SELECT COUNT(*) FROM Course WHERE courseId = ?";
+            String sql = "SELECT COUNT(*) FROM Course WHERE courseId = "+"'"+courseID+"'";
+
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1,courseID);
+
+           // stmt.setString(1,courseID);
 
             ResultSet rs = stmt.executeQuery(sql);
+            ;
 
-            if(rs.next()) {
-                if(rs.getInt(1)==0) {
+            if(rs.next() && rs.getInt(1)==0) {
+                System.out.println("course doesnot exist");
                     return false;
                 }
                 else {
+                System.out.println("course exists");
                     return true;
                 }
-            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-            return false;
     }
 
     @Override
@@ -55,7 +57,7 @@ public class CourseDAOImpl implements CourseDAO {
 
         try{
 
-            System.out.println("Connecting to database...");
+            //System.out.println("Connecting to database...");
 
             String sql = "INSERT INTO Course VALUES (?, ?)";
             stmt=conn.prepareStatement(sql);

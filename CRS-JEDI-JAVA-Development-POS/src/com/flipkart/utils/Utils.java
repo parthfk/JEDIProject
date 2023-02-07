@@ -12,9 +12,18 @@ import static com.flipkart.constant.DBConnection.*;
 public class Utils {
     private static Connection conn;
     private static PreparedStatement stmt = null;
+
+    Utils(){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     public static Course getCourseFromCourseId (String courseId) {
         try {
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String getCoursesQuery = "SELECT * from Catalogue JOIN Course WHERE Catalogue.courseId=" + courseId + " LIMIT 1";
             PreparedStatement stmt = conn.prepareStatement(getCoursesQuery);
             ResultSet rs = stmt.executeQuery(getCoursesQuery);
@@ -38,7 +47,7 @@ public class Utils {
     public static List<Student> getStudentList() {
         ArrayList<Student> students = new ArrayList<>();
         try {
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             String getUsersQuery = "SELECT * from User join Student on userId=studentId";
             PreparedStatement stmt = conn.prepareStatement(getUsersQuery);
@@ -74,15 +83,15 @@ public class Utils {
     public static List<Professor> getProfessorList() {
         ArrayList<Professor> professors = new ArrayList<>();
         try {
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             String getUsersQuery = "SELECT * from User join Professor on userId=profId";
             PreparedStatement stmt = conn.prepareStatement(getUsersQuery);
             ResultSet rs = stmt.executeQuery(getUsersQuery);
             while (rs.next()) {
                 String name = rs.getString("name");
-                String email = rs.getString("password");
-                String password = rs.getString("email");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
                 String departmentId = rs.getString("departmentId");
                 String address = rs.getString("address");
                 String mobileNumber = rs.getString("mobileNumber");
@@ -105,16 +114,15 @@ public class Utils {
     public static List<Admin> getAdminList() {
         ArrayList<Admin> admins = new ArrayList<>();
         try {
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             String getUsersQuery = "SELECT * from User join Admin on userId=adminId";
             PreparedStatement stmt = conn.prepareStatement(getUsersQuery);
             ResultSet rs = stmt.executeQuery(getUsersQuery);
             while (rs.next()) {
                 String name = rs.getString("name");
-                String email = rs.getString("password");
-                String password = rs.getString("email");
-                String departmentId = rs.getString("departmentId");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
                 String address = rs.getString("address");
                 String mobileNumber = rs.getString("mobileNumber");
                 Date dob = rs.getDate("dob");
@@ -130,6 +138,7 @@ public class Utils {
             return admins;
         } catch (SQLException e) {
             System.out.println("Something went wrong on DB side!");
+            System.out.println(e.getMessage());
         }
         return null;
     }
@@ -140,7 +149,7 @@ public class Utils {
     public static List<User> getUserList(String type) {
         ArrayList<User> users = new ArrayList<>();
         try {
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             String queryRoleId = "all";
             switch (type) {

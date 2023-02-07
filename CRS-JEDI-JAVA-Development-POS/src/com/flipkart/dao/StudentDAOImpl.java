@@ -1,7 +1,6 @@
 package com.flipkart.dao;
 
 import com.flipkart.bean.Course;
-import com.flipkart.bean.GradeCard;
 import com.flipkart.bean.Student;
 import com.flipkart.constant.DBConnection;
 import com.flipkart.constant.RoleId;
@@ -98,6 +97,7 @@ public class StudentDAOImpl implements StudentDAO {
 
             conn.close();
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -360,9 +360,62 @@ public class StudentDAOImpl implements StudentDAO {
         return registeredCourses;
     }
 
+    public static boolean registrationIsDone(Student student) {
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String checkReg = "SELECT regDone from SemRegistration where studentId='" + student.getUserId() + "'";
+            PreparedStatement stmt = conn.prepareStatement(checkReg);
+            ResultSet checkRegRs = stmt.executeQuery(checkReg);
+            if (checkRegRs.next()) {
+                boolean regDone = checkRegRs.getBoolean("regDone");
+                if (regDone) {
+                    System.out.println("Your registration is already completed. You are not allowed to perform this operation!");
+                }
+                return regDone;
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Something went wrong on DB side");
+        }
+        return false;
+    }
+
     @Override
-    public GradeCard displayGradeCard() {
-        return null;
+    public void displayGradeCard() {
+        try {
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String studentId = this.student.getUserId();
+            String getGrades =
+                        "SELECT courseId, grade FROM RegisteredCourse WHERE studentId=" + "'" + studentId + "'";
+
+            stmt = conn.prepareStatement(getGrades);
+            ResultSet rs = stmt.executeQuery(getGrades);
+            while (rs.next()) {
+                String courseId = rs.getString("courseId");
+                String grade = rs.getString("grade");
+                System.out.println("Your grade in course #" + courseId + " is " + grade);
+            }
+            stmt.close();
+
+            String getSGPA = "SELECT SGPA from GradeCard WHERE studentId=" + "'" + studentId + "'";
+            PreparedStatement stmt2 = conn.prepareStatement(getSGPA);
+
+            ResultSet rs2 = stmt2.executeQuery(getSGPA);
+            if (rs2.next()) {
+                float sgpa = rs2.getFloat("SGPA");
+                System.out.println("Your SGPA is: " + sgpa);
+            }
+
+            stmt2.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

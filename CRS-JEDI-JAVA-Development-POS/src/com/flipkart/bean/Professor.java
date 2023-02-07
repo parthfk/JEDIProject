@@ -32,6 +32,7 @@ public class Professor extends User {
         this.address = address;
         this.mobileNumber = mobileNumber;
         this.dob = dob;
+        coursesTaken = new ArrayList<>();
     }
     public String getAddress() {
         return address;
