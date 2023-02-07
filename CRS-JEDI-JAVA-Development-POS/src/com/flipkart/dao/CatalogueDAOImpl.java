@@ -1,6 +1,8 @@
 package com.flipkart.dao;
 
 import com.flipkart.bean.Course;
+import com.flipkart.constant.DBConnection;
+import com.flipkart.constant.SQLConstants;
 import com.flipkart.exception.CourseNotFoundException;
 
 import java.sql.*;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.flipkart.constant.DBConnection.*;
+import static com.flipkart.constant.SQLConstants.*;
 
 
 
@@ -17,7 +20,7 @@ public class CatalogueDAOImpl implements CatalogueDAO{
     private PreparedStatement stmt = null;
     public CatalogueDAOImpl(){
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
         } catch (Exception e) {
             System.out.println(e);
@@ -39,9 +42,8 @@ public class CatalogueDAOImpl implements CatalogueDAO{
 
         try{
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            String sql = "insert into Catalogue values (?,?,?,?)";
 
-            stmt = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(INSERT_CATALOGUE_QUERY);
 
             stmt.setString(1,course.getCourseID());
             stmt.setString(2,semID);
@@ -68,8 +70,7 @@ public class CatalogueDAOImpl implements CatalogueDAO{
         List<Course> courseList = new ArrayList<Course>();
 
         try{
-            String sql = "select Catalogue.courseId, Course.name, Catalogue.professorId, Catalogue.availableSeats from Catalogue, Course where Catalogue.courseId = Course.courseId";
-            stmt = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(FETCH_CATALOGUE_QUERY);
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next())
@@ -93,8 +94,7 @@ public class CatalogueDAOImpl implements CatalogueDAO{
     public void deleteCourseInDB(String courseId)  {
 
         try {
-            String sql = "delete from Catalogue where courseId = ?";
-            stmt = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(DELETE_FROM_CATALOGUE_QUERY);
             stmt.setString(1,courseId);
 
             int row = stmt.executeUpdate();

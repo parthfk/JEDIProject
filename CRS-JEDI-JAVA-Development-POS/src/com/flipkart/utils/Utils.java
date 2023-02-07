@@ -133,7 +133,6 @@ public class Utils {
                 admins.add(a);
 
             }
-            stmt.close();
             conn.close();
 
             return admins;

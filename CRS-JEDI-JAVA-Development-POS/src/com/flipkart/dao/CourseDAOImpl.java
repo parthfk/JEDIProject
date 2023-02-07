@@ -1,10 +1,12 @@
 package com.flipkart.dao;
 
 import com.flipkart.bean.Course;
+import com.flipkart.constant.DBConnection;
 
 import java.sql.*;
 
 import static com.flipkart.constant.DBConnection.*;
+import static com.flipkart.constant.SQLConstants.*;
 
 public class CourseDAOImpl implements CourseDAO {
 
@@ -14,7 +16,7 @@ public class CourseDAOImpl implements CourseDAO {
     public CourseDAOImpl()
     {
         try{
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
         }
         catch (Exception e)
@@ -29,17 +31,13 @@ public class CourseDAOImpl implements CourseDAO {
 
         try {
 
-            String sql = "SELECT COUNT(*) FROM Course WHERE courseId = "+"'"+courseID+"'";
+            stmt = conn.prepareStatement(CHECK_IF_COURSE_EXISTS_QUERY);
+            stmt.setString(1,courseID);
 
-            stmt = conn.prepareStatement(sql);
-
-           // stmt.setString(1,courseID);
-
-            ResultSet rs = stmt.executeQuery(sql);
-            ;
+            ResultSet rs = stmt.executeQuery();
 
             if(rs.next() && rs.getInt(1)==0) {
-                System.out.println("course doesnot exist");
+                System.out.println("course does not exist");
                     return false;
                 }
                 else {
@@ -57,10 +55,7 @@ public class CourseDAOImpl implements CourseDAO {
 
         try{
 
-            //System.out.println("Connecting to database...");
-
-            String sql = "INSERT INTO Course VALUES (?, ?)";
-            stmt=conn.prepareStatement(sql);
+            stmt=conn.prepareStatement(INSERT_IN_COURSE_QUERY);
             stmt.setString(1, course.getCourseID());
             stmt.setString(2,course.getName());
 
@@ -68,7 +63,7 @@ public class CourseDAOImpl implements CourseDAO {
                 System.out.println("Insertion in Course db successful !");
             }
             else {
-                System.out.println("Insertion in Course db  failed !");
+                System.out.println("Insertion in Course db failed !");
             }
         }
         catch (Exception e) {
