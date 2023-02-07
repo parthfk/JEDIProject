@@ -6,7 +6,6 @@ import com.flipkart.constant.PaymentMode;
 import com.flipkart.dao.CatalogueDAOImpl;
 import com.flipkart.dao.PaymentDAOImpl;
 import com.flipkart.dao.StudentDAOImpl;
-import com.flipkart.data.CourseData;
 import com.flipkart.utils.Utils;
 
 import java.sql.Date;
@@ -122,6 +121,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void selectPrimaryCourse() {
+        if (StudentDAOImpl.registrationIsDone(student)) return;
         System.out.println("Enter Course Id's to be added as your primary course and press enter.");
         System.out.println("Press # when you are done adding courses!");
         Scanner in = new Scanner(System.in);
@@ -163,6 +163,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void removeCourseFromCart(String type) {
+        if (StudentDAOImpl.registrationIsDone(student)) return;
         List<String> courseIds = (type.matches("primary")) ?
                 this.studentDao.viewPrimaryCourses() :
                 this.studentDao.viewSecondaryCourses();
@@ -205,6 +206,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
 
     public void selectSecondaryCourse() {
+        if (StudentDAOImpl.registrationIsDone(student)) return;
         System.out.println("Enter Course Id's to be added as your secondary course and press enter.");
         System.out.println("Press # when you are done adding courses!");
         Scanner in = new Scanner(System.in);
@@ -244,10 +246,13 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void confirmRegistration() {
+        if (StudentDAOImpl.registrationIsDone(student)) return;
         // Proceed with business logic for course verification.
         ArrayList<String> primaryCourseIds = this.studentDao.viewPrimaryCourses();
         ArrayList<String> secondaryCourseIds = this.studentDao.viewSecondaryCourses();
         ArrayList<String> registeredCourseIds = this.studentDao.displayRegisteredCourses();
+        System.out.println(registeredCourseIds);
+        System.out.println(registeredCourseIds.size());
         ArrayList<Course> primaryCourses = new ArrayList<>();
         ArrayList<Course> secondaryCourses = new ArrayList<>();
         ArrayList<Course> registeredCourses = new ArrayList<>();
@@ -340,7 +345,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void payFee() {
-        if (!student.getSemRegistration().getRegDone()) {
+        if (!StudentDAOImpl.registrationIsDone(student)) {
             System.out.println("Please complete semester registration first.");
             return;
         }
@@ -427,17 +432,13 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void displayRegisteredCourses() {
-        System.out.println("List of Registered courses:");
-        int i = 1;
-        boolean flag = true;
-        for (Course c : student.getCourseRegistered()) {
-            System.out.println(i + ". Course Name :" + c.getName() + ", Course ID : " + c.getCourseID());
-            i++;
-            flag = false;
-        }
-        if (flag) {
-            System.out.println("There are no Registered Courses");
-        }
+        ArrayList<String> enrolledCourses = this.studentDao.displayRegisteredCourses();
+        if (enrolledCourses == null) return;
+        System.out.println("Your enrolled courses are: ");
+        enrolledCourses.forEach((courseId) -> {
+            Course c = Utils.getCourseFromCourseId(courseId);
+            System.out.println(c);
+        });
     }
 
     public GradeCard displayGradeCard() {
