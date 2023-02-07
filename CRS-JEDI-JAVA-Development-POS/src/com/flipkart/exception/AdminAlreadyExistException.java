@@ -1,15 +1,15 @@
 package com.flipkart.exception;
 
 public class AdminAlreadyExistException extends Exception{
-    private String adminId;
+    private String emailId;
 
     /**
      * constructor
-     * @param adminId
+     * @param emailId
      */
-    public AdminAlreadyExistException(String adminId) {
+    public AdminAlreadyExistException(String emailId) {
         super();
-        this.adminId = adminId;
+        this.emailId = emailId;
     }
 
     /**
@@ -18,6 +18,6 @@ public class AdminAlreadyExistException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Admin with adminId: " + adminId + " already exist.";
+        return "Admin with emailId: " + emailId + " already exist.";
     }
 }

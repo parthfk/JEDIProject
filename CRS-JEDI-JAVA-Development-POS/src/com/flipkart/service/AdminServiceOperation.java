@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Scanner;
 import com.flipkart.dao.*;
+import com.flipkart.exception.AdminNotAddedException;
 import com.flipkart.exception.CourseNotFoundException;
 import com.flipkart.utils.Utils;
 
@@ -147,12 +148,21 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         Date dobParsed = Date.valueOf(dob);
         newAdmin.setDob(dobParsed);
 
-        try {
+
             AdminDAOImpl obj=new AdminDAOImpl();
-            obj.addAdminDAO(newAdmin);
-        } catch (Exception e) {
-            return false;
-        }
+            boolean res=obj.addAdminDAO(newAdmin);
+            if(res) {
+                System.out.println("Admin Registered Successfully!!");
+            }
+            else {
+                try {
+                    throw new AdminNotAddedException(newAdmin.getUserId());
+                } catch (AdminNotAddedException e) {
+                    System.out.println(e.getMessage());
+                    return false;
+                }
+            }
+
         return true;
     }
 

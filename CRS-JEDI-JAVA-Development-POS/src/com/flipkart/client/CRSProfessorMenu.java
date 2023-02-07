@@ -53,10 +53,15 @@ public class CRSProfessorMenu {
 
             switch (input) {
                 case 1:
-                    System.out.println("These are the courses currently available: ");
                     List<Course> courseList = new CatalogueDAOImpl().fetchCatalogue();
+                    if(courseList.size()==0)
+                        System.out.println("No courses available");
+
+                    System.out.println("These are the courses currently available: ");
+
+                    System.out.println("Course ID/tCourse Name");
                     for(int i=0;i<courseList.size();i++){
-                        System.out.println("CourseID: " + courseList.get(i).getCourseID() + " Course Name: " + courseList.get(i).getName());
+                        System.out.println(courseList.get(i).getCourseID() + + courseList.get(i).getName());
                     }
                     while(true){
                         System.out.println("Please enter the courseId to teach or # to exit.");

@@ -28,7 +28,8 @@ public class UserDAOImpl implements UserDAO{
 
     public boolean verifyCredentials(String userId,String password) throws UserNotFoundException {
         try{
-            stmt = conn.prepareStatement("select password from user where userId = ?");
+            String sql = "update user set password=? where userId = ? ";
+            stmt = conn.prepareStatement(sql);
             stmt.setString(1,userId);
             ResultSet resultSet = stmt.executeQuery();
 
@@ -51,7 +52,8 @@ public class UserDAOImpl implements UserDAO{
 
     public String getRole(String userId){
         try {
-            stmt = conn.prepareStatement("select role from user where userId = ? ");
+            String sql = "select role from user where userId = ? ";
+            stmt = conn.prepareStatement(sql);
             stmt.setString(1, userId);
             ResultSet rs = stmt.executeQuery();
 
@@ -69,7 +71,8 @@ public class UserDAOImpl implements UserDAO{
     }
     public boolean updatePassword(String userId,String newPassword){
         try {
-             stmt = conn.prepareStatement("update user set password=? where userId = ? ");
+            String sql = "update user set password=? where userId = ? ";
+             stmt = conn.prepareStatement(sql);
             stmt.setString(1, newPassword);
             stmt.setString(2, userId);
             int row = stmt.executeUpdate();

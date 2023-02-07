@@ -2,13 +2,13 @@ package com.flipkart.exception;
 
 public class CourseNotAddedException extends Exception{
 
-    private int courseId;
+    private String courseId;
 
     /**
      * constructor
      * @param courseId
      */
-    public CourseNotAddedException(int courseId) {
+    public CourseNotAddedException(String courseId) {
         this.courseId = courseId;
     }
 

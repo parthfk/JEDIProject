@@ -13,6 +13,7 @@ import java.sql.Date;
 import com.flipkart.bean.Admin;
 import com.flipkart.bean.Professor;
 import com.flipkart.constant.DBConnection;
+import com.flipkart.exception.AdminAlreadyExistException;
 import com.flipkart.service.AdminService;
 
 import static com.flipkart.constant.DBConnection.*;
@@ -21,11 +22,11 @@ public class AdminDAOImpl implements AdminDAO{
 
     private static int noOfUsers;
     Scanner scanner;
-    public void addAdminDAO(Admin admin){
+    public boolean addAdminDAO(Admin admin){
         //  public static void main(String args[]){
         Connection conn = null;
         PreparedStatement stmt = null;
-
+       int res=0;
         try{
 
             // Step 3 Regiater Driver here and create connection
@@ -39,6 +40,24 @@ public class AdminDAOImpl implements AdminDAO{
 
             //STEP 4: Execute a query
             System.out.println("Creating statement...");
+
+            String ss1="SELECT * FROM User where emailId="+admin.getEmail();
+            stmt=conn.prepareStatement(ss1);
+
+            ResultSet rs1 = stmt.executeQuery(ss1);
+
+            if (!rs1.next()) {
+                try{
+                    throw new AdminAlreadyExistException(admin.getEmail());
+                }
+                catch (AdminAlreadyExistException e) {
+                    System.out.println(e.getMessage());
+                }
+                finally {
+                    return false;
+                }
+            }
+
 
             String ss="SELECT COUNT(*) FROM User";
             stmt=conn.prepareStatement(ss);
@@ -71,7 +90,7 @@ public class AdminDAOImpl implements AdminDAO{
             stmt.setString(4, admin.getEmail());
             stmt.setInt(5, 1);
 
-            stmt.executeUpdate();
+             res=stmt.executeUpdate();
 
             System.out.println("Creating statement...");
             sql="insert into Admin values(?,?,?,?)";
@@ -95,21 +114,11 @@ public class AdminDAOImpl implements AdminDAO{
         }catch(Exception e){
             //Handle errors for Class.forName
             e.printStackTrace();
-        }finally{
-            //finally block used to close resources
-            try{
-                if(stmt!=null)
-                    stmt.close();
-            }catch(SQLException se2){
-            }// nothing we can do
-            try{
-                if(conn!=null)
-                    conn.close();
-            }catch(SQLException se){
-                se.printStackTrace();
-            }//end finally try
+        }
+        finally{
+            return res==1;
         }//end try
-        System.out.println("Admin Registered Successfuly!!");
+
 
     }
 

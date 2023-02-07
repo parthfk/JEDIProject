@@ -1,15 +1,15 @@
 package com.flipkart.exception;
 
 public class StudentNotApprovedException extends Exception{
-    private String studentId;
+    private String emailId;
 
     /**
      * constructor
-     * @param studentId
+     * @param emailId
      */
-    public StudentNotApprovedException(String studentId) {
+    public StudentNotApprovedException(String emailId) {
         super();
-        this.studentId = studentId;
+        this.emailId = emailId;
     }
 
     /**
@@ -18,6 +18,6 @@ public class StudentNotApprovedException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Student with studentId: " + studentId + " is not approved.";
+        return "Student with emailId: " + emailId + " is not approved.";
     }
 }

@@ -1,15 +1,15 @@
 package com.flipkart.exception;
 
 public class AdminNotFoundException extends Exception{
-    private String adminId;
+    private String emailId;
 
     /**
      * contructor
-     * @param adminId
+     * @param emailId
      */
-    public AdminNotFoundException(String adminId) {
+    public AdminNotFoundException(String emailId) {
         super();
-        this.adminId = adminId;
+        this.emailId = emailId;
     }
 
     /**
@@ -18,6 +18,6 @@ public class AdminNotFoundException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Admin with adminId: " + adminId + " is not found.";
+        return "Admin with emailId: " + emailId + " is not found.";
     }
 }

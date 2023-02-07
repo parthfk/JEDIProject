@@ -6,6 +6,7 @@ import com.flipkart.dao.UserDAO;
 import com.flipkart.dao.UserDAOImpl;
 import com.flipkart.data.CourseData;
 import com.flipkart.data.UserData;
+import com.flipkart.exception.*;
 import com.flipkart.utils.Utils;
 
 import java.sql.PreparedStatement;
@@ -46,6 +47,11 @@ public class UserServiceOperation implements UserService {
                             }
                         }
                         if (!emailValidated) {
+                            try {
+                                throw  new AdminNotFoundException(inputEmail);
+                            } catch (AdminNotFoundException e) {
+                                System.out.println(e.getMessage());
+                            }
                             checkUserExists(inputEmail);
                             return null;
                         }
@@ -58,6 +64,11 @@ public class UserServiceOperation implements UserService {
                                 System.out.println(u.isStatusApproval());
                                 if (!u.isStatusApproval()) {
                                     System.out.println("Registration not approved. Please contact admin");
+                                    try {
+                                        throw  new StudentNotApprovedException(inputEmail);
+                                    } catch (StudentNotApprovedException e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                     return null;
                                 }
                                 emailValidated = true;
@@ -65,6 +76,12 @@ public class UserServiceOperation implements UserService {
                             }
                         }
                         if (!emailValidated) {
+                            try {
+                                throw  new StudentNotFoundException(inputEmail);
+                            } catch (StudentNotFoundException e) {
+                                System.out.println(e.getMessage());
+                            }
+
                             checkUserExists(inputEmail);
                             return null;
                         }
@@ -81,6 +98,11 @@ public class UserServiceOperation implements UserService {
                             }
                         }
                         if (!emailValidated) {
+                            try {
+                                throw  new ProfessorNotFoundException(inputEmail);
+                            } catch (ProfessorNotFoundException e) {
+                                System.out.println(e.getMessage());
+                            }
                             checkUserExists(inputEmail);
                             return null;
                         }
@@ -157,6 +179,7 @@ public class UserServiceOperation implements UserService {
             String regex = "^(.+)@(.+)$";
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(inputEmail);
+
             if (matcher.matches()) {
                 try {
                     if (role.equals("admin")) {
@@ -168,6 +191,15 @@ public class UserServiceOperation implements UserService {
                                 break;
                             }
                         }
+                        if (!emailValidated) {
+                            try {
+                                throw  new AdminNotFoundException(inputEmail);
+                            } catch (AdminNotFoundException e) {
+                                System.out.println(e.getMessage());
+                            }
+                            checkUserExists(inputEmail);
+                            return false;
+                        }
                     } else if (role.equals("student")) {
                         List<Student> studentList = Utils.getStudentList();
                         for (User u : studentList) {
@@ -177,6 +209,16 @@ public class UserServiceOperation implements UserService {
                                 break;
                             }
                         }
+                        if (!emailValidated) {
+                            try {
+                                throw  new StudentNotFoundException(inputEmail);
+                            } catch (StudentNotFoundException e) {
+                                System.out.println(e.getMessage());
+                            }
+                            checkUserExists(inputEmail);
+                            return false;
+                        }
+
                     } else if (role.equals("professor")) {
                         List<Professor> professorList = Utils.getProfessorList();
                         for (User u : professorList) {
@@ -185,6 +227,15 @@ public class UserServiceOperation implements UserService {
                                 emailValidated = true;
                                 break;
                             }
+                        }
+                        if (!emailValidated) {
+                            try {
+                                throw  new ProfessorNotFoundException(inputEmail);
+                            } catch (ProfessorNotFoundException e) {
+                                System.out.println(e.getMessage());
+                            }
+                            checkUserExists(inputEmail);
+                            return false;
                         }
                     }
                 }catch(NullPointerException e){

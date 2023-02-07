@@ -2,6 +2,7 @@ package com.flipkart.service;
 
 import com.flipkart.bean.GradeCard;
 import com.flipkart.bean.Student;
+import com.flipkart.exception.CourseNotFoundException;
 
 public interface StudentService {
     /**
@@ -30,7 +31,7 @@ public interface StudentService {
     /**
      * Method to remove course during add-drop window
      */
-    void dropCourse();
+    void dropCourse() throws CourseNotFoundException;
 
     /**
      * Method to initiate fees payment after course registration is done.
