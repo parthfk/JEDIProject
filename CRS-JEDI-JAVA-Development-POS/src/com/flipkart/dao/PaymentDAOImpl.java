@@ -54,16 +54,331 @@ public class PaymentDAOImpl implements PaymentDAO{
             return Integer.toString(paymentID);
     }
 
-    public void sendNotification(String studentId,double paymentAmount,String paymentId,String message)
+    public boolean payCreditCard(Student student){
+        boolean res=false;
+
+        Scanner scanner=new Scanner(System.in);
+        String paymentId=generatePaymentId();
+
+        System.out.println("Please enter credit card number");
+        String creditCardNumber = scanner.nextLine();
+        System.out.println("Please enter cvv");
+        String cvv = scanner.nextLine();
+        System.out.println("Please enter expiry date");
+        String exDate = scanner.nextLine();
+
+        try{
+            java.util.Date javaDate = new java.util.Date();
+            java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
+
+            String sql2  = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values("+paymentId+","+student.getUserId()+",4,"+mySQLDate.toString()+")";
+
+            stmt = conn.prepareStatement(sql2);
+
+            if(stmt.executeUpdate(sql2)==1){
+                System.out.println("Insertion in Payment successful !");
+            }else{
+                System.out.println("Insertion in Payment unsuccessful !");
+                return res;
+            }
+
+            String paymentDetailQuery = "insert into PaymentDetails(paymentId,cardNumber,expiry,cvv) values("+paymentId+","+"'"+creditCardNumber+"'"+","+"'"+exDate+"'"+","+"'"+cvv+"'"+")";
+            stmt = conn.prepareStatement(paymentDetailQuery);
+
+
+
+            if(stmt.executeUpdate(paymentDetailQuery)==1){
+                res=true;
+                System.out.println("Insertion in PaymentDetails successful !");
+            }else{
+                System.out.println("Insertion in PaymentDetails unsuccessful !");
+            }
+
+        }
+        catch(SQLException se){
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }
+        catch(Exception e){
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            return res;
+        }
+    }
+
+    public boolean payDebitCard(Student student){
+        boolean res=false;
+
+        Scanner scanner=new Scanner(System.in);
+        String paymentId=generatePaymentId();
+
+        System.out.println("Please enter Debit card number");
+        String DebitCardNumber = scanner.nextLine();
+        System.out.println("Please enter cvv");
+        String cvv = scanner.nextLine();
+        System.out.println("Please enter expiry date");
+        String exDate = scanner.nextLine();
+
+        try{
+            java.util.Date javaDate = new java.util.Date();
+            java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
+
+            String sql2  = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values("+paymentId+","+student.getUserId()+",5,"+mySQLDate.toString()+")";
+
+            stmt = conn.prepareStatement(sql2);
+
+            if(stmt.executeUpdate(sql2)==1){
+                System.out.println("Insertion in Payment successful !");
+            }else{
+                System.out.println("Insertion in Payment unsuccessful !");
+                return res;
+            }
+
+            String paymentDetailQuery = "insert into PaymentDetails(paymentId,cardNumber,expiry,cvv) values("+paymentId+","+"'"+DebitCardNumber+"'"+","+"'"+exDate+"'"+","+"'"+cvv+"'"+")";
+            stmt = conn.prepareStatement(paymentDetailQuery);
+
+
+
+            if(stmt.executeUpdate(paymentDetailQuery)==1){
+                 res=true;
+                System.out.println("Insertion in PaymentDetails successful !");
+            }else{
+                System.out.println("Insertion in PaymentDetails unsuccessful !");
+            }
+
+        }
+        catch(SQLException se){
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }
+        catch(Exception e){
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            return res;
+        }
+
+    }
+    public boolean payUPI(Student student){
+        boolean res=false;
+
+        Scanner scanner=new Scanner(System.in);
+
+        String paymentId=generatePaymentId();
+
+        System.out.println("Please enter Upi Id");
+        String UPIId = scanner.nextLine();
+        UPIId.trim();
+
+
+        try{
+
+            java.util.Date javaDate = new java.util.Date();
+            java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
+
+            String sql2  = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values("+paymentId+","+student.getUserId()+",3,"+mySQLDate.toString()+")";
+
+            stmt = conn.prepareStatement(sql2);
+
+            if(stmt.executeUpdate(sql2)==1){
+                System.out.println("Insertion in Payment successful !");
+            }else{
+                System.out.println("Insertion in Payment unsuccessful !");
+                return res;
+            }
+
+            String paymentDetailQuery = "insert into PaymentDetails(paymentId,upiId) values("+paymentId+","+"'"+UPIId+"'"+")";
+            stmt = conn.prepareStatement(paymentDetailQuery);
+
+
+            if(stmt.executeUpdate(paymentDetailQuery)==1){
+                res=true;
+
+                System.out.println("Insertion in PaymentDetails successful !");
+            }else{
+                System.out.println("Insertion in PaymentDetails unsuccessful !");
+            }
+
+        }
+        catch(SQLException se){
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }
+        catch(Exception e){
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            return res;
+        }
+
+    }
+    public boolean payNetBanking(Student student){
+        boolean res=false;
+
+        Scanner scanner=new Scanner(System.in);
+        String paymentId=generatePaymentId();
+        System.out.println("Please enter account number");
+        String accountNumber = scanner.nextLine();
+        System.out.println("Please enter your bank name");
+        String bankName = scanner.nextLine();
+        System.out.println("please enter your password");
+        String password = scanner.nextLine();
+
+        try{
+
+            java.util.Date javaDate = new java.util.Date();
+            java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
+
+            String sql2  = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values("+paymentId+","+student.getUserId()+",6,"+mySQLDate.toString()+")";
+
+            stmt = conn.prepareStatement(sql2);
+
+            if(stmt.executeUpdate(sql2)==1){
+                System.out.println("Insertion in Payment successful !");
+            }else{
+                System.out.println("Insertion in Payment unsuccessful !");
+                return res;
+            }
+
+            String paymentDetailQuery = "insert into PaymentDetails(paymentId,bankName,accountId,password) values("+paymentId+","+"'"+bankName+"'"+","+"'"+accountNumber+"'"+","+"'"+password+"'"+")";
+
+            stmt = conn.prepareStatement(paymentDetailQuery);
+
+
+            if(stmt.executeUpdate(paymentDetailQuery)==1){
+                res=true;
+
+                System.out.println("Insertion in PaymentDetails successful !");
+            }else{
+                System.out.println("Insertion in PaymentDetails unsuccessful !");
+            }
+
+        }
+        catch(SQLException se){
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }
+        catch(Exception e){
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            return res;
+        }
+    }
+    public boolean payCash(Student student){
+        boolean res=false;
+
+        String paymentId=generatePaymentId();
+        Scanner scanner=new Scanner(System.in);
+        System.out.println("Please enter receipt number");
+        String receiptNumber = scanner.nextLine();
+
+        try{
+            java.util.Date javaDate = new java.util.Date();
+            java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
+
+            String sql2  = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values("+paymentId+","+student.getUserId()+",1,"+mySQLDate.toString()+")";
+
+            stmt = conn.prepareStatement(sql2);
+
+            if(stmt.executeUpdate(sql2)==1){
+                System.out.println("Insertion in Payment successful !");
+            }else{
+                System.out.println("Insertion in Payment unsuccessful !");
+                return res;
+            }
+
+            String paymentDetailQuery = "insert into PaymentDetails(paymentId,receiptNumber) values("+paymentId+","+"'"+receiptNumber+"'"+")";
+
+            stmt = conn.prepareStatement(paymentDetailQuery);
+
+
+            if(stmt.executeUpdate(paymentDetailQuery)==1){
+                res=true;
+
+                System.out.println("Insertion in PaymentDetails successful !");
+            }else{
+                System.out.println("Insertion in PaymentDetails unsuccessful !");
+            }
+        }
+        catch(SQLException se){
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }
+        catch(Exception e){
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            return res;
+        }
+
+    }
+
+    public boolean payCheque(Student student){
+        boolean res=false;
+
+        Scanner scanner=new Scanner(System.in);
+        String paymentId=generatePaymentId();
+        System.out.println("Please enter cheque number");
+        String chequeNumber = scanner.nextLine();
+        System.out.println("Please enter receipt number");
+        String receiptNumber = scanner.nextLine();
+
+        try{
+            java.util.Date javaDate = new java.util.Date();
+            java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
+            String sql2  = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values("+paymentId+","+student.getUserId()+",2,"+mySQLDate.toString()+")";
+
+            stmt = conn.prepareStatement(sql2);
+
+            if(stmt.executeUpdate(sql2)==1){
+                System.out.println("Insertion in Payment successful !");
+            }else{
+                System.out.println("Insertion in Payment unsuccessful !");
+                return res;
+            }
+
+
+            String paymentDetailQuery = "insert into PaymentDetails(paymentId,chequeNumber,receiptNumber) values("+paymentId+","+"'"+chequeNumber+"'"+","+"'"+receiptNumber+"')";
+            stmt = conn.prepareStatement(paymentDetailQuery);
+
+
+            if(stmt.executeUpdate(paymentDetailQuery)==1){
+                res=true;
+                System.out.println("Insertion in PaymentDetails successful !");
+            }else{
+                System.out.println("Insertion in PaymentDetails unsuccessful !");
+            }
+
+
+            if(stmt.executeUpdate(paymentDetailQuery)==1){
+                System.out.println("Insertion in PaymentDetails successful !");
+            }else{
+                System.out.println("Insertion in PaymentDetails unsuccessful !");
+            }
+        }
+        catch(SQLException se){
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }
+        catch(Exception e){
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        finally {
+            return res;
+        }
+
+    }
+
+    public void sendNotification(String studentId,double paymentAmount,String message)
     {
         try{
-            String insertPaymentNotificationQuery = "insert into PaymentNotification values(?,?,?,?)";
+            String paymentId=Integer.toString(Integer.parseInt(generatePaymentId())-1);
+            String insertPaymentNotificationQuery = "insert into PaymentNotification(notificationId,studentId,paymentAmount,message) values ("+paymentId+","+studentId+","+paymentAmount+",'"+message+"')";
             stmt = conn.prepareStatement(insertPaymentNotificationQuery);
 
-            stmt.setString(1, paymentId );
-            stmt.setString(2, studentId);
-            stmt.setDouble(3, paymentAmount);
-            stmt.setString(4, message);
 
             if(stmt.executeUpdate()==1){
                 System.out.println("Insertion in PaymentNotification successful !");
@@ -73,15 +388,15 @@ public class PaymentDAOImpl implements PaymentDAO{
                 return;
             }
 
-            String fetchquery = "SELECT studentId, paymentId ,paymentAmount, message FROM PaymentNotification where studentId= ?";
+            String fetchquery = "SELECT studentId, notificationId ,paymentAmount, message FROM PaymentNotification where studentId= "+studentId;
             stmt = conn.prepareStatement(fetchquery);
 
-            stmt.setString(1,studentId);
+//            stmt.setString(1,studentId);
             ResultSet rs = stmt.executeQuery(fetchquery);
 
             if(rs.next()) {
                 String studentId1 = rs.getString("studentId");
-                String paymentId1 = rs.getString("paymentId");
+                String paymentId1 = rs.getString("notificationId");
                 double amountPaid = rs.getDouble("paymentAmount");
                 String message1 = rs.getString("message");
 
@@ -105,375 +420,15 @@ public class PaymentDAOImpl implements PaymentDAO{
 
     }
 
-    public void payCreditCard(Student student){
-
-        Scanner scanner=new Scanner(System.in);
-        String paymentId=generatePaymentId();
-
-        System.out.println("Please enter credit card number");
-        String creditCardNumber = scanner.nextLine();
-        System.out.println("Please enter cvv");
-        String cvv = scanner.nextLine();
-        System.out.println("Please enter expiry date");
-        String exDate = scanner.nextLine();
-
-        try{
-            String sql  = "insert into Payment values(?,?,?,?)";
-            stmt = conn.prepareStatement(sql);
-
-            Date myDate = new Date();
-            SimpleDateFormat dmyFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String dmy = dmyFormat.format(myDate);
-            stmt.setString(1, paymentId);
-            stmt.setString(2, student.getUserId());
-            stmt.setString(3, String.valueOf(PaymentMode.CREDIT_CARD));
-            stmt.setDate(4, java.sql.Date.valueOf(dmy));
-            if(stmt.executeUpdate(sql)==1){
-                System.out.println("Insertion in Payment successful !");
-            }else{
-                System.out.println("Insertion in Payment unsuccessful !");
-                return;
-            }
-
-            String paymentDetailQuery = "insert into PaymentDetails values(?,?,?,?,?,?,?,?,?,?)";
-            stmt = conn.prepareStatement(paymentDetailQuery);
-
-            stmt.setString(1, paymentId);
-            stmt.setString(2, creditCardNumber);
-            stmt.setString(3, exDate);
-            stmt.setString(4, cvv);
-            stmt.setString(5, null);
-            stmt.setString(6, null);
-            stmt.setString(7, null);
-            stmt.setString(8, null);
-            stmt.setString(9, null);
-            stmt.setString(10,null);
-
-            if(stmt.executeUpdate(paymentDetailQuery)==1){
-                System.out.println("Insertion in PaymentDetails successful !");
-            }else{
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
-            }
-
-        }
-        catch(SQLException se){
-            //Handle errors for JDBC
-            se.printStackTrace();
-        }
-        catch(Exception e){
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        }
-    }
-
-    public void payDebitCard(Student student){
-
-        Scanner scanner=new Scanner(System.in);
-        String paymentId=generatePaymentId();
-
-        System.out.println("Please enter Debit card number");
-        String DebitCardNumber = scanner.nextLine();
-        System.out.println("Please enter cvv");
-        String cvv = scanner.nextLine();
-        System.out.println("Please enter expiry date");
-        String exDate = scanner.nextLine();
-
-        try{
-            String sql  = "insert into Payment values(?,?,?,?)";
-            stmt = conn.prepareStatement(sql);
-
-            Date myDate = new Date();
-            SimpleDateFormat dmyFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String dmy = dmyFormat.format(myDate);
-            stmt.setString(1, paymentId);
-            stmt.setString(2, student.getUserId());
-            stmt.setString(3, String.valueOf(PaymentMode.DEBIT_CARD));
-            stmt.setDate(4, java.sql.Date.valueOf(dmy));
-
-            if(stmt.executeUpdate(sql)==1){
-                System.out.println("Insertion in Payment successful !");
-            }else{
-                System.out.println("Insertion in Payment unsuccessful !");
-                return;
-            }
-
-            String paymentDetailQuery = "insert into PaymentDetails values(?,?,?,?,?,?,?,?,?,?)";
-            stmt = conn.prepareStatement(paymentDetailQuery);
-
-            stmt.setString(1, paymentId);
-            stmt.setString(2, DebitCardNumber);
-            stmt.setString(3, exDate);
-            stmt.setString(4, cvv);
-            stmt.setString(5, null);
-            stmt.setString(6, null);
-            stmt.setString(7, null);
-            stmt.setString(8, null);
-            stmt.setString(9, null);
-            stmt.setString(10,null);
-
-            if(stmt.executeUpdate(paymentDetailQuery)==1){
-                System.out.println("Insertion in PaymentDetails successful !");
-            }else{
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
-            }
-
-        }
-        catch(SQLException se){
-            //Handle errors for JDBC
-            se.printStackTrace();
-        }
-        catch(Exception e){
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        }
-
-    }
-    public void payUPI(Student student){
-
-        Scanner scanner=new Scanner(System.in);
-
-        String paymentId=generatePaymentId();
-
-        System.out.println("Please enter Upi Id");
-        String UPIId = scanner.nextLine();
-
-
-        try{
-            String sql  = "insert into Payment values(?,?,?,?)";
-            stmt = conn.prepareStatement(sql);
-
-            Date myDate = new Date();
-            SimpleDateFormat dmyFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String dmy = dmyFormat.format(myDate);
-            stmt.setString(1, paymentId);
-            stmt.setString(2, student.getUserId());
-            stmt.setString(3, String.valueOf(PaymentMode.UPI));
-            stmt.setDate(4, java.sql.Date.valueOf(dmy));
-
-            if(stmt.executeUpdate(sql)==1){
-                System.out.println("Insertion in Payment successful !");
-            }else{
-                System.out.println("Insertion in Payment unsuccessful !");
-                return;
-            }
-
-            String paymentDetailQuery = "insert into PaymentDetails values(?,?,?,?,?,?,?,?,?,?)";
-            stmt = conn.prepareStatement(paymentDetailQuery);
-
-            stmt.setString(1, paymentId);
-            stmt.setString(2, null);
-            stmt.setString(3, null);
-            stmt.setString(4, null);
-            stmt.setString(5, UPIId);
-            stmt.setString(6, null);
-            stmt.setString(7, null);
-            stmt.setString(8, null);
-            stmt.setString(9, null);
-            stmt.setString(10,null);
-
-            if(stmt.executeUpdate(paymentDetailQuery)==1){
-                System.out.println("Insertion in PaymentDetails successful !");
-            }else{
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
-            }
-
-        }
-        catch(SQLException se){
-            //Handle errors for JDBC
-            se.printStackTrace();
-        }
-        catch(Exception e){
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        }
-
-    }
-    public void payNetBanking(Student student){
-
-        Scanner scanner=new Scanner(System.in);
-        String paymentId=generatePaymentId();
-        System.out.println("Please enter account number");
-        String accountNumber = scanner.nextLine();
-        System.out.println("Please enter your bank name");
-        String bankName = scanner.nextLine();
-        System.out.println("please enter your password");
-        String password = scanner.nextLine();
-
-
-        try{
-            String sql  = "insert into Payment values(?,?,?,?)";
-            stmt = conn.prepareStatement(sql);
-
-            Date myDate = new Date();
-            SimpleDateFormat dmyFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String dmy = dmyFormat.format(myDate);
-            stmt.setString(1, paymentId);
-            stmt.setString(2, student.getUserId());
-            stmt.setString(3, String.valueOf(PaymentMode.NET_BANKING));
-            stmt.setDate(4, java.sql.Date.valueOf(dmy));
-
-            if(stmt.executeUpdate(sql)==1){
-                System.out.println("Insertion in Payment successful !");
-            }else{
-                System.out.println("Insertion in Payment unsuccessful !");
-                return;
-            }
-
-            String paymentDetailQuery = "insert into PaymentDetails values(?,?,?,?,?,?,?,?,?,?)";
-            stmt = conn.prepareStatement(paymentDetailQuery);
-
-            stmt.setString(1, paymentId);
-            stmt.setString(2, null);
-            stmt.setString(3, null);
-            stmt.setString(4, null);
-            stmt.setString(5, null);
-            stmt.setString(6, bankName);
-            stmt.setString(7, accountNumber);
-            stmt.setString(8, password);
-            stmt.setString(9, null);
-            stmt.setString(10,null);
-
-            if(stmt.executeUpdate(paymentDetailQuery)==1){
-                System.out.println("Insertion in PaymentDetails successful !");
-            }else{
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
-            }
-
-        }
-        catch(SQLException se){
-            //Handle errors for JDBC
-            se.printStackTrace();
-        }
-        catch(Exception e){
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        }
-    }
-    public void payCash(Student student){
-
-        String paymentId=generatePaymentId();
-        Scanner scanner=new Scanner(System.in);
-        System.out.println("Please enter receipt number");
-        String receiptNumber = scanner.nextLine();
-
-        try{
-            String sql  = "insert into Payment values(?,?,?,?)";
-            stmt = conn.prepareStatement(sql);
-
-            Date myDate = new Date();
-            SimpleDateFormat dmyFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String dmy = dmyFormat.format(myDate);
-            stmt.setString(1, paymentId);
-            stmt.setString(2, student.getUserId());
-            stmt.setString(3, String.valueOf(PaymentMode.CASH));
-            stmt.setDate(4, java.sql.Date.valueOf(dmy));
-
-            if(stmt.executeUpdate(sql)==1){
-                System.out.println("Insertion in Payment successful !");
-            }else{
-                System.out.println("Insertion in Payment unsuccessful !");
-                return;
-            }
-
-            String paymentDetailQuery = "insert into PaymentDetails values(?,?,?,?,?,?,?,?,?,?)";
-            stmt = conn.prepareStatement(paymentDetailQuery);
-
-            stmt.setString(1, paymentId);
-            stmt.setString(2, null);
-            stmt.setString(3, null);
-            stmt.setString(4, null);
-            stmt.setString(5, null);
-            stmt.setString(6, null);
-            stmt.setString(7, null);
-            stmt.setString(8, null);
-            stmt.setString(9, null);
-            stmt.setString(10,receiptNumber);
-
-            if(stmt.executeUpdate(paymentDetailQuery)==1){
-                System.out.println("Insertion in PaymentDetails successful !");
-            }else{
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
-            }
-        }
-        catch(SQLException se){
-            //Handle errors for JDBC
-            se.printStackTrace();
-        }
-        catch(Exception e){
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        }
-
-    }
-
-
-    public void payCheque(Student student){
-
-        Scanner scanner=new Scanner(System.in);
-        String paymentId=generatePaymentId();
-        System.out.println("Please enter cheque number");
-        String chequeNumber = scanner.nextLine();
-        System.out.println("Please enter receipt number");
-        String receiptNumber = scanner.nextLine();
-
-        try{
-            String sql  = "insert into Payment values(?,?,?,?)";
-            stmt = conn.prepareStatement(sql);
-
-            Date myDate = new Date();
-            SimpleDateFormat dmyFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String dmy = dmyFormat.format(myDate);
-            stmt.setString(1, paymentId);
-            stmt.setString(2, student.getUserId());
-            stmt.setString(3, String.valueOf(PaymentMode.CHEQUE));
-            stmt.setDate(4, java.sql.Date.valueOf(dmy));
-
-            if(stmt.executeUpdate(sql)==1){
-                System.out.println("Insertion in Payment successful !");
-            }else{
-                System.out.println("Insertion in Payment unsuccessful !");
-                return;
-            }
-
-            String paymentDetailQuery = "insert into PaymentDetails values(?,?,?,?,?,?,?,?,?,?)";
-            stmt = conn.prepareStatement(paymentDetailQuery);
-
-            stmt.setString(1, paymentId);
-            stmt.setString(2, null);
-            stmt.setString(3, null);
-            stmt.setString(4, null);
-            stmt.setString(5, null);
-            stmt.setString(6, null);
-            stmt.setString(7, null);
-            stmt.setString(8, null);
-            stmt.setString(9, chequeNumber);
-            stmt.setString(10,receiptNumber);
-
-            if(stmt.executeUpdate(paymentDetailQuery)==1){
-                System.out.println("Insertion in PaymentDetails successful !");
-            }else{
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
-            }
-        }
-        catch(SQLException se){
-            //Handle errors for JDBC
-            se.printStackTrace();
-        }
-        catch(Exception e){
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        }
-
-    }
 
     public boolean paymentApproved(Student student){
         try{
             String studentId=student.getUserId();
             boolean feeDone=true;
 
-            String setFeeDoneQuery = "UPDATE Student SET feeDone = 1 WHERE studentId = ?";
+            String setFeeDoneQuery = "UPDATE Student SET feeDone = 1 WHERE studentId = "+studentId;
             stmt = conn.prepareStatement(setFeeDoneQuery);
-            stmt.setString(1,studentId);
+//            stmt.setString(1,studentId);
 
             int m = stmt.executeUpdate(setFeeDoneQuery);
             if (m == 1){

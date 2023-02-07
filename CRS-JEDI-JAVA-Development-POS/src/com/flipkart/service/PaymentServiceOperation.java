@@ -98,6 +98,6 @@ public class PaymentServiceOperation implements PaymentService {
 //        System.out.println("PaymentID: "+notification.getPaymentAmount());
 //        System.out.println("Message: "+notification.getMessage());
 
-            paymentDAO.sendNotification(studentId, paymentAmount,paymentId,message);
+            paymentDAO.sendNotification(studentId, paymentAmount,message);
     }
 }

@@ -13,7 +13,11 @@ import java.io.Console;
 import java.util.Scanner;
 
 public class CRSApplication {
-    public static void main (String[] args) throws CourseNotFoundException {
+    /**
+     * Main function which is the starting point of all functionality.
+     * @param args
+     */
+    public static void main (String[] args) {
         Scanner in = new Scanner(System.in);
 
         boolean endApplication  = false;

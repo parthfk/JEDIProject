@@ -24,11 +24,11 @@ public interface StudentService {
      */
     void selectSecondaryCourse();
     /**
-     * Method to add course from database
+     * Method to add course during add-drop window
      */
     void addCourse();
     /**
-     * Method to remove course from database
+     * Method to remove course during add-drop window
      */
     void dropCourse();
 

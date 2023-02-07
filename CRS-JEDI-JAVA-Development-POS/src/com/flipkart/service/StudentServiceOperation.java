@@ -6,6 +6,8 @@ import com.flipkart.constant.PaymentMode;
 import com.flipkart.dao.CatalogueDAOImpl;
 import com.flipkart.dao.PaymentDAOImpl;
 import com.flipkart.dao.StudentDAOImpl;
+import com.flipkart.data.CourseData;
+import com.flipkart.exception.PaymentFailedException;
 import com.flipkart.utils.Utils;
 
 import java.sql.Date;
@@ -392,44 +394,60 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         System.out.println();
         int mode = sc.nextInt();
         String message = "";
+
+        boolean isFeeDone=false;
+
         switch (mode) {
             case 1:
                 message = "Fees paid online through" + " UPI !";
                 studentPayment.setModeOfPayment(PaymentMode.UPI);
-                PaymentDAOImpl.getInstance().payUPI(student);
+                isFeeDone=PaymentDAOImpl.getInstance().payUPI(student);
                 break;
             case 2:
                 message = "Fees paid online through" + " debit card !";
                 studentPayment.setModeOfPayment(PaymentMode.DEBIT_CARD);
-                PaymentDAOImpl.getInstance().payDebitCard(student);
+                isFeeDone=PaymentDAOImpl.getInstance().payDebitCard(student);
                 break;
             case 3:
                 message = "Fees paid online through" + " credit card !";
                 studentPayment.setModeOfPayment(PaymentMode.CREDIT_CARD);
-                PaymentDAOImpl.getInstance().payCreditCard(student);
+                isFeeDone=PaymentDAOImpl.getInstance().payCreditCard(student);
                 break;
             case 4:
                 studentPayment.setModeOfPayment(PaymentMode.NET_BANKING);
-                PaymentDAOImpl.getInstance().payNetBanking(student);
+                isFeeDone=PaymentDAOImpl.getInstance().payNetBanking(student);
                 break;
             case 5:
                 message = "Fees paid offline through" + " cash !";
                 studentPayment.setModeOfPayment(PaymentMode.CASH);
-                PaymentDAOImpl.getInstance().payCash(student);
+                isFeeDone=PaymentDAOImpl.getInstance().payCash(student);
                 break;
             case 6:
                 message = "Fees paid offline through" + " cheque !";
                 studentPayment.setModeOfPayment(PaymentMode.CHEQUE);
-                PaymentDAOImpl.getInstance().payCheque(student);
+                isFeeDone=PaymentDAOImpl.getInstance().payCheque(student);
                 break;
             default:
                 System.out.println("Invalid key, try again!");
                 break;
         }
+
+        if(isFeeDone)
+        {
+            student.setFeeDone(true);
+        }else {
+            try {
+                throw new PaymentFailedException(student.getUserId());
+            } catch (PaymentFailedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+
         if (PaymentDAOImpl.getInstance().paymentApproved(student)) {
 
             PaymentDAOImpl.getInstance().sendNotification(
-                    student.getUserId(), paymentServiceOperation.calculateAmount(), studentPayment.getPaymentId(), message);
+                    student.getUserId(), paymentServiceOperation.calculateAmount(), message);
         } else {
             System.out.println("Sorry,Payment Failed ! Please try again or contact admin.");
         }

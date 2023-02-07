@@ -27,7 +27,11 @@ public class CRSAdminMenu {
     Scanner in = new Scanner(System.in);
     UserService userService;
 
-    public CRSAdminMenu(Admin admin) throws CourseNotFoundException {
+    /**
+     * Constructor
+     * @param admin
+     */
+    public CRSAdminMenu(Admin admin) {
         this.adminUsername = admin.getName();
         //displayMenu();
 
@@ -38,7 +42,11 @@ public class CRSAdminMenu {
 
     }
 
-    private void displayAdminMenu(Admin admin) throws CourseNotFoundException {
+    /**
+     * Method which implements different functions according to the option chosen
+     * @param admin
+     */
+    private void displayAdminMenu(Admin admin) {
         while(true) {
             displayMenu();
             int input=in.nextInt();
@@ -84,7 +92,9 @@ public class CRSAdminMenu {
     }
 
 
-
+    /**
+     * Method which displays different options of admin menu
+     */
     public void displayMenu() {
 
         System.out.println();
