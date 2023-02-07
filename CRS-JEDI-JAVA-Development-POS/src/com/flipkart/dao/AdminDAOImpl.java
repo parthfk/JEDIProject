@@ -11,6 +11,7 @@ import java.sql.Date;
 
 import com.flipkart.bean.Admin;
 import com.flipkart.bean.Professor;
+import com.flipkart.bean.Student;
 import com.flipkart.service.AdminService;
 
 import static com.flipkart.constant.DBConnection.*;
@@ -349,15 +350,10 @@ public class AdminDAOImpl implements AdminDAO{
         }//end try
     }
 
+    @Override
+    public void generateGradeCard(Student student) {
 
-
-
-
-
-
-
-
-
+    }
 
 
 }

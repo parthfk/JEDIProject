@@ -2,13 +2,15 @@ package com.flipkart.service;
 
 import com.flipkart.bean.GradeCard;
 import com.flipkart.bean.Student;
+import com.flipkart.exception.PaymentFailedException;
+import com.flipkart.exception.PaymentNotFoundException;
 
 public interface StudentService {
     /**
      * Method to initiate semester registration for student
      *
      */
-    void registerForSem();
+    void registerForSem() throws PaymentNotFoundException, PaymentFailedException;
     /**
      * Method to register a student, although student can't login until it's approved by admin
      */
@@ -35,7 +37,7 @@ public interface StudentService {
     /**
      * Method to initiate fees payment after course registration is done.
      */
-    void payFee();
+    void payFee() ;
 
     /**
      * Method to view all the registered courses.

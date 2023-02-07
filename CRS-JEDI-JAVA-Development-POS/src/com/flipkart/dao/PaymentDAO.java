@@ -3,13 +3,13 @@ import com.flipkart.bean.Student;
 
 public interface PaymentDAO {
 
-    public void sendNotification(String studentId,double paymentAmount,String paymentId,String message);
-    public void payCreditCard(Student student);
-    public void payDebitCard(Student student);
-    public void payUPI(Student student);
-    public void payNetBanking(Student student);
-    public void payCash(Student student);
-    public void payCheque(Student student);
+    public boolean sendNotification(String studentId,String paymentId);
+    public String  payCreditCard(Student student,double paymentAmount,String message);
+    public String payDebitCard(Student student,double paymentAmount,String message);
+    public String payUPI(Student student,double paymentAmount,String message);
+    public String payNetBanking(Student student,double paymentAmount,String message);
+    public String payCash(Student student,double paymentAmount,String message);
+    public String payCheque(Student student,double paymentAmount,String message);
     public String generatePaymentId();
     public boolean paymentApproved(Student student);
 

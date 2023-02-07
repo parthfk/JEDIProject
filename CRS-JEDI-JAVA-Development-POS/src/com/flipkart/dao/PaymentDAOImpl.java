@@ -50,22 +50,15 @@ public class PaymentDAOImpl implements PaymentDAO{
         }
     }
 
-    public void sendNotification(String studentId,double paymentAmount,String paymentId,String message)
+    public boolean sendNotification(String studentId,String paymentId)
     {
         Connection conn = null;
         PreparedStatement stmt = null;
+        boolean res=false;
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            String insertPaymentNotificationQuery = "insert into PaymentNotification values(?,?,?,?)";
-            stmt = conn.prepareStatement(insertPaymentNotificationQuery);
-
-            stmt.setString(1, paymentId );
-            stmt.setString(2, studentId);
-            stmt.setDouble(3, paymentAmount);
-            stmt.setString(4, message);
-            stmt.executeUpdate();
 
             String fetchquery = "SELECT studentId, paymentId ,paymentAmount, message FROM PaymentNotification where studentId="+studentId;
             ResultSet rs = stmt.executeQuery(fetchquery);
@@ -73,12 +66,14 @@ public class PaymentDAOImpl implements PaymentDAO{
             String studentId1  = rs.getString("studentId");
             String paymentId1= rs.getString("paymentId");
             double amountPaid  = rs.getDouble("paymentAmount");
-            String message1 = rs.getString("message");
+            String message = rs.getString("message");
 
             System.out.println("Student Id:"+studentId1);
             System.out.println("Payment Id:"+paymentId1);
             System.out.println("Amount Paid:"+amountPaid);
             System.out.println(message);
+
+            res=true;
 
             stmt.close();
             conn.close();
@@ -91,13 +86,18 @@ public class PaymentDAOImpl implements PaymentDAO{
             //Handle errors for Class.forName
             e.printStackTrace();
         }
+        finally {
+            return res;
+        }
 
     }
 
-    public void payCreditCard(Student student){
+    public String payCreditCard(Student student,double paymentAmount,String message){
 
         Scanner scanner=new Scanner(System.in);
         String paymentId=generatePaymentId();
+
+        boolean isDone=false;
 
         System.out.println("Please enter credit card number");
         String creditCardNumber = scanner.nextLine();
@@ -141,6 +141,17 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(10,null);
             stmt.executeUpdate(paymentDetailQuery);
 
+            String insertPaymentNotificationQuery = "insert into PaymentNotification values(?,?,?,?)";
+            stmt = conn.prepareStatement(insertPaymentNotificationQuery);
+
+            stmt.setString(1, paymentId );
+            stmt.setString(2, student.getUserId());
+            stmt.setDouble(3, paymentAmount);
+            stmt.setString(4, message);
+            stmt.executeUpdate();
+
+            isDone=true;
+
             stmt.close();
             conn.close();
         }
@@ -152,13 +163,19 @@ public class PaymentDAOImpl implements PaymentDAO{
             //Handle errors for Class.forName
             e.printStackTrace();
         }
+        finally {
+            if(isDone)return paymentId;
+            else
+                return "-1";
+        }
     }
 
-    public void payDebitCard(Student student){
+
+    public String payDebitCard(Student student,double paymentAmount,String message){
 
         Scanner scanner=new Scanner(System.in);
         String paymentId=generatePaymentId();
-
+        boolean isDone=false;
         System.out.println("Please enter Debit card number");
         String DebitCardNumber = scanner.nextLine();
         System.out.println("Please enter cvv");
@@ -199,6 +216,7 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(9, null);
             stmt.setString(10,null);
             stmt.executeUpdate(paymentDetailQuery);
+            isDone=true;
 
             stmt.close();
             conn.close();
@@ -210,15 +228,19 @@ public class PaymentDAOImpl implements PaymentDAO{
         catch(Exception e){
             //Handle errors for Class.forName
             e.printStackTrace();
+        } finally {
+            if(isDone)return paymentId;
+            else
+                return "-1";
         }
 
     }
-    public void payUPI(Student student){
+    public String payUPI(Student student,double paymentAmount,String message){
 
         Scanner scanner=new Scanner(System.in);
 
         String paymentId=generatePaymentId();
-
+        boolean isDone=false;
         System.out.println("Please enter Upi Id");
         String UPIId = scanner.nextLine();
 
@@ -256,6 +278,7 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(9, null);
             stmt.setString(10,null);
             stmt.executeUpdate(paymentDetailQuery);
+            isDone=true;
 
             stmt.close();
             conn.close();
@@ -267,11 +290,15 @@ public class PaymentDAOImpl implements PaymentDAO{
         catch(Exception e){
             //Handle errors for Class.forName
             e.printStackTrace();
+        } finally {
+            if(isDone)return paymentId;
+            else
+                return "-1";
         }
 
     }
-    public void payNetBanking(Student student){
-
+    public String payNetBanking(Student student,double paymentAmount,String message){
+        boolean isDone=false;
         Scanner scanner=new Scanner(System.in);
         String paymentId=generatePaymentId();
         System.out.println("Please enter account number");
@@ -314,6 +341,7 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(9, null);
             stmt.setString(10,null);
             stmt.executeUpdate(paymentDetailQuery);
+            isDone=true;
 
             stmt.close();
             conn.close();
@@ -325,10 +353,14 @@ public class PaymentDAOImpl implements PaymentDAO{
         catch(Exception e){
             //Handle errors for Class.forName
             e.printStackTrace();
+        } finally {
+            if(isDone)return paymentId;
+            else
+                return "-1";
         }
     }
-    public void payCash(Student student){
-
+    public String payCash(Student student,double paymentAmount,String message){
+        boolean isDone=false;
         String paymentId=generatePaymentId();
         Scanner scanner=new Scanner(System.in);
         System.out.println("Please enter receipt number");
@@ -367,6 +399,7 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(9, null);
             stmt.setString(10,receiptNumber);
             stmt.executeUpdate(paymentDetailQuery);
+            isDone=true;
 
             stmt.close();
             conn.close();
@@ -378,13 +411,17 @@ public class PaymentDAOImpl implements PaymentDAO{
         catch(Exception e){
             //Handle errors for Class.forName
             e.printStackTrace();
+        } finally {
+            if(isDone)return paymentId;
+            else
+                return "-1";
         }
 
     }
 
 
-    public void payCheque(Student student){
-
+    public String payCheque(Student student,double paymentAmount,String message){
+        boolean isDone=false;
         Scanner scanner=new Scanner(System.in);
         String paymentId=generatePaymentId();
         System.out.println("Please enter cheque number");
@@ -426,7 +463,7 @@ public class PaymentDAOImpl implements PaymentDAO{
             stmt.setString(9, chequeNumber);
             stmt.setString(10,receiptNumber);
             stmt.executeUpdate(paymentDetailQuery);
-
+            isDone=true;
             stmt.close();
             conn.close();
         }
@@ -437,6 +474,10 @@ public class PaymentDAOImpl implements PaymentDAO{
         catch(Exception e){
             //Handle errors for Class.forName
             e.printStackTrace();
+        } finally {
+            if(isDone)return paymentId;
+            else
+                return "-1";
         }
 
     }

@@ -6,6 +6,8 @@ import com.flipkart.constant.PaymentMode;
 import com.flipkart.dao.PaymentDAOImpl;
 import com.flipkart.dao.StudentDAOImpl;
 import com.flipkart.data.CourseData;
+import com.flipkart.exception.PaymentFailedException;
+import com.flipkart.exception.PaymentNotFoundException;
 import com.flipkart.utils.Utils;
 
 import java.sql.Date;
@@ -26,7 +28,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         System.out.println(this.studentDao);
     }
 
-    public void registerForSem() {
+    public void registerForSem()  {
         student.setSemRegistration(new SemRegistration(student));
 
         boolean registering = true;
@@ -395,44 +397,61 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         System.out.println();
         int mode = sc.nextInt();
         String message = "";
+        String pId="";
         switch (mode) {
             case 1:
                 message = "Fees paid online through" + " UPI !";
                 studentPayment.setModeOfPayment(PaymentMode.UPI);
-                PaymentDAOImpl.getInstance().payUPI(student);
+                PaymentDAOImpl.getInstance().payUPI(student,paymentServiceOperation.calculateAmount(),message);
                 break;
             case 2:
                 message = "Fees paid online through" + " debit card !";
                 studentPayment.setModeOfPayment(PaymentMode.DEBIT_CARD);
-                PaymentDAOImpl.getInstance().payDebitCard(student);
+                PaymentDAOImpl.getInstance().payDebitCard(student,paymentServiceOperation.calculateAmount(),message);
                 break;
             case 3:
                 message = "Fees paid online through" + " credit card !";
                 studentPayment.setModeOfPayment(PaymentMode.CREDIT_CARD);
-                PaymentDAOImpl.getInstance().payCreditCard(student);
+                pId=PaymentDAOImpl.getInstance().payCreditCard(student,paymentServiceOperation.calculateAmount(),message);
                 break;
             case 4:
                 studentPayment.setModeOfPayment(PaymentMode.NET_BANKING);
-                PaymentDAOImpl.getInstance().payNetBanking(student);
+                PaymentDAOImpl.getInstance().payNetBanking(student,paymentServiceOperation.calculateAmount(),message);
                 break;
             case 5:
                 message = "Fees paid offline through" + " cash !";
                 studentPayment.setModeOfPayment(PaymentMode.CASH);
-                PaymentDAOImpl.getInstance().payCash(student);
+                PaymentDAOImpl.getInstance().payCash(student,paymentServiceOperation.calculateAmount(),message);
                 break;
             case 6:
                 message = "Fees paid offline through" + " cheque !";
                 studentPayment.setModeOfPayment(PaymentMode.CHEQUE);
-                PaymentDAOImpl.getInstance().payCheque(student);
+                PaymentDAOImpl.getInstance().payCheque(student,paymentServiceOperation.calculateAmount(),message);
                 break;
             default:
                 System.out.println("Invalid key, try again!");
                 break;
         }
-        if (PaymentDAOImpl.getInstance().paymentApproved(student)) {
+        if(pId=="-1")
+        {
+            try {
+                throw new PaymentFailedException(pId);
+            } catch (PaymentFailedException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            studentPayment.setPaymentId(pId);
+        }
 
-            PaymentDAOImpl.getInstance().sendNotification(
-                    student.getUserId(), paymentServiceOperation.calculateAmount(), studentPayment.getPaymentId(), message);
+        if (PaymentDAOImpl.getInstance().paymentApproved(student)) {
+           if(!PaymentDAOImpl.getInstance().sendNotification(
+                    student.getUserId(), studentPayment.getPaymentId())){
+               try {
+                   throw new PaymentNotFoundException(studentPayment.getStudentId(),student.getUserId());
+               } catch (PaymentNotFoundException e) {
+                   System.out.println(e.getMessage());
+               }
+           }
         } else {
             System.out.println("Sorry,Payment Failed ! Please try again or contact admin.");
         }

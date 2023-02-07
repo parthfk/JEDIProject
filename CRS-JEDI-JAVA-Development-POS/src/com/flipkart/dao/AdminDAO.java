@@ -2,6 +2,7 @@ package com.flipkart.dao;
 
 import com.flipkart.bean.Admin;
 import com.flipkart.bean.Professor;
+import com.flipkart.bean.Student;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,6 +17,6 @@ public interface AdminDAO {
     public void approveStudentDAO();
 
 
-    public void generateGradeCard(Student);
+    public void generateGradeCard(Student student);
 
 }

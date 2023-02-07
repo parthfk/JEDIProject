@@ -1,6 +1,8 @@
 package com.flipkart.client;
 
 import com.flipkart.bean.Student;
+import com.flipkart.exception.PaymentFailedException;
+import com.flipkart.exception.PaymentNotFoundException;
 import com.flipkart.service.StudentService;
 import com.flipkart.service.StudentServiceOperation;
 
@@ -12,13 +14,13 @@ public class CRSStudentMenu {
     // 3. logout
     private String studentUsername;
     private StudentServiceOperation service;
-    public CRSStudentMenu(Student student) {
+    public CRSStudentMenu(Student student) throws PaymentNotFoundException, PaymentFailedException {
         this.studentUsername = student.getName();
         service = new StudentServiceOperation(student);
         displayMenu();
     }
 
-    public void displayMenu() {
+    public void displayMenu()  {
         boolean studentMenu = true;
         while (studentMenu) {
             System.out.println();
