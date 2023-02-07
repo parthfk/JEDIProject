@@ -9,7 +9,7 @@ public interface PaymentDAO {
      * @param paymentId
      * @param message
      */
-    public void sendNotification(String studentId,double paymentAmount,String paymentId,String message);
+    public void sendNotification(String studentId,double paymentAmount,String message);
 
     /**
      * @param student

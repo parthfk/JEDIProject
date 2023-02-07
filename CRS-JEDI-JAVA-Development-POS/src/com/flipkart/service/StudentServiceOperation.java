@@ -420,7 +420,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         if (PaymentDAOImpl.getInstance().paymentApproved(student)) {
 
             PaymentDAOImpl.getInstance().sendNotification(
-                    student.getUserId(), paymentServiceOperation.calculateAmount(), studentPayment.getPaymentId(), message);
+                    student.getUserId(), paymentServiceOperation.calculateAmount(), message);
         } else {
             System.out.println("Sorry,Payment Failed ! Please try again or contact admin.");
         }

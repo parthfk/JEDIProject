@@ -16,7 +16,7 @@ public interface AdminService {
      * Method to remove a course by the admin
      * @return boolean
      */
-    boolean removeCourse() throws CourseNotFoundException;
+    boolean removeCourse() ;
 
     /**
      * Method to approve a student by admin.

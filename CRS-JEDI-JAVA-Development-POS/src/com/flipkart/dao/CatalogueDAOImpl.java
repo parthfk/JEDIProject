@@ -81,7 +81,7 @@ public class CatalogueDAOImpl implements CatalogueDAO{
     }
 
     @Override
-    public void deleteCourseInDB(String courseId) throws CourseNotFoundException {
+    public void deleteCourseInDB(String courseId)  {
 
         try {
             String sql = "delete from Catalogue where courseId = ?";
@@ -95,6 +95,8 @@ public class CatalogueDAOImpl implements CatalogueDAO{
             }
 
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (CourseNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

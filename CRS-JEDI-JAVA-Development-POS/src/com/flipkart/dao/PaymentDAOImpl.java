@@ -54,57 +54,6 @@ public class PaymentDAOImpl implements PaymentDAO{
             return Integer.toString(paymentID);
     }
 
-    public void sendNotification(String studentId,double paymentAmount,String paymentId,String message)
-    {
-        try{
-            String insertPaymentNotificationQuery = "insert into PaymentNotification values(?,?,?,?)";
-            stmt = conn.prepareStatement(insertPaymentNotificationQuery);
-
-            stmt.setString(1, paymentId );
-            stmt.setString(2, studentId);
-            stmt.setDouble(3, paymentAmount);
-            stmt.setString(4, message);
-
-            if(stmt.executeUpdate()==1){
-                System.out.println("Insertion in PaymentNotification successful !");
-            }
-            else {
-                System.out.println("Insertion in PaymentNotification failed!");
-                return;
-            }
-
-            String fetchquery = "SELECT studentId, paymentId ,paymentAmount, message FROM PaymentNotification where studentId= ?";
-            stmt = conn.prepareStatement(fetchquery);
-
-            stmt.setString(1,studentId);
-            ResultSet rs = stmt.executeQuery(fetchquery);
-
-            if(rs.next()) {
-                String studentId1 = rs.getString("studentId");
-                String paymentId1 = rs.getString("paymentId");
-                double amountPaid = rs.getDouble("paymentAmount");
-                String message1 = rs.getString("message");
-
-                System.out.println("Student Id:" + studentId1);
-                System.out.println("Payment Id:" + paymentId1);
-                System.out.println("Amount Paid:" + amountPaid);
-                System.out.println(message);
-            }
-            else{
-                System.out.println("Reading from Payment Notification failed !");
-            }
-        }
-        catch(SQLException se){
-            //Handle errors for JDBC
-            se.printStackTrace();
-        }
-        catch(Exception e){
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        }
-
-    }
-
     public void payCreditCard(Student student){
 
         Scanner scanner=new Scanner(System.in);
@@ -406,7 +355,6 @@ public class PaymentDAOImpl implements PaymentDAO{
 
     }
 
-
     public void payCheque(Student student){
 
         Scanner scanner=new Scanner(System.in);
@@ -465,6 +413,59 @@ public class PaymentDAOImpl implements PaymentDAO{
         }
 
     }
+
+    public void sendNotification(String studentId,double paymentAmount,String message)
+    {
+        try{
+            String paymentId=Integer.toString(Integer.parseInt(generatePaymentId())-1);
+            String insertPaymentNotificationQuery = "insert into PaymentNotification values(?,?,?,?)";
+            stmt = conn.prepareStatement(insertPaymentNotificationQuery);
+
+            stmt.setString(1, paymentId );
+            stmt.setString(2, studentId);
+            stmt.setDouble(3, paymentAmount);
+            stmt.setString(4, message);
+
+            if(stmt.executeUpdate()==1){
+                System.out.println("Insertion in PaymentNotification successful !");
+            }
+            else {
+                System.out.println("Insertion in PaymentNotification failed!");
+                return;
+            }
+
+            String fetchquery = "SELECT studentId, paymentId ,paymentAmount, message FROM PaymentNotification where studentId= ?";
+            stmt = conn.prepareStatement(fetchquery);
+
+            stmt.setString(1,studentId);
+            ResultSet rs = stmt.executeQuery(fetchquery);
+
+            if(rs.next()) {
+                String studentId1 = rs.getString("studentId");
+                String paymentId1 = rs.getString("paymentId");
+                double amountPaid = rs.getDouble("paymentAmount");
+                String message1 = rs.getString("message");
+
+                System.out.println("Student Id:" + studentId1);
+                System.out.println("Payment Id:" + paymentId1);
+                System.out.println("Amount Paid:" + amountPaid);
+                System.out.println(message);
+            }
+            else{
+                System.out.println("Reading from Payment Notification failed !");
+            }
+        }
+        catch(SQLException se){
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }
+        catch(Exception e){
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }
+
+    }
+
 
     public boolean paymentApproved(Student student){
         try{

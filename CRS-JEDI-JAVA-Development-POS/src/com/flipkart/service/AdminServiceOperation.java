@@ -49,7 +49,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         return true;
     }
 
-    public boolean removeCourse() throws CourseNotFoundException {
+    public boolean removeCourse()  {
         System.out.println("-----Below is the list of courses currently present-------");
         CatalogueDAOImpl catalogueDAO = new CatalogueDAOImpl();
         List<Course> courseList = catalogueDAO.fetchCatalogue();
