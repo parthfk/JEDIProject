@@ -56,7 +56,7 @@ public interface StudentDAO {
     /**
      * @return
      */
-    public GradeCard displayGradeCard ();
+    public void displayGradeCard ();
 
     /**
      * @param registeredCourses

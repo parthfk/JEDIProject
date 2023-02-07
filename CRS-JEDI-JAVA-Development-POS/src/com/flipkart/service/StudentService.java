@@ -44,8 +44,7 @@ public interface StudentService {
     /**
      * Method to retrieve Grade card
      *
-     * @return GradeCard object
      */
-    GradeCard displayGradeCard ();
+    void displayGradeCard ();
 
 }

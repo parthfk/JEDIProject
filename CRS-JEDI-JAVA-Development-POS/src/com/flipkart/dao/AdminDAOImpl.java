@@ -398,7 +398,7 @@ public class AdminDAOImpl implements AdminDAO{
             {
                 String tempgrade = rs.getString(1);
                 semID = rs.getString(2);
-                if(tempgrade == null){
+                if(tempgrade == null || tempgrade.matches("N/A")){
                     gradeNotAssigned = true;
                     break;
                 }
@@ -448,11 +448,13 @@ public class AdminDAOImpl implements AdminDAO{
             stmt.executeUpdate();
             stmt.close();
 
-            sql = "UPDATE Student set gradeCardApproved = 1 WHERE studentId = '" + userId_of_approved_gradeCard +"'";
+            sql = "UPDATE Student set gradeCardApproved = 1, gradeCardId = ? WHERE studentId = '" + userId_of_approved_gradeCard +"'";
             stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, records);
             stmt.executeUpdate();
 
             System.out.println("GradeCard generated!");
+
 
         } catch (Exception e){
             e.printStackTrace();

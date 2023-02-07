@@ -18,6 +18,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     private StudentDAOImpl studentDao;
 
     public StudentServiceOperation() {
+
     }
 
     public StudentServiceOperation(Student student) {
@@ -117,6 +118,9 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
         newStudent.setUserId("s" + IDNumber.ID_NUMBER++);
 
+        this.student = newStudent;
+        if (this.studentDao == null)
+            this.studentDao = StudentDAOImpl.getInstance(this.student);
         this.studentDao.signup();
     }
 
@@ -441,21 +445,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         });
     }
 
-    public GradeCard displayGradeCard() {
-        if (!student.isGradeCardApproved()) {
-            System.out.println("Your gradeCard has not been generated yet. Please contact your admin.");
-            return null;
-        }
-        GradeCard gradeCard = student.getGradeCard();
-        System.out.println("Student id: " + gradeCard.getStudentID());
-        System.out.println("Semester id: " + gradeCard.getSemesterID());
-        System.out.println("SGPA : " + gradeCard.getSGPA());
-        System.out.println("Courses :" + gradeCard.getCourseList());
-        System.out.print("Grades :");
-        for (Grade g : gradeCard.getGrades()) {
-            System.out.print(g.getGrade() + ", ");
-        }
-
-        return gradeCard;
+    public void displayGradeCard() {
+        this.studentDao.displayGradeCard();
     }
 }
