@@ -13,11 +13,12 @@ import java.util.ArrayList;
 import static com.flipkart.constant.DBConnection.*;
 
 public class StudentDAOImpl implements StudentDAO {
-    private Connection conn = null;
-    private PreparedStatement stmt = null;
+    private Connection conn;
+    private PreparedStatement stmt;
     private Student student;
 
     private StudentDAOImpl(Student student) {
+        this.student = student;
         this.conn = DbConnection.getConnectionInstance();
     }
 
@@ -144,10 +145,9 @@ public class StudentDAOImpl implements StudentDAO {
         ArrayList<String> primaryCourses = new ArrayList<>();
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            String viewPrimaryCoursesQuery = "SELECT pc1, pc2, pc3, pc4 from SemRegistration WHERE studentId='?'";
+            String viewPrimaryCoursesQuery = "SELECT pc1, pc2, pc3, pc4 from SemRegistration WHERE studentId='" + student.getUserId() + "'";
 
             stmt = conn.prepareStatement(viewPrimaryCoursesQuery);
-            stmt.setString(1, student.getUserId());
             ResultSet rs = stmt.executeQuery(viewPrimaryCoursesQuery);
             while (rs.next()) {
                 String pc1 = "", pc2 = "", pc3 = "", pc4 = "";

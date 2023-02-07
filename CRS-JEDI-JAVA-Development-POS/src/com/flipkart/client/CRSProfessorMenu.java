@@ -61,7 +61,7 @@ public class CRSProfessorMenu {
 
                     System.out.println("Course ID/tCourse Name");
                     for(int i=0;i<courseList.size();i++){
-                        System.out.println(courseList.get(i).getCourseID() + + courseList.get(i).getName());
+                        System.out.println(courseList.get(i).getCourseID() + courseList.get(i).getName());
                     }
                     while(true){
                         System.out.println("Please enter the courseId to teach or # to exit.");
