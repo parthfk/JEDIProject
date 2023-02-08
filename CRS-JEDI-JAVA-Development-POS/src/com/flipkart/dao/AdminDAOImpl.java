@@ -62,22 +62,11 @@ public class AdminDAOImpl implements AdminDAO {
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
+            return false;
         } catch (Exception e) {
             //Handle errors for Class.forName
             e.printStackTrace();
-        } finally {
-
-            try {
-                if (stmt != null)
-                    stmt.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
+            return false;
         }
         System.out.println("Admin Registered Successfully!!");
         return false;
