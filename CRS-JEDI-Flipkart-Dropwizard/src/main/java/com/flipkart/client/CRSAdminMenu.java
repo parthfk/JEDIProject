@@ -57,7 +57,13 @@ public class CRSAdminMenu {
 
             switch (input) {
                 case 1:
-                    adminObj.approveStudent();
+                        System.out.println("Enter student ID to be Approved or Press # to exit");
+                        Scanner sc = new Scanner(System.in);
+                        String studentId = sc.next();
+                        if (studentId.equals("#")) {
+                            break;
+                        }
+                    adminObj.approveStudent(studentId);
                     break;
                 case 2:
                     adminObj.addProfessor();

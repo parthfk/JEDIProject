@@ -100,9 +100,9 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         return true;
     }
 
-    public void approveStudent() {
+    public void approveStudent(String studentId) {
         AdminDAOImpl obj = new AdminDAOImpl();
-        obj.approveStudentDAO();
+        obj.approveStudentDAO(studentId);
     }
 
 
@@ -189,8 +189,8 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         }
     }
 
-    public void generateGradeCard() {
+    public void generateGradeCard(String userId_of_approved_gradeCard) {
         AdminDAO adminDAO = new AdminDAOImpl();
-        adminDAO.generateGradeCardDAO();
+        adminDAO.generateGradeCardDAO(userId_of_approved_gradeCard);
     }
 }

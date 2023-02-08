@@ -26,13 +26,13 @@ public interface AdminDAO {
     /**
      * Method to approve student using SQL commands
      */
-    public void approveStudentDAO();
+    public void approveStudentDAO(String studentId);
 
 
     /**
      * Method to generate Grade Card after accessing grades using SQL Commands
      */
-    public void generateGradeCardDAO();
+    public void generateGradeCardDAO(String userId_of_approved_gradeCard);
 
 
 }

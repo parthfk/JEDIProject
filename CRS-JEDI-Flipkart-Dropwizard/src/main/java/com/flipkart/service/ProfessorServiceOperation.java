@@ -68,7 +68,7 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
                        profDAO.addGrade(student.getUserId(), semesterId, courseToGrade.getCourseID(), gradeString);
                    } else {
                        System.out.println("Please enter one of the following grades: A" +
-                               ",A-,B,B-,C,C-,D,D-,E,F");
+                               ",A-,B,B-,C,C-,D,F");
                    }
                }
            }
@@ -79,7 +79,7 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
     }
     public boolean validateGrade(String gradeEntered){
         List<String> possibleGrades = new ArrayList<>(Arrays.asList("A","A-",
-        "B","B-","C","C-","D","D-","E","F"));
+        "B","B-","C","C-","D","F"));
         for(String possibleGrade: possibleGrades){
             if(possibleGrade.equals(gradeEntered)){
                 return true;
@@ -95,10 +95,10 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         return profDAO.viewEnrolledStudentListDao(courseId,semesterId);
     }
     public void selectCourse(Course course){
-        List<Course> courseList = professor.getCoursesTaken();
-        courseList.add(course);
-        course.setProfessorID(professor.getUserId());
-        professor.setCoursesTaken(courseList);
+//        List<Course> courseList = professor.getCoursesTaken();
+//        courseList.add(course);
+//        course.setProfessorID(professor.getUserId());
+//        professor.setCoursesTaken(courseList);
         //dao
         profDAO.selectCourseDAO(course);
     }

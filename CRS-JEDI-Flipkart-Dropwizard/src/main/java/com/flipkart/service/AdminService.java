@@ -21,7 +21,7 @@ public interface AdminService {
     /**
      * Method to approve a student by admin.
      */
-    void approveStudent();
+    void approveStudent(String studentId);
 
     /**
      * Method to add a professor to the system by the admin
@@ -38,6 +38,6 @@ public interface AdminService {
     /**
      * Method to generate grade card of the student
      */
-    void generateGradeCard();
+    void generateGradeCard(String userId_of_approved_gradeCard);
 
 }

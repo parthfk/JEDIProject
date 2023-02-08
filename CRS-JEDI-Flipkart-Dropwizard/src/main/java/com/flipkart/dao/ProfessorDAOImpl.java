@@ -12,20 +12,19 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ProfessorDAOImpl implements ProfessorDAO{
-    private Professor prof;
+    private String profId;
     private Connection conn;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_CYAN = "\u001B[36m";
 
-    public ProfessorDAOImpl(Professor prof) {
-        this.prof = prof;
+    public ProfessorDAOImpl(String profId) {
+        this.profId = profId;
         conn = DbConnection.getInstance().getConnection();
     }
 
     @Override
     public void selectCourseDAO(Course course) {
-        String profId = prof.getUserId();
         String courseId = course.getCourseID();
 
         try{
@@ -83,7 +82,7 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
     @Override
     public List<Course> viewCourseListDao(String id) {
-        String getCourseListQuery = "SELECT courseId,availableSeats FROM Catalogue WHERE professorId='" + prof.getUserId() + "'";
+        String getCourseListQuery = "SELECT courseId,availableSeats FROM Catalogue WHERE professorId='" + profId + "'";
         try{
             PreparedStatement st = conn.prepareStatement(getCourseListQuery);
             ResultSet rs = st.executeQuery(getCourseListQuery);

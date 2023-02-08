@@ -40,7 +40,7 @@ public class AdminDAOImpl implements AdminDAO {
             stmt.setString(1, admin.getEmail());
 
             ResultSet rs1 = stmt.executeQuery();
-            
+
             if (rs1.next()) {
 
                 try{
@@ -166,12 +166,11 @@ public class AdminDAOImpl implements AdminDAO {
 
     }
 
-    public void approveStudentDAO() {
+    public void approveStudentDAO(String studentId) {
         PreparedStatement stmt = null;
 
         try {
 
-            while (true) {
 
                 stmt = conn.prepareStatement(SELECT_UNAPPROVED_STUDENTS_QUERY);
                 ResultSet rs = stmt.executeQuery();
@@ -201,12 +200,12 @@ public class AdminDAOImpl implements AdminDAO {
                 buffer.setLength(0);
 
 
-                System.out.println("Enter student ID to be Approved or Press # to exit");
-                Scanner sc = new Scanner(System.in);
-                String studentId = sc.next();
-                if (studentId.equals("#")) {
-                    break;
-                }
+//                System.out.println("Enter student ID to be Approved or Press # to exit");
+//                Scanner sc = new Scanner(System.in);
+//                String studentId = sc.next();
+//                if (studentId.equals("#")) {
+//                    break;
+//                }
 
                 stmt = conn.prepareStatement(UPDATE_STUDENT_APPROVAL_STATUS_QUERY);
                 stmt.setString(1, studentId);
@@ -216,9 +215,7 @@ public class AdminDAOImpl implements AdminDAO {
                 } else {
                     System.out.println("Student with ID: " + studentId + " Approved!!");
                 }
-
-            }
-            stmt.close();
+                stmt.close();
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -238,7 +235,7 @@ public class AdminDAOImpl implements AdminDAO {
     }
 
 
-    public void generateGradeCardDAO() {
+    public void generateGradeCardDAO(String userId_of_approved_gradeCard) {
         PreparedStatement stmt;
 
 
@@ -252,6 +249,7 @@ public class AdminDAOImpl implements AdminDAO {
                 System.out.println("No Grade card ready to be generated");
                 return;
             }
+
             System.out.println("Student Name \t UserID \t E-Mail \t \t Department");
 
             do {
@@ -260,12 +258,12 @@ public class AdminDAOImpl implements AdminDAO {
 
             rs.close();
 
-            System.out.println("Enter UserID of student to approve Grade Gard or Press # to exit");
-            scanner = new Scanner(System.in);
-            String userId_of_approved_gradeCard = scanner.next();
-            if (userId_of_approved_gradeCard.equals("#")) {
-                return;
-            }
+//            System.out.println("Enter UserID of student to approve Grade Gard or Press # to exit");
+//            scanner = new Scanner(System.in);
+//            String userId_of_approved_gradeCard = scanner.next();
+//            if (userId_of_approved_gradeCard.equals("#")) {
+//                return;
+//            }
 
             stmt = conn.prepareStatement(FETCH_GRADES_QUERY);
             stmt.setString(1, userId_of_approved_gradeCard);
@@ -289,19 +287,19 @@ public class AdminDAOImpl implements AdminDAO {
                     gradeNotAssigned = true;
                     break;
                 }
-                if (tempGrade.matches("A+")) {
+                if (tempGrade.matches("A")) {
                     gradeTotal += 10;
                 } else if (tempGrade.matches("A-")) {
                     gradeTotal += 9;
-                } else if (tempGrade.matches("B+")) {
+                } else if (tempGrade.matches("B")) {
                     gradeTotal += 8;
                 } else if (tempGrade.matches("B-")) {
                     gradeTotal += 7;
-                } else if (tempGrade.matches("C+")) {
+                } else if (tempGrade.matches("C")) {
                     gradeTotal += 6;
                 } else if (tempGrade.matches("C-")) {
                     gradeTotal += 5;
-                } else if (tempGrade.matches("D+")) {
+                } else if (tempGrade.matches("D")) {
                     gradeTotal += 4;
                 }
 
