@@ -14,19 +14,18 @@ import java.util.regex.*;
 
 public class UserServiceOperation implements UserService {
 
-    public User logIn() {
+    public User logIn(String inEmail, String passEntered,String roole) {
         Scanner in = new Scanner(System.in);
         boolean emailValidated = false, passWordEnteredIsCorrect = false;
         User userObj = null;
 
         //List<User> userData = null;
-        System.out.println("Please enter your Email id: ");
-        String inputEmail = in.nextLine().toLowerCase();
-        System.out.println("Please enter your Password: ");
-        String passwordEntered = in.nextLine().toLowerCase();
-        System.out.println("Please enter your Role: ");
-        String role = in.nextLine().toLowerCase();
-
+       // System.out.println("Please enter your Email id: ");
+        String inputEmail = inEmail.toLowerCase();
+       // System.out.println("Please enter your Password: ");
+        String passwordEntered = passEntered.toLowerCase();
+       // System.out.println("Please enter your Role: ");
+        String role = roole.toLowerCase();
         while (!emailValidated) {
             String regex = "^(.+)@(.+)$";
             Pattern pattern = Pattern.compile(regex);
@@ -141,8 +140,8 @@ public class UserServiceOperation implements UserService {
         System.out.println("No user exists with this email! Please contact admin for help!");
     }
 
-    public boolean logOut(User user) {
-        System.out.println("You have logged out successfully at " + new Date());
+    public boolean logOut() {
+        //System.out.println("You have logged out successfully at " + new Date());
         return true;
     }
 
@@ -151,27 +150,21 @@ public class UserServiceOperation implements UserService {
 
         if(courses.size()==0)
         {
-            System.out.println("No Courses exist in Catalogue");
+            //System.out.println("No Courses exist in Catalogue");
             return courses;
-
-
         }
-        System.out.println("These are the courses currently available: ");
-//        for(int i=0;i<courses.size();i++) {
-//            System.out.println("CourseID \t Course Name \t Professor ID ");
-//            System.out.println(courses.get(i).getCourseID() + "\t\t\t " + courses.get(i).getName() + "\t \t \t\t  " + courses.get(i).getProfessorID());
-//        }
-            StringBuffer buffer = new StringBuffer();
-            Formatter fmt = new Formatter();
-
-            fmt.format("\n%14s %14s %14s\n", "Course ID", "Course Name", "Professor");
-
-            for(Course c: courses)
-            {
-                fmt.format("%14s %14s %14s\n", c.getCourseID(),c.getName(),c.getProfessorID());
-            }
-            System.out.println(fmt);
-            buffer.setLength(0);
+//        System.out.println("These are the courses currently available: ");
+//            StringBuffer buffer = new StringBuffer();
+//            Formatter fmt = new Formatter();
+//
+//            fmt.format("\n%14s %14s %14s\n", "Course ID", "Course Name", "Professor");
+//
+//            for(Course c: courses)
+//            {
+//                fmt.format("%14s %14s %14s\n", c.getCourseID(),c.getName(),c.getProfessorID());
+//            }
+//            System.out.println(fmt);
+//            buffer.setLength(0);
 
         return courses;
 

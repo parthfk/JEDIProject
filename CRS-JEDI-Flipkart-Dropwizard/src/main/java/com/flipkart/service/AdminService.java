@@ -10,13 +10,13 @@ public interface AdminService {
      * Method to add a course by the admin
      * @return boolean
      */
-    boolean addCourse();
+    boolean addCourse(String semesterId,String courseId,String courseName,int seatsAvailable);
 
     /**
      * Method to remove a course by the admin
      * @return boolean
      */
-    boolean removeCourse() ;
+    boolean removeCourse(String id_to_be_deleted) ;
 
     /**
      * Method to approve a student by admin.
@@ -27,7 +27,7 @@ public interface AdminService {
      * Method to add a professor to the system by the admin
      *
      */
-    void addProfessor();
+    void addProfessor(Professor newProf);
 
     /**
      * Method to add another admin

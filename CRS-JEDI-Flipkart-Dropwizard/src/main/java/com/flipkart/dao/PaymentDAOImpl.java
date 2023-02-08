@@ -296,12 +296,6 @@ public class PaymentDAOImpl implements PaymentDAO {
             String paymentDetailQuery = "insert into PaymentDetails(paymentId,chequeNumber,receiptNumber) values(" + paymentId + "," + "'" + chequeNumber + "'" + "," + "'" + receiptNumber + "')";
             stmt = conn.prepareStatement(paymentDetailQuery);
 
-            if (stmt.executeUpdate(paymentDetailQuery) == 1) {
-                res = true;
-                System.out.println("Insertion in PaymentDetails successful !");
-            } else {
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
-            }
 
             if (stmt.executeUpdate(paymentDetailQuery) == 1) {
                 System.out.println("Insertion in PaymentDetails successful !");

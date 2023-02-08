@@ -15,7 +15,7 @@ public interface ProfessorService {
      * Method to retrieve all the students enrolled for a particular course.
 	 * @return List of Students
 	 */
-    List<Student> viewEnrolledStudentList();
+    List<Student> viewEnrolledStudentList(String courseId,String semId);
     /**
      * Method to select a particular course  to teach for the  professor.
      * @param course object

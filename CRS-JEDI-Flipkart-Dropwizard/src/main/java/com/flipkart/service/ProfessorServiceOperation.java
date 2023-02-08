@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ProfessorServiceOperation extends UserServiceOperation implements ProfessorService{
-    private Professor professor;
+    private String profId;
     private ProfessorDAO profDAO;
 
     Scanner in = new Scanner(System.in);
-    public ProfessorServiceOperation(Professor professor){
-        this.professor =professor;
-        profDAO = new ProfessorDAOImpl(professor);
+    public ProfessorServiceOperation(String professorId){
+        this.profId = professorId;
+        profDAO = new ProfessorDAOImpl(professorId);
     }
 
     public List<String> readCourseAndSemesterIds(){
@@ -54,7 +54,7 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
        catch(Exception e){
            e.printStackTrace();
        }
-       System.out.println("Please select one of the following grades for each student: A,A-,B,B-,C,C-,D,D-,E,F");
+       System.out.println("Please select one of the following grades for each student: A,A-,B,B-,C,C-,D,F");
        try {
            List<Student> enrolledStudents = profDAO.viewEnrolledStudentListDao(courseToGrade.getCourseID(), semesterId);
 
@@ -87,13 +87,10 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         }
         return false;
     }
-    public List<Student> viewEnrolledStudentList(){
-        List<String> courseAndSemIds = this.readCourseAndSemesterIds();
-        String courseId = courseAndSemIds.get(0);
-        String semesterId = courseAndSemIds.get(1);
-
+    public List<Student> viewEnrolledStudentList(String courseId,String semesterId){
         return profDAO.viewEnrolledStudentListDao(courseId,semesterId);
     }
+
     public void selectCourse(Course course){
 //        List<Course> courseList = professor.getCoursesTaken();
 //        courseList.add(course);
@@ -103,8 +100,7 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         profDAO.selectCourseDAO(course);
     }
     public List<Course> viewCourseList(){
-        List<Course> courseList = profDAO.viewCourseListDao(professor.getUserId());
-        this.printCourseList(courseList);
-        return courseList;
+        //this.printCourseList(courseList);
+        return profDAO.viewCourseListDao(profId);
     }
 }

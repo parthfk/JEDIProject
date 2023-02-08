@@ -17,24 +17,24 @@ import com.flipkart.utils.Utils;
 import java.util.List;
 
 public class AdminServiceOperation extends UserServiceOperation implements AdminService {
-    private Scanner scanner;
+//    private Scanner scanner;
 
     public AdminServiceOperation() {
-        scanner = new Scanner(System.in);
-    }
+//        scanner = new Scanner(System.in);
+   }
 
-    public boolean addCourse() {
-        System.out.println("Please enter semesterId :");
-        String semesterId = scanner.nextLine();
-
-        System.out.println("Please enter course ID");
-        String courseId = scanner.nextLine();
-
-        System.out.println("Please enter course name");
-        String courseName = scanner.nextLine();
-
-        System.out.println("Please enter available seats");
-        int seatsAvailable = scanner.nextInt();
+    public boolean addCourse(String semesterId,String courseId,String courseName,int seatsAvailable) {
+//        System.out.println("Please enter semesterId :");
+//        String semesterId = scanner.nextLine();
+//
+//        System.out.println("Please enter course ID");
+//        String courseId = scanner.nextLine();
+//
+//        System.out.println("Please enter course name");
+//        String courseName = scanner.nextLine();
+//
+//        System.out.println("Please enter available seats");
+//        int seatsAvailable = scanner.nextInt();
 
         try {
             Course newCourse = new Course(courseId, courseName, null, seatsAvailable);
@@ -59,7 +59,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         return true;
     }
 
-    public boolean removeCourse() {
+    public boolean removeCourse(String id_to_be_deleted) {
 
         System.out.println("-----Below is the list of courses currently present-------");
         CatalogueDAOImpl catalogueDAO = new CatalogueDAOImpl();
@@ -81,7 +81,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
 
 
         System.out.println("Enter the course ID to be deleted");
-        String id_to_be_deleted = scanner.nextLine();
+       // String id_to_be_deleted = scanner.nextLine();
         boolean flag = false;
         for (Course c : courseList) {
             if (c.getCourseID().equals(id_to_be_deleted)) {
@@ -106,33 +106,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
     }
 
 
-    public void addProfessor() {
-        Professor newProf = new Professor();
-//        System.out.println("Enter new Professor ID");
-//        newProf.setUserId(scanner.next());
-
-        System.out.println("Enter new Professor Name");
-        newProf.setName(scanner.next());
-        System.out.println("Enter new Professor Email");
-        newProf.setEmail(scanner.next());
-        System.out.println("Enter new Professor Password");
-        newProf.setPassword(scanner.next());
-        System.out.println("Enter new Professor DepartmentID");
-        newProf.setDepartmentID(scanner.next());
-        newProf.setUserType("professor");
-        System.out.println("Enter professor's address");
-        String address = scanner.next();
-        newProf.setAddress(address);
-        System.out.println("Enter professor's mobile number");
-        String mobileNumber = scanner.next();
-        while (!Utils.isPhoneNumberValid(mobileNumber)) {
-            System.out.println("Your mobile number is invalid. It must a 10 digit numeric. Please enter again");
-            mobileNumber = scanner.nextLine();
-        }
-        newProf.setMobileNumber(mobileNumber);
-        System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
-        Date dobParsed = Utils.isDateValid(scanner);
-        newProf.setDob(dobParsed);
+    public void addProfessor(Professor newProf) {
         try {
 
             AdminDAOImpl obj=new AdminDAOImpl();
@@ -147,31 +121,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
     }
 
     public boolean addAdmin() {
-        Admin newAdmin = new Admin();
-//        System.out.println("Enter new Admin ID");
-//        newAdmin.setUserId(scanner.next());
 
-
-        System.out.println("Enter new Admin Name");
-        newAdmin.setName(scanner.next());
-        System.out.println("Enter new Admin Email");
-        newAdmin.setEmail(scanner.next());
-        newAdmin.setUserType("admin");
-        System.out.println("Enter new Admin Password");
-        newAdmin.setPassword(scanner.next());
-        System.out.println("Enter new admin's address");
-        String address = scanner.next();
-        newAdmin.setAddress(address);
-        System.out.println("Enter new admin's number");
-        String mobileNumber = scanner.next();
-        while (!Utils.isPhoneNumberValid(mobileNumber)) {
-            System.out.println("Your mobile number is invalid. It must a 10 digit numeric. Please enter again");
-            mobileNumber = scanner.nextLine();
-        }
-        newAdmin.setMobileNumber(mobileNumber);
-        System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
-        Date dobParsed = Utils.isDateValid(scanner);
-        newAdmin.setDob(dobParsed);
 
 
         AdminDAOImpl obj = new AdminDAOImpl();

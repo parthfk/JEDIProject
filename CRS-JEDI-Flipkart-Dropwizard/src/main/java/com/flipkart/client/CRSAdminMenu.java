@@ -7,6 +7,7 @@ import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
 import com.flipkart.exception.CourseNotFoundException;
 import com.flipkart.service.*;
+import com.flipkart.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +30,7 @@ public class CRSAdminMenu {
 
     Scanner in = new Scanner(System.in);
     UserService userService;
-
+    private Scanner scanner;
     /**
      * Constructor
      * @param admin
@@ -40,7 +41,7 @@ public class CRSAdminMenu {
 
         userService = new UserServiceOperation();
 
-
+        Scanner scanner = new Scanner(System.in);
         displayAdminMenu(admin);
 
     }
@@ -66,20 +67,75 @@ public class CRSAdminMenu {
                     adminObj.approveStudent(studentId);
                     break;
                 case 2:
-                    adminObj.addProfessor();
+                    Professor newProf = new Professor();
+                    System.out.println("Enter new Professor Name");
+                    newProf.setName(scanner.next());
+                    System.out.println("Enter new Professor Email");
+                    newProf.setEmail(scanner.next());
+                    System.out.println("Enter new Professor Password");
+                    newProf.setPassword(scanner.next());
+                    System.out.println("Enter new Professor DepartmentID");
+                    newProf.setDepartmentID(scanner.next());
+                    newProf.setUserType("professor");
+                    System.out.println("Enter professor's address");
+                    String address = scanner.next();
+                    newProf.setAddress(address);
+                    System.out.println("Enter professor's mobile number");
+                    String mobileNumber = scanner.next();
+                    while (!Utils.isPhoneNumberValid(mobileNumber)) {
+                        System.out.println("Your mobile number is invalid. It must a 10 digit numeric. Please enter again");
+                        mobileNumber = scanner.nextLine();
+                    }
+                    newProf.setMobileNumber(mobileNumber);
+                    System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
+                    java.sql.Date dobParsed = Utils.isDateValid(scanner);
+                    newProf.setDob(dobParsed);
+                    adminObj.addProfessor(newProf);
                     break;
                 case 3:
                     //incomplete
-                    adminObj.generateGradeCard();
+                    String userId_of_approved_gradeCard = scanner.next();
+                    adminObj.generateGradeCard(userId_of_approved_gradeCard);
                     break;
                 case 4:
+                    Admin newAdmin = new Admin();
+                    System.out.println("Enter new Admin Name");
+                    newAdmin.setName(scanner.next());
+                    System.out.println("Enter new Admin Email");
+                    newAdmin.setEmail(scanner.next());
+                    newAdmin.setUserType("admin");
+                    System.out.println("Enter new Admin Password");
+                    newAdmin.setPassword(scanner.next());
+                    System.out.println("Enter new admin's address");
+                    address = scanner.next();
+                    newAdmin.setAddress(address);
+                    System.out.println("Enter new admin's number");
+                    mobileNumber = scanner.next();
+                    while (!Utils.isPhoneNumberValid(mobileNumber)) {
+                        System.out.println("Your mobile number is invalid. It must a 10 digit numeric. Please enter again");
+                        mobileNumber = scanner.nextLine();
+                    }
+                    newAdmin.setMobileNumber(mobileNumber);
+                    System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
+                    dobParsed = Utils.isDateValid(scanner);
+                    newAdmin.setDob(dobParsed);
                     adminObj.addAdmin();
                     break;
                 case 5:
-                    adminObj.addCourse();
+
+                            System.out.println("Please enter semesterId :");
+                            String semesterId = scanner.nextLine();
+                            System.out.println("Please enter course ID");
+                            String courseId = scanner.nextLine();
+                            System.out.println("Please enter course name");
+                            String courseName = scanner.nextLine();
+                            System.out.println("Please enter available seats");
+                            int seatsAvailable = scanner.nextInt();
+                    adminObj.addCourse(semesterId,courseId,courseName,seatsAvailable);
                     break;
                 case 6:
-                    adminObj.removeCourse();
+                    String id_to_be_deleted = scanner.nextLine();
+                    adminObj.removeCourse(id_to_be_deleted);
 
                     break;
                 case 7:

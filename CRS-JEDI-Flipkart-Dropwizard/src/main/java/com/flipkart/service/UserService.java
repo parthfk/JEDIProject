@@ -10,7 +10,7 @@ public interface UserService {
      * Method to log in a user after verifying credentials and identifying role
      * @return User object
      */
-    public User logIn();
+    public User logIn(String a,String b,String c);
 
     /**
      * Method to logout the user from the session

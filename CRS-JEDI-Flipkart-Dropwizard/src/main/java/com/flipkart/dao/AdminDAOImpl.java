@@ -19,7 +19,6 @@ import static com.flipkart.constant.SQLConstants.*;
 public class AdminDAOImpl implements AdminDAO {
 
     private static int noOfUsers;
-    Scanner scanner;
     private Connection conn;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_YELLOW = "\u001B[33m";
@@ -317,6 +316,7 @@ public class AdminDAOImpl implements AdminDAO {
             stmt = conn.prepareStatement(COUNT_GRADECARDS_QUERY);
             rs = stmt.executeQuery();
             int records = 2312;
+
             if (rs.next())
                 records = rs.getInt(1);
             else
