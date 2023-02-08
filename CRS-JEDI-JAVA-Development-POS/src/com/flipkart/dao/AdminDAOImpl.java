@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.flipkart.bean.Admin;
+import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
 
 import com.flipkart.constant.DBConnection;
@@ -208,15 +209,21 @@ public class AdminDAOImpl implements AdminDAO {
                     return;
                 }
                 System.out.println("List of Un-Approved Students");
+
+                StringBuffer buffer = new StringBuffer();
+                Formatter fmt = new Formatter();
+
+                fmt.format("\n%14s %14s %14s\n", "Student ID", "Name", "E-Mail");
                 do {
 
                     String eid = rs.getString("userId");
                     String name = rs.getString("name");
                     String email = rs.getString("email");
-                    System.out.print("Student ID: " + eid);
-                    System.out.print(" Name: " + name);
-                    System.out.println(" E-Mail: " + email);
+                    fmt.format("%14s %14s %14s\n", eid,name,email);
                 } while (rs.next());
+
+                System.out.println(fmt);
+                buffer.setLength(0);
 
 
                 System.out.println("Enter student ID to be Approved or Press # to exit");

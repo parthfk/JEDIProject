@@ -10,6 +10,7 @@ import com.flipkart.service.ProfessorServiceOperation;
 import com.flipkart.service.UserService;
 import com.flipkart.service.UserServiceOperation;
 
+import java.util.Formatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -59,10 +60,24 @@ public class CRSProfessorMenu {
 
                     System.out.println("These are the courses currently available: ");
 
-                    System.out.println("Course ID \tCourse Name");
-                    for(int i=0;i<courseList.size();i++){
-                        System.out.println(courseList.get(i).getCourseID()+"\t \t \t " +courseList.get(i).getName());
+//                    System.out.println("Course ID \tCourse Name");
+//                    for(int i=0;i<courseList.size();i++){
+//                        System.out.println(courseList.get(i).getCourseID()+"\t \t \t " +courseList.get(i).getName());
+//                    }
+
+                    StringBuffer buffer = new StringBuffer();
+                    Formatter fmt = new Formatter();
+
+                    fmt.format("\n%14s %14s\n", "Course ID", "Course Name");
+
+                    for(Course c: courseList)
+                    {
+                        fmt.format("%14s %14s\n", c.getCourseID(),c.getName());
                     }
+                    System.out.println(fmt);
+                    buffer.setLength(0);
+
+
                     while(true){
                         System.out.println("Please enter the courseId to teach or # to exit.");
                         String inputCourseId = scanner.nextLine();
@@ -84,10 +99,20 @@ public class CRSProfessorMenu {
                 case 3:
                     List<Student> studentList = profService.viewEnrolledStudentList();
                     if(studentList != null){
-                        System.out.println("Name \t \t ID");
-                    for(Student s : studentList){
-                        System.out.println(s.getName() +"\t"+ s.getUserId());
-                    }
+//                           System.out.println("Name \t \t ID");
+//                            for(Student s : studentList){
+//                            System.out.println(s.getName() +"\t"+ s.getUserId());
+                        buffer = new StringBuffer();
+                         fmt = new Formatter();
+
+                        fmt.format("\n%14s %14s\n", "Name", "ID");
+
+                        for(Student s: studentList)
+                        {
+                            fmt.format("%14s %14s\n",s.getName(),s.getUserId());
+                        }
+                        System.out.println(fmt);
+                        buffer.setLength(0);
                     }
                     break;
                 case 4:

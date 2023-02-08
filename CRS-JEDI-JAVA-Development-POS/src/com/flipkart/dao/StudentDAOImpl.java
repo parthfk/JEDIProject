@@ -11,6 +11,7 @@ import com.flipkart.utils.DbConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Formatter;
 
 public class StudentDAOImpl implements StudentDAO {
     private Connection conn;
@@ -364,16 +365,24 @@ public class StudentDAOImpl implements StudentDAO {
             }
 
             ResultSet rs = stmt.executeQuery(getGrades);
+
+            StringBuffer buffer = new StringBuffer();
+            Formatter fmt = new Formatter();
+
+            fmt.format("\n%14s %14s\n", "Course ID", "Grade");
+
             while (rs.next()) {
                 String courseId = rs.getString("courseId");
                 String grade = rs.getString("grade");
-                System.out.println("Your grade in course #" + courseId + " is " + grade);
+                fmt.format("%14s %14s\n", courseId,grade);
             }
+            System.out.println(fmt);
+            buffer.setLength(0);
             stmt.close();
 
             String getSGPA = "SELECT SGPA from GradeCard WHERE studentId=" + "'" + studentId + "'";
-            PreparedStatement stmt2 = conn.prepareStatement(getSGPA);
 
+            PreparedStatement stmt2 = conn.prepareStatement(getSGPA);
             ResultSet rs2 = stmt2.executeQuery(getSGPA);
             if (rs2.next()) {
                 float sgpa = rs2.getFloat("SGPA");
