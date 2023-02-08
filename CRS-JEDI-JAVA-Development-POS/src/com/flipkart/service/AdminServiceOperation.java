@@ -11,7 +11,9 @@ import java.util.Scanner;
 
 import com.flipkart.dao.*;
 import com.flipkart.exception.AdminNotAddedException;
+import com.flipkart.exception.CourseAlreadyRegisteredException;
 import com.flipkart.exception.CourseNotFoundException;
+import com.flipkart.exception.ProfessorNotAddedException;
 import com.flipkart.utils.Utils;
 
 import java.util.List;
@@ -43,7 +45,11 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
             if (!courseDAO.doesCourseExist(courseId)) {
                 courseDAO.addCourseToDB(newCourse);
             }
-            catalogueDAO.addCourseInDB(newCourse, semesterId);
+            else {
+                throw new CourseAlreadyRegisteredException(courseId);
+            }
+            catalogueDAO.addCourseInDB(newCourse,semesterId);
+
 
 
             System.out.println("Your new course added: " + newCourse);
@@ -121,8 +127,13 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         Date dobParsed = Date.valueOf(dob);
         newProf.setDob(dobParsed);
         try {
-            AdminDAOImpl obj = new AdminDAOImpl();
-            obj.addProfessorDAO(newProf);
+
+            AdminDAOImpl obj=new AdminDAOImpl();
+            if(!obj.addProfessorDAO(newProf))
+            {
+                throw new ProfessorNotAddedException(newProf.getEmail());
+            }
+
         } catch (Exception e) {
             System.out.println("Something went wrong" + e.getMessage());
         }
@@ -156,16 +167,20 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         newAdmin.setDob(dobParsed);
 
 
-        AdminDAOImpl obj = new AdminDAOImpl();
-        boolean res = obj.addAdminDAO(newAdmin);
-        if (res) {
-            System.out.println("Admin Registered Successfully!!");
-        } else {
-            try {
-                throw new AdminNotAddedException(newAdmin.getUserId());
-            } catch (AdminNotAddedException e) {
-                System.out.println(e.getMessage());
-                return false;
+
+            AdminDAOImpl obj=new AdminDAOImpl();
+            boolean res=obj.addAdminDAO(newAdmin);
+            if(res) {
+                System.out.println("Admin Registered Successfully!!");
+            }
+            else {
+                try {
+                    throw new AdminNotAddedException(newAdmin.getEmail());
+                } catch (AdminNotAddedException e) {
+                    System.out.println(e.getMessage());
+                    return false;
+                }
+
             }
         }
 

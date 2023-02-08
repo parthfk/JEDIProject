@@ -5,6 +5,9 @@ import com.flipkart.bean.Student;
 import com.flipkart.constant.DBConnection;
 import com.flipkart.constant.RoleId;
 import com.flipkart.constant.SQLConstants;
+import com.flipkart.exception.AdminAlreadyExistException;
+import com.flipkart.exception.GradeNotAddedException;
+import com.flipkart.exception.StudentAlreadyExistException;
 import com.flipkart.utils.DbConnection;
 
 import java.sql.*;
@@ -32,6 +35,7 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public void signup() {
+
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             // Fields for new User record
@@ -43,6 +47,23 @@ public class StudentDAOImpl implements StudentDAO {
             password = student.getPassword();
             email = student.getEmail();
             roleId = RoleId.STUDENT;
+
+            String ss1="SELECT * FROM User where emailId="+email;
+            stmt=conn.prepareStatement(ss1);
+
+            ResultSet rs1 = stmt.executeQuery(ss1);
+
+            if (rs1.next()) {
+                try{
+                    throw new StudentAlreadyExistException(email);
+                }
+                catch (StudentAlreadyExistException e) {
+                    System.out.println(e.getMessage());
+                }
+                finally {
+                    return ;
+                }
+            }
 
             stmt = conn.prepareStatement(SQLConstants.USER_ENTRY_QUERY);
             stmt.setString(1, userId);  // This would set age
@@ -362,6 +383,17 @@ public class StudentDAOImpl implements StudentDAO {
                     "SELECT courseId, grade FROM RegisteredCourse WHERE studentId=" + "'" + studentId + "'";
 
             stmt = conn.prepareStatement(getGrades);
+
+            ResultSet rs0 = stmt.executeQuery(getGrades);
+            while (rs0.next()) {
+                String grade = rs0.getString("grade");
+                if(grade=="N/A")
+                {
+                    throw new GradeNotAddedException(studentId);
+                }
+
+            }
+
             ResultSet rs = stmt.executeQuery(getGrades);
             while (rs.next()) {
                 String courseId = rs.getString("courseId");
@@ -381,7 +413,11 @@ public class StudentDAOImpl implements StudentDAO {
 
             stmt2.close();
             conn.close();
-        } catch (SQLException e) {
+        }
+        catch (GradeNotAddedException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }

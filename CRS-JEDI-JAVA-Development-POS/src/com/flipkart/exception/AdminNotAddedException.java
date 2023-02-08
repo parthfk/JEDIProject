@@ -1,15 +1,15 @@
 package com.flipkart.exception;
 
 public class AdminNotAddedException extends Exception{
-    private String adminId;
+    private String emailId;
 
     /**
      * constructor
-     * @param adminId
+     * @param emailId
      */
-    public AdminNotAddedException(String adminId) {
+    public AdminNotAddedException(String emailId) {
         super();
-        this.adminId = adminId;
+        this.emailId = emailId;
     }
 
     /**
@@ -18,6 +18,6 @@ public class AdminNotAddedException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Admin with adminId: " + adminId + " is not added.";
+        return "Admin with emailId: " + emailId + " is not added.";
     }
 }
