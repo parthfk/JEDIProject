@@ -26,31 +26,22 @@ public class CatalogueDAOImpl implements CatalogueDAO {
     }
 
     @Override
-    public void addCourseInDB(Course course, String semID) {
+    public boolean addCourseInDB(Course course, String semID) throws SQLException {
 
-        try{
             stmt = conn.prepareStatement(INSERT_CATALOGUE_QUERY);
 
             stmt.setString(1, course.getCourseID());
             stmt.setString(2, semID);
             stmt.setString(3, null);
             stmt.setInt(4, course.getAvailableSeats());
-            if (stmt.executeUpdate() == 1) {
-                System.out.println("Catalogue Updated");
-            } else {
-                System.out.println("Catalogue db update failed");
-            }
+            boolean res = stmt.executeUpdate()==1;
             stmt.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+            return res;
     }
 
     @Override
-    public List<Course> fetchCatalogue(boolean allCourses) {
+    public List<Course> fetchCatalogue(boolean allCourses) throws SQLException {
         List<Course> courseList = new ArrayList<>();
-
-        try {
             if (allCourses)
                 stmt = conn.prepareStatement(FETCH_CATALOGUE_QUERY_ALL);
             else
@@ -65,15 +56,10 @@ public class CatalogueDAOImpl implements CatalogueDAO {
             rs.close();
             return courseList;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return courseList;
     }
 
     @Override
-    public void deleteCourseInDB(String courseId) {
-        try {
+    public boolean deleteCourseInDB(String courseId) throws CourseNotFoundException,SQLException {
             stmt = conn.prepareStatement(DELETE_FROM_CATALOGUE_QUERY);
             stmt.setString(1, courseId);
 
@@ -82,9 +68,7 @@ public class CatalogueDAOImpl implements CatalogueDAO {
             if (row == 0) {
                 throw new CourseNotFoundException(courseId);
             }
+            return true;
 
-        } catch (SQLException | CourseNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

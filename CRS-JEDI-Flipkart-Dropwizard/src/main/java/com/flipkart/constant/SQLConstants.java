@@ -78,4 +78,6 @@ public class SQLConstants {
     public static final String updateCourseQuery = "UPDATE Catalogue SET professorId=? WHERE courseId=?";
     public static final String updateRegisteredCourse = "UPDATE RegisteredCourse SET grade=? WHERE studentId=? AND courseId= ? AND semesterId=?";
 
+    public static final String GET_ALL_USERS = "SELECT * from User";
+
 }

@@ -1,7 +1,10 @@
 package com.flipkart.dao;
 
 
+import com.flipkart.bean.User;
 import com.flipkart.exception.UserNotFoundException;
+
+import java.util.List;
 
 public interface UserDAO {
     /**
@@ -27,5 +30,12 @@ public interface UserDAO {
      * @return
      */
     public boolean updatePassword(String userId,String newPassword);
+
+
+    /*
+    Method to get list of all users
+    @return
+     */
+    public List<User> getAllUsers();
 
 }

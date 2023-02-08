@@ -5,6 +5,7 @@ import com.flipkart.bean.Admin;
 import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
+import com.flipkart.exception.CourseAlreadyRegisteredException;
 import com.flipkart.exception.CourseNotFoundException;
 import com.flipkart.service.*;
 import com.flipkart.utils.Utils;
@@ -42,7 +43,7 @@ public class CRSAdminMenu {
         userService = new UserServiceOperation();
 
         Scanner scanner = new Scanner(System.in);
-        displayAdminMenu(admin);
+        //displayAdminMenu(admin);
 
     }
 
@@ -50,7 +51,7 @@ public class CRSAdminMenu {
      * Method which implements different functions according to the option chosen
      * @param admin
      */
-    private void displayAdminMenu(Admin admin) {
+    private void displayAdminMenu(Admin admin) throws CourseAlreadyRegisteredException,Exception {
         while(true) {
             displayMenu();
             int input=in.nextInt();
@@ -119,7 +120,7 @@ public class CRSAdminMenu {
                     System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
                     dobParsed = Utils.isDateValid(scanner);
                     newAdmin.setDob(dobParsed);
-                    adminObj.addAdmin();
+                    adminObj.addAdmin(newAdmin);
                     break;
                 case 5:
 

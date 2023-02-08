@@ -2,6 +2,7 @@ package com.flipkart.service;
 
 import com.flipkart.bean.Course;
 import com.flipkart.bean.User;
+import com.flipkart.exception.AdminNotFoundException;
 
 import java.util.List;
 
@@ -30,4 +31,9 @@ public interface UserService {
      */
     boolean updatePassword();
 
+
+    /**
+     *  Method to get list of all users
+     */
+    List<User> getAllUsers();
 }

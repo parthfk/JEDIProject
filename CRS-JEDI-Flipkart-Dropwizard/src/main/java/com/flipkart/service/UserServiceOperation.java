@@ -140,7 +140,7 @@ public class UserServiceOperation implements UserService {
         System.out.println("No user exists with this email! Please contact admin for help!");
     }
 
-    public boolean logOut() {
+    public boolean logOut(User user) {
         //System.out.println("You have logged out successfully at " + new Date());
         return true;
     }
@@ -295,4 +295,10 @@ public class UserServiceOperation implements UserService {
 //        }
 //        return false;
 //    }
+
+
+    @Override
+    public List<User> getAllUsers() {
+        return UserDAOImpl.getInstance().getAllUsers();
+    }
 }

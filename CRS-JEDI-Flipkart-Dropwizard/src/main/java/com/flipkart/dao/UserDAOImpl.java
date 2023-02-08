@@ -1,10 +1,15 @@
 package com.flipkart.dao;
 
+import com.flipkart.bean.User;
 import com.flipkart.constant.SQLConstants;
 import com.flipkart.exception.UserNotFoundException;
 import com.flipkart.utils.DbConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.flipkart.constant.SQLConstants.SELECT_UNAPPROVED_STUDENTS_QUERY;
 
 public class UserDAOImpl implements UserDAO {
     private Connection conn = null;
@@ -79,5 +84,39 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        List<User> allUsers = new ArrayList<>();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(SQLConstants.GET_ALL_USERS);
+            ResultSet rs = stmt.executeQuery();
+
+            if (!rs.next()) {
+                return allUsers;
+            }
+
+            do {
+                User u = new User();
+                String eid = rs.getString("userId");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                int roleId = rs.getInt("roleId");
+                u.setUserId(eid);
+                u.setName(name);
+                u.setEmail(email);
+                u.setPassword(password);
+                if(roleId==1)u.setUserType("admin");
+                else if(roleId ==2)u.setUserType("professor");
+                u.setUserType("student");
+                allUsers.add(u);
+
+            } while (rs.next());
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return allUsers;
     }
 }

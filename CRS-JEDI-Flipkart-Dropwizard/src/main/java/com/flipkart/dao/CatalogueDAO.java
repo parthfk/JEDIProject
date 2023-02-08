@@ -3,6 +3,7 @@ package com.flipkart.dao;
 import com.flipkart.bean.Course;
 import com.flipkart.exception.CourseNotFoundException;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface CatalogueDAO {
@@ -11,16 +12,16 @@ public interface CatalogueDAO {
      * @param course
      * @param semID
      */
-    public void addCourseInDB(Course course, String semID);
+    public boolean addCourseInDB(Course course, String semID) throws SQLException;
 
     /** Method to fetch Courses in catalogue on database level
      * @return list of courses
      */
-    public List<Course> fetchCatalogue(boolean allCourses);
+    public List<Course> fetchCatalogue(boolean allCourses) throws SQLException;
 
     /** Method to delete course from catalogue in DB using SQl commands
      * @param courseId ß
      * @throws CourseNotFoundException
      */
-    public void deleteCourseInDB(String courseId) throws CourseNotFoundException;
+    public boolean deleteCourseInDB(String courseId) throws CourseNotFoundException,Exception;
 }
