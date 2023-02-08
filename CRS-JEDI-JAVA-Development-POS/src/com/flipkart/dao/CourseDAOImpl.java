@@ -12,9 +12,6 @@ public class CourseDAOImpl implements CourseDAO {
     private Connection conn = null;
     private PreparedStatement stmt = null;
 
-    Connection conn = null;
-    PreparedStatement stmt = null;
-
     public CourseDAOImpl()
     {
         try{
