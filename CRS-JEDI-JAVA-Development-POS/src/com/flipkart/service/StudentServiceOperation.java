@@ -141,7 +141,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void selectPrimaryCourse() {
-        if (StudentDAOImpl.registrationIsDone(student)) return;
+        if (this.studentDao.registrationIsDone(student)) return;
         System.out.println("Enter Course Id's to be added as your primary course and press enter.");
         System.out.println("Press # when you are done adding courses!");
         Scanner in = new Scanner(System.in);
@@ -185,7 +185,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void removeCourseFromCart(String type) {
-        if (StudentDAOImpl.registrationIsDone(student)) return;
+        if (this.studentDao.registrationIsDone(student)) return;
         List<String> courseIds = (type.matches("primary")) ?
                 this.studentDao.viewPrimaryCourses() :
                 this.studentDao.viewSecondaryCourses();
@@ -227,7 +227,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
 
     public void selectSecondaryCourse() {
-        if (StudentDAOImpl.registrationIsDone(student)) return;
+        if (this.studentDao.registrationIsDone(student)) return;
         System.out.println("Enter Course Id's to be added as your secondary course and press enter.");
         System.out.println("Press # when you are done adding courses!");
         Scanner in = new Scanner(System.in);
@@ -269,7 +269,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void confirmRegistration() {
-        if (StudentDAOImpl.registrationIsDone(student)) return;
+        if (this.studentDao.registrationIsDone(student)) return;
         // Proceed with business logic for course verification.
         ArrayList<String> primaryCourseIds = this.studentDao.viewPrimaryCourses();
         ArrayList<String> secondaryCourseIds = this.studentDao.viewSecondaryCourses();
@@ -401,7 +401,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void payFee() {
-        if (!StudentDAOImpl.registrationIsDone(student)) {
+        if (!this.studentDao.registrationIsDone(student)) {
             System.out.println("Please complete semester registration first.");
             return;
         }
