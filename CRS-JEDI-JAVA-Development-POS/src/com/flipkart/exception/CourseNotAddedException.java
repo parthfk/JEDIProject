@@ -4,6 +4,9 @@ public class CourseNotAddedException extends Exception{
 
     private String courseId;
 
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+
     /**
      * constructor
      * @param courseId
@@ -18,6 +21,9 @@ public class CourseNotAddedException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Course with courseId " + courseId + " not added in catalog.";
+
+        return ANSI_YELLOW+
+                "Course with courseId " + courseId + " not added in catalog."+
+                ANSI_RESET;
     }
 }

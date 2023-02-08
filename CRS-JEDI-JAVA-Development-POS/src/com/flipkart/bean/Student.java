@@ -4,6 +4,11 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Student Class- to store student related attributes
+ * Contains variables and their getter setter functions
+ */
+
 public class Student extends User {
     private String departmentID;
     private boolean feeDone;

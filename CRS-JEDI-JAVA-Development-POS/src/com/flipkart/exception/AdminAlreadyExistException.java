@@ -3,6 +3,9 @@ package com.flipkart.exception;
 public class AdminAlreadyExistException extends Exception{
     private String emailId;
 
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+
     /**
      * constructor
      * @param emailId
@@ -18,6 +21,8 @@ public class AdminAlreadyExistException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Admin with emailId: " + emailId + " already exist.";
+        return ANSI_YELLOW+
+                "Admin with emailId: " + emailId + " already exist."+
+                ANSI_RESET;
     }
 }

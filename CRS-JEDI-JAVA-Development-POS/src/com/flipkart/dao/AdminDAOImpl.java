@@ -3,16 +3,15 @@ package com.flipkart.dao;
 import java.util.*;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.flipkart.bean.Admin;
-import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
 import com.flipkart.exception.AdminAlreadyExistException;
 import com.flipkart.exception.ProfessorAlreadyExistException;
+import com.flipkart.utils.DbConnection;
 
 import static com.flipkart.constant.DBConnection.*;
 import static com.flipkart.constant.SQLConstants.*;
@@ -21,21 +20,23 @@ public class AdminDAOImpl implements AdminDAO {
 
     private static int noOfUsers;
     Scanner scanner;
+    private Connection conn;
+
+    public AdminDAOImpl(){
+        conn = DbConnection.getInstance().getConnection();
+    }
 
     public boolean addAdminDAO(Admin admin) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
+
+        PreparedStatement stmt;
 
         try {
 
+            stmt=conn.prepareStatement(FETCH_USER_WITH_EMAIL_ID);
 
-            Class.forName(JDBC_DRIVER);
+            stmt.setString(1, admin.getEmail());
 
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            stmt=conn.prepareStatement(FETCH_USER_WITH_EMAIL_ID+admin.getEmail());
-
-            ResultSet rs1 = stmt.executeQuery(FETCH_USER_WITH_EMAIL_ID+admin.getEmail());
+            ResultSet rs1 = stmt.executeQuery();
             
             if (rs1.next()) {
 
@@ -78,7 +79,7 @@ public class AdminDAOImpl implements AdminDAO {
 
             stmt.executeUpdate();
 
-            conn.close();
+            stmt.close();
 
         } catch (SQLException se) {
             //Handle errors for JDBC
@@ -89,25 +90,20 @@ public class AdminDAOImpl implements AdminDAO {
             e.printStackTrace();
             return false;
         }
-        System.out.println("Admin Registered Successfully!!");
-        return false;
+        //System.out.println("Admin Registered Successfully!!");
+        return true;
     }
 
 
     public boolean addProfessorDAO(Professor professor) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
+        PreparedStatement stmt;
 
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt=conn.prepareStatement(FETCH_USER_WITH_EMAIL_ID);
+            stmt.setString(1, professor.getEmail());
 
-
-            stmt=conn.prepareStatement(FETCH_USER_WITH_EMAIL_ID+professor.getEmail());
-
-            ResultSet rs1 = stmt.executeQuery(FETCH_USER_WITH_EMAIL_ID+professor.getEmail());
+            ResultSet rs1 = stmt.executeQuery();
 
             if (rs1.next()) {
 
@@ -151,7 +147,7 @@ public class AdminDAOImpl implements AdminDAO {
 
             stmt.executeUpdate();
 
-            conn.close();
+            stmt.close();
 
         } catch (SQLException se) {
             //Handle errors for JDBC
@@ -168,12 +164,9 @@ public class AdminDAOImpl implements AdminDAO {
     }
 
     public void approveStudentDAO() {
-        Connection conn = null;
         PreparedStatement stmt = null;
 
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             while (true) {
 
@@ -219,7 +212,7 @@ public class AdminDAOImpl implements AdminDAO {
                 }
 
             }
-            conn.close();
+            stmt.close();
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -233,27 +226,17 @@ public class AdminDAOImpl implements AdminDAO {
                     stmt.close();
             } catch (SQLException se2) {
             }// nothing we can do
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }//end finally try
+
         }//end try
         System.out.println("Operation Completed Successfully");
     }
 
 
     public void generateGradeCardDAO() {
-        Connection conn;
         PreparedStatement stmt;
 
 
         try {
-
-            Class.forName(JDBC_DRIVER);
-
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             stmt = conn.prepareStatement(FETCH_STUDENT_FOR_GRADECARD_GENERATION_QUERY);
 
@@ -283,7 +266,7 @@ public class AdminDAOImpl implements AdminDAO {
             rs = stmt.executeQuery();
 
             if (!rs.next()) {
-                System.out.println("This student has not registered any courses yet.");
+                System.out.println("This student has not registered for any courses yet.");
                 return;
             }
 
@@ -356,12 +339,12 @@ public class AdminDAOImpl implements AdminDAO {
 
             stmt.executeUpdate();
 
-            conn.close();
+            stmt.close();
 
             System.out.println("GradeCard generated!");
 
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }

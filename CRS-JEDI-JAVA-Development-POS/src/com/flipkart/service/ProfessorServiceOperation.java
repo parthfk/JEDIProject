@@ -3,8 +3,6 @@ package com.flipkart.service;
 import com.flipkart.bean.*;
 import com.flipkart.dao.ProfessorDAO;
 import com.flipkart.dao.ProfessorDAOImpl;
-import com.flipkart.data.RegisteredCourseData;
-import com.flipkart.data.UserData;
 
 import java.util.ArrayList;
 import java.util.Arrays;

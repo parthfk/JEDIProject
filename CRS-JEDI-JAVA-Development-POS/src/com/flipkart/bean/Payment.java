@@ -5,6 +5,11 @@ import com.flipkart.constant.PaymentMode;
 import java.util.Date;
 import java.util.UUID;
 
+
+/**
+ * Payment Class- to store details about the payment made by the student
+ * Contains variables and their getter setter functions
+ */
 public class Payment {
     public static final double AMOUNT = 10000;
     private String paymentId;
@@ -12,6 +17,10 @@ public class Payment {
     private PaymentMode modeOfPayment;
     private Date transactionDate;
 
+    /**
+     * constructor
+     * @param studentId
+     */
     public Payment(String studentId){
         paymentId = UUID.randomUUID().toString();
         this.studentId = studentId;

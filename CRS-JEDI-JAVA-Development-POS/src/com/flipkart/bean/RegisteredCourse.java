@@ -1,11 +1,21 @@
 package com.flipkart.bean;
 
+/**
+ * RegisteredCourse Class- to store details about the courses registered by the student
+ * Contains variables and their getter setter functions
+ */
 public class RegisteredCourse {
 	private String courseID;
 	private String studentID;
 	private Grade grade;
 	private String semesterID;
 
+	/**
+	 * constructor
+	 * @param courseID
+	 * @param studentID
+	 * @param semesterID
+	 */
 	public RegisteredCourse(String courseID, String studentID,String semesterID){
 		this.courseID = courseID;
 		this.studentID = studentID;

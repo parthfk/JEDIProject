@@ -38,19 +38,19 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             System.out.println();
             System.out.println("**************************************************");
             System.out.println();
-            System.out.println("Press 1 to view course catalog");
-            System.out.println("Press 2 to add Primary Courses");
-            System.out.println("Press 3 to add Secondary Courses");
-            System.out.println("Press 4 to remove an added primary course");
-            System.out.println("Press 5 to remove an added secondary course");
-            System.out.println("Press 6 to confirm and proceed with final registration");
-            System.out.println("Press 7 to view registered Courses");
-            System.out.println("Press 8 to pay fee");
+            System.out.println("Press 1 to View course catalog");
+            System.out.println("Press 2 to Add Primary Courses");
+            System.out.println("Press 3 to Add Secondary Courses");
+            System.out.println("Press 4 to Remove an added primary course");
+            System.out.println("Press 5 to Remove an added secondary course");
+            System.out.println("Press 6 to Confirm and proceed with final registration");
+            System.out.println("Press 7 to View registered Courses");
+            System.out.println("Press 8 to Pay fee");
 
             boolean addDropWindow = true; // todo change
             if (addDropWindow) {
-                System.out.println("Press 9 to add a course ");
-                System.out.println("Press 10 to delete a Courses");
+                System.out.println("Press 9 to Add a course ");
+                System.out.println("Press 10 to Delete a Courses");
             }
             System.out.println("Press # to go back to student menu");
             System.out.println();
@@ -60,7 +60,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             String input = in.nextLine();
             switch (input) {
                 case "1":
-                    super.viewCourseCatalogue();
+                    super.viewCourseCatalogue(false);
                     break;
                 case "2":
                     selectPrimaryCourse();
@@ -116,18 +116,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             System.out.println("Your mobile number is invalid. It must a 10 digit numeric. Please enter again:");
             mobileNumber = in.nextLine();
         }
-        System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
-
-        Date dobParsed;
-        while (true) {
-            try {
-                String dob = in.nextLine();
-                dobParsed = Date.valueOf(dob);
-                break;
-            } catch (IllegalArgumentException e) {
-                System.out.println("Your date format/values is incorrect, please enter in the format YYYY-MM-DD only. Try again:");
-            }
-        }
+        Date dobParsed = Utils.isDateValid(in);
 
         Student newStudent = new Student(name, emailEntered, password, departmentId,
                 address, mobileNumber, dobParsed);
@@ -172,11 +161,20 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                 break;
             } else {
                 Course course = Utils.getCourseFromCourseId(input);
+                boolean alreadyAdded = false;
+                for(Course c : primaryCourses){
+                    if(c.getCourseID().equals(course.getCourseID())){
+                        System.out.println("Course already exists");
+                        alreadyAdded = true;
+                        break;
+                    }
+                }
                 if (course == null) {
                     System.out.println("No course with the provided ID!");
-                } else if (course.getProfessorID().matches("") || course.getProfessorID() == null) {
+                }
+                else if (course.getProfessorID().matches("") || course.getProfessorID() == null) {
                     System.out.println("No professor assigned to this course yet. Please select another");
-                } else {
+                } else if(!alreadyAdded) {
                     primaryCourses.add(course);
                     System.out.println("Course " + course.getCourseID() + " is added successfully to your cart!");
                 }

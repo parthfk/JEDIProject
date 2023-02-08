@@ -7,11 +7,14 @@ import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
 import com.flipkart.exception.CourseNotFoundException;
 import com.flipkart.service.*;
-import com.flipkart.data.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
+/**
+ * Contains the functionality to display Admin Menu
+ */
 public class CRSAdminMenu {
     // 1. approve student
     // 2. add professor
@@ -74,7 +77,7 @@ public class CRSAdminMenu {
 
                     break;
                 case 7:
-                    userService.viewCourseCatalogue();
+                    userService.viewCourseCatalogue(true);
                     break;
                 case 8:
                     userService.logOut(admin);
@@ -96,15 +99,16 @@ public class CRSAdminMenu {
         System.out.println();
         System.out.println("**************************************************");
         System.out.println();
-        System.out.println("Welcome to admin portal, " + this.adminUsername);
-        System.out.println("Press 1 to approve student ");
-        System.out.println("Press 2 to add professor");
-        System.out.println("Press 3 to generate grade card");
-        System.out.println("Press 4 to add admin");
-        System.out.println("Press 5 to add course");
-        System.out.println("Press 6 to remove course");
+        System.out.println("Welcome to ADMIN portal, " + this.adminUsername);
+        System.out.println("You have logged in successfully at time " + new Date());
+        System.out.println("Press 1 to Approve student ");
+        System.out.println("Press 2 to Add professor");
+        System.out.println("Press 3 to Generate grade card");
+        System.out.println("Press 4 to Add admin");
+        System.out.println("Press 5 to Add course");
+        System.out.println("Press 6 to Remove course");
         System.out.println("Press 7 to View Course Catalogue");
-        System.out.println("Press 8 to logout");
+        System.out.println("Press 8 to Logout");
         System.out.println();
         System.out.println("**************************************************");
         System.out.println();

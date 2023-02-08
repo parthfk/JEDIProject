@@ -1,11 +1,23 @@
 package com.flipkart.bean;
 
+/**
+ * PaymentNotification Class- to store details about the payment notification sent to student after fee payment
+ * Contains variables and their getter setter functions
+ */
+
 public class PaymentNotification {
     private String studentId;
     private double paymentAmount;
     private String notificationId;
     private String message;
 
+    /**
+     * constructor
+     * @param studentId
+     * @param paymentAmount
+     * @param paymentId
+     * @param message
+     */
     public PaymentNotification(String studentId,double paymentAmount,String paymentId,String message){
         this.studentId = studentId;
         this.paymentAmount = paymentAmount;

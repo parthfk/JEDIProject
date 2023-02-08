@@ -14,7 +14,7 @@ public interface CatalogueDAO {
     public void addCourseInDB(Course course, String semID);
 
     /** Method to fetch Courses in catalogue on database level
-     * @return
+     * @return list of courses
      */
     public List<Course> fetchCatalogue(boolean allCourses);
 

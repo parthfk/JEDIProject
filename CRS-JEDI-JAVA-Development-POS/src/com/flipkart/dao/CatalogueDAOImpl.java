@@ -19,8 +19,7 @@ public class CatalogueDAOImpl implements CatalogueDAO {
     private PreparedStatement stmt = null;
 
     public CatalogueDAOImpl() {
-        conn = DbConnection.getConnectionInstance();
-
+        conn = DbConnection.getInstance().getConnection();
     }
 
     @Override

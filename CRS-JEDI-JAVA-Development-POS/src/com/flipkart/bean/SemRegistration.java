@@ -4,13 +4,22 @@ import com.flipkart.dao.StudentDAOImpl;
 
 import java.util.ArrayList;
 
+
+/**
+ * SemRegistration Class- to store details about the semester registration for a student
+ * Contains variables and their getter setter functions
+ */
 public class SemRegistration {
     private String studentId;
     private ArrayList<Course> primaryCourses;
     private ArrayList<Course> secondaryCourses;
     private Boolean regDone;
-
     private String semesterId;
+
+    /**
+     * constructor
+     * @param student
+     */
     public SemRegistration(Student student) {
         this.studentId = student.getUserId();
         this.primaryCourses = new ArrayList<>();

@@ -1,5 +1,10 @@
 package com.flipkart.bean;
 
+
+/**
+ * User Class- to store user related attributes
+ * Contains variables and their getter setter functions
+ */
 public class User {
     private String userId;
     private String name;
@@ -10,6 +15,14 @@ public class User {
 
 
     }
+
+    /**
+     * constructor
+     * @param name
+     * @param password
+     * @param email
+     * @param userType
+     */
     public User(String name, String password, String email, String userType) {
         this.name = name;
         this.password = password;

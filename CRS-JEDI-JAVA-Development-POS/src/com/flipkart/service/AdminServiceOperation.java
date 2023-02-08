@@ -1,9 +1,6 @@
 package com.flipkart.service;
 
 import com.flipkart.bean.*;
-import com.flipkart.data.CourseData;
-import com.flipkart.data.RegisteredCourseData;
-import com.flipkart.data.UserData;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -111,14 +108,15 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
 
     public void addProfessor() {
         Professor newProf = new Professor();
-        System.out.println("Enter new Professor ID");
-        newProf.setUserId(scanner.next());
-        System.out.println("Enter new Professor Password");
-        newProf.setPassword(scanner.next());
+//        System.out.println("Enter new Professor ID");
+//        newProf.setUserId(scanner.next());
+
         System.out.println("Enter new Professor Name");
         newProf.setName(scanner.next());
         System.out.println("Enter new Professor Email");
         newProf.setEmail(scanner.next());
+        System.out.println("Enter new Professor Password");
+        newProf.setPassword(scanner.next());
         System.out.println("Enter new Professor DepartmentID");
         newProf.setDepartmentID(scanner.next());
         newProf.setUserType("professor");
@@ -133,8 +131,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         }
         newProf.setMobileNumber(mobileNumber);
         System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
-        String dob = scanner.next();
-        Date dobParsed = Date.valueOf(dob);
+        Date dobParsed = Utils.isDateValid(scanner);
         newProf.setDob(dobParsed);
         try {
 
@@ -151,16 +148,17 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
 
     public boolean addAdmin() {
         Admin newAdmin = new Admin();
-        System.out.println("Enter new Admin ID");
-        newAdmin.setUserId(scanner.next());
+//        System.out.println("Enter new Admin ID");
+//        newAdmin.setUserId(scanner.next());
 
-        System.out.println("Enter new Admin Password");
-        newAdmin.setPassword(scanner.next());
+
         System.out.println("Enter new Admin Name");
         newAdmin.setName(scanner.next());
         System.out.println("Enter new Admin Email");
         newAdmin.setEmail(scanner.next());
         newAdmin.setUserType("admin");
+        System.out.println("Enter new Admin Password");
+        newAdmin.setPassword(scanner.next());
         System.out.println("Enter new admin's address");
         String address = scanner.next();
         newAdmin.setAddress(address);
@@ -172,8 +170,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         }
         newAdmin.setMobileNumber(mobileNumber);
         System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
-        String dob = scanner.next();
-        Date dobParsed = Date.valueOf(dob);
+        Date dobParsed = Utils.isDateValid(scanner);
         newAdmin.setDob(dobParsed);
 
 

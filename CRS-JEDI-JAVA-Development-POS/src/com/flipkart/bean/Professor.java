@@ -4,6 +4,11 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Professor Class- to store professor related attributes
+ * Contains variables and their getter setter functions
+ */
+
 public class Professor extends User {
     private Date dob;
     private String address;

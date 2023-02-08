@@ -7,26 +7,24 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 import static com.flipkart.constant.DBConnection.*;
 
+
 public class Utils {
-    private static Connection conn;
+    private static Connection conn = DbConnection.getInstance().getConnection();
     private static PreparedStatement stmt = null;
 
-    Utils() {
-        try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Gives course object corresponding to course ID
+     *
+     * @param courseId
+     * @return Course Object
+     */
     public static Course getCourseFromCourseId(String courseId) {
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            String getCoursesQuery = "SELECT * from Catalogue JOIN Course WHERE Catalogue.courseId='" + courseId + "' LIMIT 1";
+            String getCoursesQuery = "SELECT * from Catalogue JOIN Course ON Catalogue.courseId=Course.courseId AND Course.courseId='" + courseId + "' LIMIT 1";
             PreparedStatement stmt = conn.prepareStatement(getCoursesQuery);
             ResultSet rs = stmt.executeQuery(getCoursesQuery);
             if (rs.next()) {
@@ -34,11 +32,12 @@ public class Utils {
                 String semesterId = rs.getString("semesterId");
                 String professorId = rs.getString("professorId");
                 int availableSeats = rs.getInt("availableSeats");
+                System.out.println(courseId);
+                System.out.println(courseName);
+
                 return new Course(courseId, courseName, professorId, availableSeats);
             }
             stmt.close();
-            conn.close();
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println("Something went wrong on DB side!");
@@ -46,11 +45,13 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Retunrs list of students present in database
+     * @return Student list
+     */
     public static List<Student> getStudentList() {
         ArrayList<Student> students = new ArrayList<>();
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
             String getUsersQuery = "SELECT * from User join Student on userId=studentId";
             PreparedStatement stmt = conn.prepareStatement(getUsersQuery);
             ResultSet rs = stmt.executeQuery(getUsersQuery);
@@ -72,8 +73,6 @@ public class Utils {
                 students.add(s);
             }
             stmt.close();
-            conn.close();
-
             return students;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -82,10 +81,14 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Professor list present in Database
+     * @return Professor List
+     */
+
     public static List<Professor> getProfessorList() {
         ArrayList<Professor> professors = new ArrayList<>();
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             String getUsersQuery = "SELECT * from User join Professor on userId=profId";
             PreparedStatement stmt = conn.prepareStatement(getUsersQuery);
@@ -104,8 +107,6 @@ public class Utils {
                 professors.add(p);
             }
             stmt.close();
-            conn.close();
-
             return professors;
         } catch (SQLException e) {
             System.out.println("Something went wrong on DB side!");
@@ -113,11 +114,13 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Returs Admin List present in database
+     * @return Admin list
+     */
     public static List<Admin> getAdminList() {
         ArrayList<Admin> admins = new ArrayList<>();
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
             String getUsersQuery = "SELECT * from User join Admin on userId=adminId";
             PreparedStatement stmt = conn.prepareStatement(getUsersQuery);
             ResultSet rs = stmt.executeQuery(getUsersQuery);
@@ -134,8 +137,6 @@ public class Utils {
                 admins.add(a);
 
             }
-            conn.close();
-
             return admins;
         } catch (SQLException e) {
             System.out.println("Something went wrong on DB side!");
@@ -147,10 +148,14 @@ public class Utils {
     /*
         This function might not be needed. Use the specific ones instead
      */
+
+    /**
+     * returns list of all users including all roles
+     * @return User List
+     */
     public static List<User> getUserList() {
         ArrayList<User> users = new ArrayList<>();
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String getUsersQuery = "SELECT * from User";
             PreparedStatement stmt = conn.prepareStatement(getUsersQuery);
             ResultSet rs = stmt.executeQuery(getUsersQuery);
@@ -162,7 +167,6 @@ public class Utils {
                 users.add(new User(name, password, email, RoleIdMapping.fromId(roleId)));
             }
             stmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println("Something went wrong on DB side!");
@@ -170,9 +174,12 @@ public class Utils {
         return users;
     }
 
+    /**
+     * Updates Seats available in a course
+     * @param Course (You want seats to get updated)
+     */
     public static void updateCourseSeats(Course c) {
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             // Fields for new SemRegistration record
             String userEntryQuery =
                     "UPDATE Catalogue SET availableSeats=? WHERE courseId=?";
@@ -184,16 +191,18 @@ public class Utils {
             stmt.setString(2, courseId);
             stmt.executeUpdate();
             stmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     *to get count of students present in database
+     * @return number of students
+     */
     public static int getStudentCount() {
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             // Fields for new SemRegistration record
             String userEntryQuery =
                     "SELECT COUNT(*) FROM User WHERE roleId=3";
@@ -205,7 +214,6 @@ public class Utils {
                 return id + 1;
             }
             stmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
@@ -213,11 +221,37 @@ public class Utils {
         return new Random().nextInt(1000);
     }
 
+    /**
+     * checks if user ender valid mobile number
+     * @param mobileNumber
+     * @return whether mobile nnumber entered is valid in format or not
+     */
     public static boolean isPhoneNumberValid(String mobileNumber) {
         if (mobileNumber.length() != 10) return false;
         for (int i = 0; i < mobileNumber.length(); i++) {
             if (mobileNumber.charAt(i) < '0' || mobileNumber.charAt(i) > '9') return false;
         }
         return true;
+    }
+
+
+    /**
+     * returns a Date object when the user enters a valid date in the asked format
+     * Else keeps looping and asking the user again
+     * @param in
+     * @return VALID DOB
+     */
+    public static Date isDateValid(Scanner in) {
+        while (true) {
+            try {
+                System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
+                String dob = in.nextLine();
+                Date dobParsed = Date.valueOf(dob);
+                return dobParsed;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Your date format/values is incorrect, please enter in the format YYYY-MM-DD only. Try again:");
+                continue;
+            }
+        }
     }
 }

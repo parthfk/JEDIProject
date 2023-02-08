@@ -4,16 +4,12 @@ import com.flipkart.bean.*;
 import com.flipkart.dao.CatalogueDAOImpl;
 import com.flipkart.dao.UserDAO;
 import com.flipkart.dao.UserDAOImpl;
-import com.flipkart.data.CourseData;
-import com.flipkart.data.UserData;
 import com.flipkart.exception.*;
 import com.flipkart.utils.Utils;
 
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.List;
-import java.util.Scanner;
+import java.time.LocalTime;
+import java.util.*;
 import java.util.regex.*;
 
 public class UserServiceOperation implements UserService {
@@ -129,7 +125,7 @@ public class UserServiceOperation implements UserService {
                 return null;
             }
         }
-        System.out.println("You have logged in successfully !");
+        //System.out.println("You have logged in successfully at time " + new Date());
         return userObj;
     }
 
@@ -146,12 +142,12 @@ public class UserServiceOperation implements UserService {
     }
 
     public boolean logOut(User user) {
-        System.out.println("You have logged out successfully !");
+        System.out.println("You have logged out successfully at " + new Date());
         return true;
     }
 
-    public List<Course> viewCourseCatalogue() {
-        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue(false);
+    public List<Course> viewCourseCatalogue(boolean viewAll) {
+        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue(viewAll);
 
         if(courses.size()==0)
         {

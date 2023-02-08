@@ -17,7 +17,7 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
     public ProfessorDAOImpl(Professor prof) {
         this.prof = prof;
-        conn = DbConnection.getConnectionInstance();
+        conn = DbConnection.getInstance().getConnection();
     }
 
     @Override

@@ -9,12 +9,14 @@ import java.util.Scanner;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import com.flipkart.constant.DBConnection;
 import com.flipkart.constant.PaymentMode;
 
 import static com.flipkart.constant.DBConnection.*;
 
 import com.flipkart.bean.Student;
 import com.flipkart.constant.PaymentMode;
+import com.flipkart.utils.DbConnection;
 
 public class PaymentDAOImpl implements PaymentDAO {
     private int paymentID = 1;
@@ -22,13 +24,8 @@ public class PaymentDAOImpl implements PaymentDAO {
     private Connection conn = null;
     private PreparedStatement stmt = null;
 
-    private PaymentDAOImpl() {
-        try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+    public PaymentDAOImpl() {
+        conn = DbConnection.getInstance().getConnection();
     }
 
     public static PaymentDAOImpl getInstance() {

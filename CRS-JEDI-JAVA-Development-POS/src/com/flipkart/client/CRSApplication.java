@@ -15,17 +15,24 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+/**
+ * The starting point of CRS system. The main menu functionality is displayed here
+ */
 public class CRSApplication {
     /**
      * Main function which is the starting point of all functionality.
      * @param args
      */
+
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+
     public static void main (String[] args) throws SQLException {
         Scanner in = new Scanner(System.in);
         boolean endApplication  = false;
         UserService userService = new UserServiceOperation();
         User userObj = null;
-        Connection conn = DbConnection.getConnectionInstance();
+        Connection conn = DbConnection.getInstance().getConnection();
 
         while (!endApplication) {
             System.out.println();
@@ -34,7 +41,7 @@ public class CRSApplication {
             System.out.println("Welcome to the CRS Application! choose the Option given below !" +
                     "\n  Main Menu :->\n 1. Login\n 2." +
                     " Registration of the Student\n " +
-                    "3. update password\n 4. Exit\n");
+                    "3. Update password\n 4. Exit\n");
             System.out.println();
             System.out.println("**************************************************");
             System.out.println();
@@ -60,7 +67,9 @@ public class CRSApplication {
                             new CRSAdminMenu((Admin) userObj);
                             continue;
                         default:
-                            System.out.println("Please enter a valid Role.");
+                            System.out.println(ANSI_YELLOW+
+                                    "Please enter a valid role !"+
+                                    ANSI_RESET);
                             endApplication = false;
                             continue;
                     }
@@ -71,7 +80,11 @@ public class CRSApplication {
                     break;
                 case 3:
                     System.out.println("Redirect to Update Password");
-                    userService.updatePassword();
+                    if(userService.updatePassword()){
+                        System.out.println("Password updated successfully! Please login again.");
+                    }else{
+                        System.out.println("Password update failed.Please contact admin or try again later.");
+                    }
                     break;
                 case 4:
                     endApplication=true;
@@ -79,7 +92,9 @@ public class CRSApplication {
                     System.exit(0);
                     break;
                 default:
-                    System.out.println("Please select a valid input !");
+                    System.out.println(ANSI_YELLOW+
+                            "Please select a valid input !"+
+                            ANSI_RESET);
                     endApplication = false;
             }
         }

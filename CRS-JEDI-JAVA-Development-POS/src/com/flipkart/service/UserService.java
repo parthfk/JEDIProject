@@ -23,7 +23,7 @@ public interface UserService {
      * Method to see the list of courses offered in the catalogue. This is kept in user class as course catalogue can be viewed by every type of user.
      * @return List of courses being offered
      */
-    List<Course> viewCourseCatalogue();
+    List<Course> viewCourseCatalogue(boolean viewAll);
     /**
      * Method to update password of a user
      * @return boolean indicating if the password is updated successfully

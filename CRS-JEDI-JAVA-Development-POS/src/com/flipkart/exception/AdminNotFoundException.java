@@ -3,6 +3,9 @@ package com.flipkart.exception;
 public class AdminNotFoundException extends Exception{
     private String emailId;
 
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+
     /**
      * contructor
      * @param emailId
@@ -18,6 +21,8 @@ public class AdminNotFoundException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Admin with emailId: " + emailId + " is not found.";
+        return ANSI_YELLOW+
+                "Admin with emailId: " + emailId + " is not found."+
+                ANSI_RESET;
     }
 }

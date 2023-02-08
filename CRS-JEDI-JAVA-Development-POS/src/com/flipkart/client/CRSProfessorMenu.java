@@ -4,7 +4,9 @@ import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
 import com.flipkart.dao.CatalogueDAOImpl;
-import com.flipkart.data.CourseData;
+//import com.flipkart.data.CourseData;
+import com.flipkart.exception.CourseNotAvailableException;
+import com.flipkart.exception.CourseNotFoundException;
 import com.flipkart.service.ProfessorService;
 import com.flipkart.service.ProfessorServiceOperation;
 import com.flipkart.service.UserService;
@@ -13,7 +15,11 @@ import com.flipkart.service.UserServiceOperation;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Date;
 
+/**
+ * Contains the functionality to display Professor Menu
+ */
 public class CRSProfessorMenu {
     // 1. select courses to teach
     // 2. view course catalog
@@ -84,17 +90,29 @@ public class CRSProfessorMenu {
                         if(inputCourseId.equals("#")){
                             break;
                         }
-                        else{
-                            for(Course c:courseList){
-                                if(c.getCourseID().equals((inputCourseId))){
+                        else {
+                            boolean isA = false;
+
+                            for (Course c : courseList) {
+                                if (c.getCourseID().equals((inputCourseId))) {
                                     profService.selectCourse(c);
+                                    isA = true;
+                                }
+                            }
+                            if(!isA)
+                            {
+                                try {
+                                    throw new CourseNotFoundException(inputCourseId);
+                                } catch (CourseNotFoundException e) {
+                                    System.out.println(e.getMessage());
                                 }
                             }
                         }
                     }
                     break;
-                case 2:
+                        case 2:
                     profService.viewCourseList();
+
                     break;
                 case 3:
                     List<Student> studentList = profService.viewEnrolledStudentList();
@@ -135,12 +153,13 @@ public class CRSProfessorMenu {
         System.out.println();
         System.out.println("**************************************************");
         System.out.println();
-        System.out.println("Welcome to professor portal -> " + this.professorUsername);
-        System.out.println("Press 1 to select courses to teach");
-        System.out.println("Press 2 to view selected courses");
-        System.out.println("Press 3 to view enrolled students");
-        System.out.println("Press 4 to add grades");
-        System.out.println("Press 5 to logout");
+        System.out.println("Welcome to PROFESSOR portal, " + this.professorUsername);
+        System.out.println("You have logged in successfully at time " + new Date());
+        System.out.println("Press 1 to Select courses to teach");
+        System.out.println("Press 2 to View selected courses");
+        System.out.println("Press 3 to View enrolled students");
+        System.out.println("Press 4 to Add grades");
+        System.out.println("Press 5 to Logout");
         System.out.println();
         System.out.println("**************************************************");
         System.out.println();

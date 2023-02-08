@@ -2,6 +2,11 @@ package com.flipkart.bean;
 
 import java.util.List;
 
+
+/**
+ * GradeCard Class- to store details to be presented in student grade card
+ * Contains variables and their getter setter functions
+ */
 public class GradeCard {
 	private String studentID;
 	private float SGPA;

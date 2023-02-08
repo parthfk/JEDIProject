@@ -4,10 +4,10 @@ import com.flipkart.bean.Course;
 import com.flipkart.bean.Student;
 import com.flipkart.constant.RoleId;
 import com.flipkart.constant.SQLConstants;
-import com.flipkart.exception.AdminAlreadyExistException;
 import com.flipkart.exception.GradeNotAddedException;
 import com.flipkart.exception.StudentAlreadyExistException;
 import com.flipkart.utils.DbConnection;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class StudentDAOImpl implements StudentDAO {
 
     private StudentDAOImpl(Student student) {
         this.student = student;
-        this.conn = DbConnection.getConnectionInstance();
+        this.conn = DbConnection.getInstance().getConnection();
     }
 
     // Singleton Pattern
@@ -45,7 +45,7 @@ public class StudentDAOImpl implements StudentDAO {
             email = student.getEmail();
             roleId = RoleId.STUDENT;
 
-            String ss1="SELECT * FROM User where emailId="+email;
+            String ss1="SELECT * FROM User where email='"+email +"'";
             stmt=conn.prepareStatement(ss1);
 
             ResultSet rs1 = stmt.executeQuery(ss1);
@@ -348,6 +348,23 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     public void displayGradeCard() {
         try {
+
+            //Check if gradecard is approved
+
+            stmt = conn.prepareStatement(SQLConstants.GRADECARD_GENERATED);
+            stmt.setString(1,this.student.getUserId());
+
+            boolean hasGradeCardBeenGenerated = false;
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next())
+                hasGradeCardBeenGenerated = rs.getBoolean(1);
+
+            if(!hasGradeCardBeenGenerated){
+                System.out.println("GradeCard not generated yet ! Please contact the admin.");
+                return;
+            }
+
             String studentId = this.student.getUserId();
             String getGrades =
                     "SELECT courseId, grade FROM RegisteredCourse WHERE studentId=" + "'" + studentId + "'";
@@ -364,7 +381,7 @@ public class StudentDAOImpl implements StudentDAO {
 
             }
 
-            ResultSet rs = stmt.executeQuery(getGrades);
+             rs = stmt.executeQuery(getGrades);
 
             StringBuffer buffer = new StringBuffer();
             Formatter fmt = new Formatter();

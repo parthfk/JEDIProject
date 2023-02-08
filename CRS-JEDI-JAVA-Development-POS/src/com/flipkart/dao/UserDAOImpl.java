@@ -11,7 +11,7 @@ public class UserDAOImpl implements UserDAO {
     private PreparedStatement stmt = null;
 
     UserDAOImpl() {
-        conn = DbConnection.getConnectionInstance();
+        conn = DbConnection.getInstance().getConnection();
     }
 
     //Singleton pattern

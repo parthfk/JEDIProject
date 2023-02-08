@@ -3,10 +3,17 @@ package com.flipkart.bean;
 import java.sql.Date;
 import java.util.ArrayList;
 
+/**
+ * Admin Class- to store admin related attributes
+ * Contains variables and their getter setter functions
+ */
+
 public class Admin extends User {
+
     private Date dob;
     private String address;
     private String mobileNumber;
+
     public String getAddress() {
         return address;
     }

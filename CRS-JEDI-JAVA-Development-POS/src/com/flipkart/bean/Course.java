@@ -1,11 +1,23 @@
 package com.flipkart.bean;
 
+
+/**
+ * Course Class- to store details about all the courses present
+ * Contains variables and their getter setter functions
+ */
 public class Course {
 	private String courseID;
 	private String name;
 	private String professorID;
 	private int availableSeats = 10;
 
+	/**
+	 * constructor
+	 * @param courseID
+	 * @param name
+	 * @param professorID
+	 * @param availableSeats
+	 */
 	public Course(String courseID, String name, String professorID, int availableSeats) {
 		this.courseID = courseID;
 		this.name = name;

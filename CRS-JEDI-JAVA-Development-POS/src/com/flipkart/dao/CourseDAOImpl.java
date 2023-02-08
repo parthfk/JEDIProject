@@ -15,7 +15,7 @@ public class CourseDAOImpl implements CourseDAO {
 
     public CourseDAOImpl()
     {
-        conn = DbConnection.getConnectionInstance();
+        conn = DbConnection.getInstance().getConnection();
     }
 
     @Override
