@@ -36,11 +36,10 @@ public class AdminDAOImpl implements AdminDAO {
             Class.forName(JDBC_DRIVER);
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            
-            String ss1="SELECT * FROM User where emailId="+admin.getEmail();
-            stmt=conn.prepareStatement(ss1);
 
-            ResultSet rs1 = stmt.executeQuery(ss1);
+            stmt=conn.prepareStatement(FETCH_USER_WITH_EMAIL_ID+admin.getEmail());
+
+            ResultSet rs1 = stmt.executeQuery(FETCH_USER_WITH_EMAIL_ID+admin.getEmail());
             
             if (rs1.next()) {
 
@@ -123,11 +122,10 @@ public class AdminDAOImpl implements AdminDAO {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            
-            String ss1="SELECT * FROM User where emailId="+professor.getEmail();
-            stmt=conn.prepareStatement(ss1);
 
-            ResultSet rs1 = stmt.executeQuery(ss1);
+            stmt=conn.prepareStatement(FETCH_USER_WITH_EMAIL_ID+professor.getEmail());
+
+            ResultSet rs1 = stmt.executeQuery(FETCH_USER_WITH_EMAIL_ID+professor.getEmail());
 
             if (rs1.next()) {
 
