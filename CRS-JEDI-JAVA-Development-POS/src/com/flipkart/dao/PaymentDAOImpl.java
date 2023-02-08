@@ -142,7 +142,8 @@ public class PaymentDAOImpl implements PaymentDAO {
             stmt = conn.prepareStatement(paymentDetailQuery);
 
             if (stmt.executeUpdate(paymentDetailQuery) == 1) {
-wres = true;
+                res = true;
+
                 System.out.println("Insertion in PaymentDetails successful !");
             } else {
                 System.out.println("Insertion in PaymentDetails unsuccessful !");

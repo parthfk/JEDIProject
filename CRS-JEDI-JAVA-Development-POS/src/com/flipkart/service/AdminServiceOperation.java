@@ -177,26 +177,20 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         newAdmin.setDob(dobParsed);
 
 
-
-            AdminDAOImpl obj=new AdminDAOImpl();
-            boolean res=obj.addAdminDAO(newAdmin);
-            if(res) {
-                System.out.println("Admin Registered Successfully!!");
-                return true;
+        AdminDAOImpl obj = new AdminDAOImpl();
+        boolean res = obj.addAdminDAO(newAdmin);
+        if (res) {
+            System.out.println("Admin Registered Successfully!!");
+            return true;
+        } else {
+            try {
+                throw new AdminNotAddedException(newAdmin.getEmail());
+            } catch (AdminNotAddedException e) {
+                System.out.println(e.getMessage());
+                return false;
             }
-            else {
-                try {
-                    throw new AdminNotAddedException(newAdmin.getEmail());
-                } catch (AdminNotAddedException e) {
-                    System.out.println(e.getMessage());
-                    return false;
-                }
-
-            }
-        return true;
         }
-
-
+    }
 
     public void generateGradeCard() {
         AdminDAO adminDAO = new AdminDAOImpl();

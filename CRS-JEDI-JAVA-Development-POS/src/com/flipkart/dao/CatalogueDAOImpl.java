@@ -25,6 +25,8 @@ public class CatalogueDAOImpl implements CatalogueDAO {
 
     @Override
     public void addCourseInDB(Course course, String semID) {
+
+        try{
             stmt = conn.prepareStatement(INSERT_CATALOGUE_QUERY);
 
             stmt.setString(1, course.getCourseID());

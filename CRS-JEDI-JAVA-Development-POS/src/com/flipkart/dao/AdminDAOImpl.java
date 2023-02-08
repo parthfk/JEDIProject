@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import com.flipkart.bean.Admin;
 import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
+import com.flipkart.exception.AdminAlreadyExistException;
+import com.flipkart.exception.ProfessorAlreadyExistException;
 
 import static com.flipkart.constant.DBConnection.*;
 import static com.flipkart.constant.SQLConstants.*;
