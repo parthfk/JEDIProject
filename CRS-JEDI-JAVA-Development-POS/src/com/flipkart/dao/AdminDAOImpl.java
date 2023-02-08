@@ -21,6 +21,9 @@ public class AdminDAOImpl implements AdminDAO {
     private static int noOfUsers;
     Scanner scanner;
     private Connection conn;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
     public AdminDAOImpl(){
         conn = DbConnection.getInstance().getConnection();
@@ -182,13 +185,16 @@ public class AdminDAOImpl implements AdminDAO {
                 StringBuffer buffer = new StringBuffer();
                 Formatter fmt = new Formatter();
 
-                fmt.format("\n%14s %14s %14s\n", "Student ID", "Name", "E-Mail");
+                //fmt.format("\n%20s %20s %20s\n", ANSI_RED+"Student ID"+ANSI_RESET, ANSI_RED+"Name"+ANSI_RESET, ANSI_RED+"E-Mail"+ANSI_RESET);
+
+                fmt.format("\n%-17s %-17s %-17s\n", ANSI_CYAN +"Student ID"+ ANSI_RESET,ANSI_CYAN+"Name"+ANSI_RESET,ANSI_CYAN+"E-Mail"+ANSI_RESET);
+
                 do {
 
                     String eid = rs.getString("userId");
                     String name = rs.getString("name");
                     String email = rs.getString("email");
-                    fmt.format("%14s %14s %14s\n", eid,name,email);
+                    fmt.format("%-17s %-17s %-17s\n", ANSI_RESET+eid+ANSI_RESET,ANSI_RESET+name+ANSI_RESET,ANSI_RESET+email+ANSI_RESET);
                 } while (rs.next());
 
                 System.out.println(fmt);

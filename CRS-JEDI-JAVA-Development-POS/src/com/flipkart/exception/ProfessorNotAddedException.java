@@ -21,6 +21,8 @@ public class ProfessorNotAddedException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Professor with emailId: " + emailId + " is not added.";
+        return ANSI_YELLOW+
+                "Professor with emailId: " + emailId + " is not added."+
+                ANSI_RESET;
     }
 }

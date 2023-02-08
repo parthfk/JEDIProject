@@ -20,6 +20,8 @@ public class CourseNotFoundException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Course with courseId " + courseId + " is not found.";
+        return ANSI_YELLOW+
+                "Course with courseId " + courseId + " is not found."+
+                ANSI_RESET;
     }
 }

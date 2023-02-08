@@ -20,6 +20,8 @@ public class PasswordMismatchException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Password mismatch of user with userId: " + userId;
+        return ANSI_YELLOW+
+                "Password mismatch of user with userId: " + userId+
+                ANSI_RESET;
     }
 }

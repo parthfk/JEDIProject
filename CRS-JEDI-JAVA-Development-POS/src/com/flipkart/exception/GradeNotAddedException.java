@@ -20,6 +20,8 @@ public class GradeNotAddedException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Grade not allotted yet to all subject for: " + studentId;
+        return ANSI_YELLOW+
+                "Grade not allotted yet to all subject for: " + studentId+
+                ANSI_RESET;
     }
 }

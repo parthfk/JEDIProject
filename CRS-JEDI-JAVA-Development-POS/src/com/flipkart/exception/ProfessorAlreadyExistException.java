@@ -21,6 +21,8 @@ public class ProfessorAlreadyExistException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Professor with emailId: " + emailId + " is already exist.";
+        return ANSI_YELLOW+
+                "Professor with emailId: " + emailId + " is already exist."+
+                ANSI_RESET;
     }
 }

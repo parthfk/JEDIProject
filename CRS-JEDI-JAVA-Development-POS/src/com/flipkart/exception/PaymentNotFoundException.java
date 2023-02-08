@@ -23,6 +23,8 @@ public class PaymentNotFoundException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Payment with paymentId: " + paymentId  +" and studentId: "+ studentId + " not found!";
+        return ANSI_YELLOW+
+                "Payment with paymentId: " + paymentId  +" and studentId: "+ studentId + " not found!"+
+                ANSI_RESET;
     }
 }

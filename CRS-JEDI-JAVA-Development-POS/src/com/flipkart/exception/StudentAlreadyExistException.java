@@ -20,6 +20,8 @@ public class StudentAlreadyExistException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Student with studentId: " + emailId + " is already exist.";
+        return ANSI_YELLOW+
+                "Student with studentId: " + emailId + " is already exist."+
+                ANSI_RESET;
     }
 }

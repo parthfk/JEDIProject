@@ -20,6 +20,8 @@ public class ProfessorNotFoundException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Professor with professorId: " + emailId + " is not found.";
+        return ANSI_YELLOW+
+                "Professor with professorId: " + emailId + " is not found."+
+                ANSI_RESET;
     }
 }

@@ -17,6 +17,9 @@ import static com.flipkart.constant.SQLConstants.*;
 public class CatalogueDAOImpl implements CatalogueDAO {
     private Connection conn;
     private PreparedStatement stmt = null;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
     public CatalogueDAOImpl() {
         conn = DbConnection.getInstance().getConnection();

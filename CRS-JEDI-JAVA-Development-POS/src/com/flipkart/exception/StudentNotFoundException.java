@@ -20,6 +20,8 @@ public class StudentNotFoundException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Student with emailId: " + emailId + " is not found.";
+        return ANSI_YELLOW+
+                "Student with emailId: " + emailId + " is not found."+
+                ANSI_RESET;
     }
 }

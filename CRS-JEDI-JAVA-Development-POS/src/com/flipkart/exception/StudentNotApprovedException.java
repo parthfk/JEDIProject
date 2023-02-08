@@ -20,6 +20,8 @@ public class StudentNotApprovedException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Student with emailId: " + emailId + " is not approved.";
+        return ANSI_YELLOW+
+                "Student with emailId: " + emailId + " is not approved."+
+                ANSI_RESET;
     }
 }
