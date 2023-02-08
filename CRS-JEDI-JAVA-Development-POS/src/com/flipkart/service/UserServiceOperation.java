@@ -110,7 +110,8 @@ public class UserServiceOperation implements UserService {
                         System.out.println("Please enter a Valid role, which can be 'student', 'professor' or 'admin'!");
                         return null;
                     }
-                } catch (NullPointerException e) {
+                } catch (Exception e) {
+                    e.printStackTrace();
                     System.out.println("Failure in reading the db : \n" + e.getMessage());
                 }
             } else {

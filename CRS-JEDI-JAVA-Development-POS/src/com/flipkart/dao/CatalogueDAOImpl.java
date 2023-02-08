@@ -1,6 +1,8 @@
 package com.flipkart.dao;
 
 import com.flipkart.bean.Course;
+import com.flipkart.constant.DBConnection;
+import com.flipkart.constant.SQLConstants;
 import com.flipkart.exception.CourseNotFoundException;
 
 import java.sql.*;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.flipkart.constant.DBConnection.*;
+import static com.flipkart.constant.SQLConstants.*;
 
 
 public class CatalogueDAOImpl implements CatalogueDAO {
@@ -17,7 +20,7 @@ public class CatalogueDAOImpl implements CatalogueDAO {
     public CatalogueDAOImpl() {
         try {
             Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -25,11 +28,20 @@ public class CatalogueDAOImpl implements CatalogueDAO {
 
     @Override
     public void addCourseInDB(Course course, String semID) {
-        try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            String sql = "insert into Catalogue values (?,?,?,?)";
+//
+//    }
+//    public static void main(String args[]){
+//
+//         Connection conn = null;
+//         PreparedStatement stmt = null;
+//         Course course=new Course("123","","",5);
+//         int semID=5;
 
-            stmt = conn.prepareStatement(sql);
+
+        try{
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            stmt = conn.prepareStatement(INSERT_CATALOGUE_QUERY);
 
             stmt.setString(1, course.getCourseID());
             stmt.setString(2, semID);
@@ -50,9 +62,8 @@ public class CatalogueDAOImpl implements CatalogueDAO {
     public List<Course> fetchCatalogue() {
         List<Course> courseList = new ArrayList<>();
 
-        try {
-            String sql = "select Catalogue.courseId, Course.name, Catalogue.professorId, Catalogue.availableSeats from Catalogue, Course where Catalogue.courseId = Course.courseId";
-            stmt = conn.prepareStatement(sql);
+        try{
+            stmt = conn.prepareStatement(FETCH_CATALOGUE_QUERY);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -72,9 +83,8 @@ public class CatalogueDAOImpl implements CatalogueDAO {
     @Override
     public void deleteCourseInDB(String courseId) {
         try {
-            String sql = "delete from Catalogue where courseId = ?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, courseId);
+            stmt = conn.prepareStatement(DELETE_FROM_CATALOGUE_QUERY);
+            stmt.setString(1,courseId);
 
             int row = stmt.executeUpdate();
             stmt.close();
