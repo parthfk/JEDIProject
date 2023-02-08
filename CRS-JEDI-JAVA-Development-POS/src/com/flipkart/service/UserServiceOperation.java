@@ -11,6 +11,7 @@ import com.flipkart.utils.Utils;
 
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.*;
@@ -151,17 +152,33 @@ public class UserServiceOperation implements UserService {
 
     public List<Course> viewCourseCatalogue() {
         List<Course> courses = new CatalogueDAOImpl().fetchCatalogue(false);
+
         if(courses.size()==0)
         {
             System.out.println("No Courses exist in Catalogue");
             return courses;
+
+
         }
         System.out.println("These are the courses currently available: ");
-        for(int i=0;i<courses.size();i++){
-            System.out.println("CourseID \t Course Name \t Professor ID ");
-            System.out.println(courses.get(i).getCourseID() + "\t\t\t" + courses.get(i).getName()+ "\t"+courses.get(i).getProfessorID());
-        }
+//        for(int i=0;i<courses.size();i++) {
+//            System.out.println("CourseID \t Course Name \t Professor ID ");
+//            System.out.println(courses.get(i).getCourseID() + "\t\t\t " + courses.get(i).getName() + "\t \t \t\t  " + courses.get(i).getProfessorID());
+//        }
+            StringBuffer buffer = new StringBuffer();
+            Formatter fmt = new Formatter();
+
+            fmt.format("\n%14s %14s %14s\n", "Course ID", "Course Name", "Professor");
+
+            for(Course c: courses)
+            {
+                fmt.format("%14s %14s %14s\n", c.getCourseID(),c.getName(),c.getProfessorID());
+            }
+            System.out.println(fmt);
+            buffer.setLength(0);
+
         return courses;
+
     }
 
     public boolean updatePassword() {

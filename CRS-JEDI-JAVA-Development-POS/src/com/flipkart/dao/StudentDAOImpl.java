@@ -2,7 +2,6 @@ package com.flipkart.dao;
 
 import com.flipkart.bean.Course;
 import com.flipkart.bean.Student;
-import com.flipkart.constant.DBConnection;
 import com.flipkart.constant.RoleId;
 import com.flipkart.constant.SQLConstants;
 import com.flipkart.exception.AdminAlreadyExistException;
@@ -12,8 +11,7 @@ import com.flipkart.utils.DbConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
-
-import static com.flipkart.constant.DBConnection.*;
+import java.util.Formatter;
 
 public class StudentDAOImpl implements StudentDAO {
     private Connection conn;
@@ -37,7 +35,6 @@ public class StudentDAOImpl implements StudentDAO {
     public void signup() {
 
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             // Fields for new User record
             String studentId, userId, name, password, email;
             int roleId;
@@ -91,8 +88,8 @@ public class StudentDAOImpl implements StudentDAO {
             statusApproval = student.isStatusApproval();
             gradeCardApproved = student.isGradeCardApproved();
 
-            String studentEntryQuery = "INSERT into Student values (?,?,?,?,?,?,?,?,?)";
-            stmt = conn.prepareStatement(studentEntryQuery);
+
+            stmt = conn.prepareStatement(SQLConstants.STUDENT_ENTRY_QUERY);
             stmt.setString(1, studentId);  // This would set age
             stmt.setDate(2, dob);
             stmt.setString(3, address);
@@ -110,8 +107,6 @@ public class StudentDAOImpl implements StudentDAO {
                 return;
             }
             stmt.close();
-
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
@@ -121,11 +116,7 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     public void selectPrimaryCourse(ArrayList<Course> primaryCourses) {
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             // Fields for updating SemRegistration record
-            String userEntryQuery =
-                    "INSERT into SemRegistration values(?,?,?,?,?,?,?,?,?) " +
-                            "on duplicate key UPDATE pc1=?, pc2=?, pc3=?, pc4=?";
 
             String studentId = this.student.getUserId();
             String pc1 = "", pc2 = "", pc3 = "", pc4 = "";
@@ -136,7 +127,7 @@ public class StudentDAOImpl implements StudentDAO {
                 pc4 = primaryCourses.get(3).getCourseID();
             } catch (Exception ignored) {}
 
-            stmt = conn.prepareStatement(userEntryQuery);
+            stmt = conn.prepareStatement(SQLConstants.NEW_USER_ENTRY_QUERY);
             stmt.setString(1, studentId);
             stmt.setBoolean(2, false);
             stmt.setString(3, pc1);
@@ -154,7 +145,6 @@ public class StudentDAOImpl implements StudentDAO {
 
             stmt.executeUpdate();
             stmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
@@ -165,7 +155,6 @@ public class StudentDAOImpl implements StudentDAO {
     public ArrayList<String> viewPrimaryCourses() {
         ArrayList<String> primaryCourses = new ArrayList<>();
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String viewPrimaryCoursesQuery = "SELECT pc1, pc2, pc3, pc4 from SemRegistration WHERE studentId='" + student.getUserId() + "'";
 
             stmt = conn.prepareStatement(viewPrimaryCoursesQuery);
@@ -185,7 +174,6 @@ public class StudentDAOImpl implements StudentDAO {
                 primaryCourses.add(pc4);
             }
             stmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println("Something went wrong on DB side!");
@@ -196,12 +184,7 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     public void selectSecondaryCourse(ArrayList<Course> secondaryCourses) {
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             // Fields for new SemRegistration record
-            String userEntryQuery =
-                    "INSERT into SemRegistration values(?,?,?,?,?,?,?,?,?) " +
-                            "on duplicate key UPDATE sc1=?, sc2=?";
-
             String studentId = this.student.getUserId();
             String sc1 = "", sc2 = "";
             try {
@@ -210,7 +193,7 @@ public class StudentDAOImpl implements StudentDAO {
             } catch (Exception ignored) {
             }
 
-            stmt = conn.prepareStatement(userEntryQuery);
+            stmt = conn.prepareStatement(SQLConstants.NEW_USER_ENTRY_QUERY_2);
             stmt.setString(1, studentId);
             stmt.setBoolean(2, false);
             stmt.setString(3, "");
@@ -225,7 +208,6 @@ public class StudentDAOImpl implements StudentDAO {
 
             stmt.executeUpdate();
             stmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
@@ -236,7 +218,6 @@ public class StudentDAOImpl implements StudentDAO {
     public ArrayList<String> viewSecondaryCourses() {
         ArrayList<String> secondaryCourses = new ArrayList<>();
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String viewSecondaryCoursesQuery = "SELECT sc1, sc2 from SemRegistration " +
                     "WHERE studentId='" + student.getUserId() + "'";
 
@@ -253,7 +234,6 @@ public class StudentDAOImpl implements StudentDAO {
                 secondaryCourses.add(sc2);
             }
             stmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println("Something went wrong on DB side!");
@@ -267,17 +247,14 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     public void confirmRegistration() {
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             // Fields for new SemRegistration record
-            String userEntryQuery =
-                    "UPDATE SemRegistration SET regDone=1 WHERE studentId=? ";
+
 
             String studentId = this.student.getUserId();
-            stmt = conn.prepareStatement(userEntryQuery);
+            stmt = conn.prepareStatement(SQLConstants.UPDATE_USER_ENTRY_QUERY);
             stmt.setString(1, studentId);
             stmt.executeUpdate();
             stmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
@@ -287,7 +264,7 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     public boolean addCourse(String courseId) {
         try {
-            stmt = conn.prepareStatement("INSERT into RegisteredCourse values(?,?)");
+            stmt = conn.prepareStatement(SQLConstants.INSERT_REGISTERED_COURSE_QUERY);
             stmt.setString(1, courseId);
             stmt.setString(2, this.student.getUserId());
             stmt.setString(3, "N/A");
@@ -295,7 +272,7 @@ public class StudentDAOImpl implements StudentDAO {
 
             stmt.executeUpdate();
 
-            stmt = conn.prepareStatement("UPDATE Catalogue set availableSeats=availableSeats-1 where courseId=?");
+            stmt = conn.prepareStatement(SQLConstants.UPDATE_CATALOGUE_QUERY);
             stmt.setString(1, courseId);
             stmt.executeUpdate();
             return true;
@@ -309,12 +286,12 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     public boolean dropCourse(String courseId) {
         try {
-            stmt = conn.prepareStatement("DELETE from RegisteredCourse where courseId=? AND studentId=?");
+            stmt = conn.prepareStatement(SQLConstants.DELETE_REGISTERED_COURSE_QUERY);
             stmt.setString(1, courseId);
             stmt.setString(2, this.student.getUserId());
             stmt.execute();
 
-            stmt = conn.prepareStatement("UPDATE Catalogue set availableSeats=availableSeats+1 where  courseId=?");
+            stmt = conn.prepareStatement(SQLConstants.UPDATE_CATALOGUE_QUERY_2);
             stmt.setString(1, courseId);
             stmt.execute();
 
@@ -331,7 +308,6 @@ public class StudentDAOImpl implements StudentDAO {
     public ArrayList<String> displayRegisteredCourses() {
         ArrayList<String> registeredCourses = new ArrayList<>();
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String displayRegisteredCoursesQuery = "SELECT * from RegisteredCourse " +
                     "WHERE studentId='" + student.getUserId() +
                     "' AND semesterId ='1' ";
@@ -342,7 +318,6 @@ public class StudentDAOImpl implements StudentDAO {
                 registeredCourses.add(rs.getString("courseId"));
             }
             stmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println("Something went wrong on DB side!");
@@ -350,10 +325,8 @@ public class StudentDAOImpl implements StudentDAO {
         return registeredCourses;
     }
 
-    public static boolean registrationIsDone(Student student) {
+    public boolean registrationIsDone(Student student) {
         try {
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
             String checkReg = "SELECT regDone from SemRegistration where studentId='" + student.getUserId() + "'";
             PreparedStatement stmt = conn.prepareStatement(checkReg);
             ResultSet checkRegRs = stmt.executeQuery(checkReg);
@@ -365,7 +338,6 @@ public class StudentDAOImpl implements StudentDAO {
                 return regDone;
             }
             stmt.close();
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println("Something went wrong on DB side");
@@ -376,8 +348,6 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     public void displayGradeCard() {
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
             String studentId = this.student.getUserId();
             String getGrades =
                     "SELECT courseId, grade FROM RegisteredCourse WHERE studentId=" + "'" + studentId + "'";
@@ -395,16 +365,24 @@ public class StudentDAOImpl implements StudentDAO {
             }
 
             ResultSet rs = stmt.executeQuery(getGrades);
+
+            StringBuffer buffer = new StringBuffer();
+            Formatter fmt = new Formatter();
+
+            fmt.format("\n%14s %14s\n", "Course ID", "Grade");
+
             while (rs.next()) {
                 String courseId = rs.getString("courseId");
                 String grade = rs.getString("grade");
-                System.out.println("Your grade in course #" + courseId + " is " + grade);
+                fmt.format("%14s %14s\n", courseId,grade);
             }
+            System.out.println(fmt);
+            buffer.setLength(0);
             stmt.close();
 
             String getSGPA = "SELECT SGPA from GradeCard WHERE studentId=" + "'" + studentId + "'";
-            PreparedStatement stmt2 = conn.prepareStatement(getSGPA);
 
+            PreparedStatement stmt2 = conn.prepareStatement(getSGPA);
             ResultSet rs2 = stmt2.executeQuery(getSGPA);
             if (rs2.next()) {
                 float sgpa = rs2.getFloat("SGPA");
@@ -412,8 +390,7 @@ public class StudentDAOImpl implements StudentDAO {
             }
 
             stmt2.close();
-            conn.close();
-        }
+        } 
         catch (GradeNotAddedException e) {
             System.out.println(e.getMessage());
         }
@@ -426,16 +403,11 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     public void setRegisteredCourses(ArrayList<Course> registeredCourses) {
         try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
             for (Course c : registeredCourses) {
-                String userEntryQuery =
-                        "INSERT into RegisteredCourse values (?,?,?,?)";
-
                 String courseId = c.getCourseID();
                 String studentId = this.student.getUserId();
 
-                stmt = conn.prepareStatement(userEntryQuery);
+                stmt = conn.prepareStatement(SQLConstants.INSERT_IN_REGISTERED_COURSE);
                 stmt.setString(1, courseId);
                 stmt.setString(2, studentId);
                 stmt.setString(3, "N/A");
@@ -444,7 +416,6 @@ public class StudentDAOImpl implements StudentDAO {
                 stmt.executeUpdate();
                 stmt.close();
             }
-            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);

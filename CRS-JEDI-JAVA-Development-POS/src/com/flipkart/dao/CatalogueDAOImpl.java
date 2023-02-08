@@ -4,6 +4,7 @@ import com.flipkart.bean.Course;
 import com.flipkart.constant.DBConnection;
 import com.flipkart.constant.SQLConstants;
 import com.flipkart.exception.CourseNotFoundException;
+import com.flipkart.utils.DbConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,23 +15,16 @@ import static com.flipkart.constant.SQLConstants.*;
 
 
 public class CatalogueDAOImpl implements CatalogueDAO {
-    private Connection conn = null;
+    private Connection conn;
     private PreparedStatement stmt = null;
 
     public CatalogueDAOImpl() {
-        try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        conn = DbConnection.getConnectionInstance();
+
     }
 
     @Override
     public void addCourseInDB(Course course, String semID) {
-        try {
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
             stmt = conn.prepareStatement(INSERT_CATALOGUE_QUERY);
 
             stmt.setString(1, course.getCourseID());
@@ -81,8 +75,6 @@ public class CatalogueDAOImpl implements CatalogueDAO {
 
             int row = stmt.executeUpdate();
             stmt.close();
-            conn.close();
-
             if (row == 0) {
                 throw new CourseNotFoundException(courseId);
             }

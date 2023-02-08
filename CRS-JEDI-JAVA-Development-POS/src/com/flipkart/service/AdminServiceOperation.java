@@ -7,6 +7,7 @@ import com.flipkart.data.UserData;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.Scanner;
 
 import com.flipkart.dao.*;
@@ -62,17 +63,26 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
     }
 
     public boolean removeCourse() {
+
         System.out.println("-----Below is the list of courses currently present-------");
         CatalogueDAOImpl catalogueDAO = new CatalogueDAOImpl();
         List<Course> courseList = catalogueDAO.fetchCatalogue(true);
         boolean flag1=true;
-        for (Course c :courseList) {
+        StringBuffer buffer = new StringBuffer();
+        Formatter fmt = new Formatter();
+
+        for(Course c: courseList)
+        {
             if(flag1){
-            System.out.println("Course Name \t Course ID");
-            flag1=false;
+                fmt.format("\n%14s %14s\n", "Course Name", "Course ID");
+                flag1=false;
             }
-            System.out.println(c.getName() + "\t \t" + c.getCourseID());
+            fmt.format("%14s %14s\n", c.getName(),c.getCourseID());
         }
+        System.out.println(fmt);
+        buffer.setLength(0);
+
+
         System.out.println("Enter the course ID to be deleted");
         String id_to_be_deleted = scanner.nextLine();
         boolean flag = false;
@@ -183,7 +193,9 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
                 }
 
             }
+        return true;
         }
+
 
 
     public void generateGradeCard() {

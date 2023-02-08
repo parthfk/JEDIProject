@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.flipkart.bean.Admin;
+import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
 
 import static com.flipkart.constant.DBConnection.*;
@@ -29,6 +30,24 @@ public class AdminDAOImpl implements AdminDAO {
             Class.forName(JDBC_DRIVER);
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            stmt=conn.prepareStatement(FETCH_USER_WITH_EMAIL_ID+admin.getEmail());
+
+            ResultSet rs1 = stmt.executeQuery(FETCH_USER_WITH_EMAIL_ID+admin.getEmail());
+            
+            if (rs1.next()) {
+
+                try{
+                    throw new AdminAlreadyExistException(admin.getEmail());
+                }
+                catch (AdminAlreadyExistException e) {
+                    System.out.println(e.getMessage());
+                }
+                finally {
+                    return false;
+                }
+            }
+
 
             stmt = conn.prepareStatement(COUNT_USERS_QUERY);
 
@@ -82,6 +101,24 @@ public class AdminDAOImpl implements AdminDAO {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+
+            stmt=conn.prepareStatement(FETCH_USER_WITH_EMAIL_ID+professor.getEmail());
+
+            ResultSet rs1 = stmt.executeQuery(FETCH_USER_WITH_EMAIL_ID+professor.getEmail());
+
+            if (rs1.next()) {
+
+                try{
+                    throw new ProfessorAlreadyExistException(professor.getEmail());
+                }
+                catch (ProfessorAlreadyExistException e) {
+                    System.out.println(e.getMessage());
+                }
+                finally {
+                    return false;
+                }
+            }
 
             stmt = conn.prepareStatement(COUNT_USERS_WITH_SPECIFIC_ROLE_QUERY);
             stmt.setInt(1, 2);
@@ -146,15 +183,21 @@ public class AdminDAOImpl implements AdminDAO {
                     return;
                 }
                 System.out.println("List of Un-Approved Students");
+
+                StringBuffer buffer = new StringBuffer();
+                Formatter fmt = new Formatter();
+
+                fmt.format("\n%14s %14s %14s\n", "Student ID", "Name", "E-Mail");
                 do {
 
                     String eid = rs.getString("userId");
                     String name = rs.getString("name");
                     String email = rs.getString("email");
-                    System.out.print("Student ID: " + eid);
-                    System.out.print(" Name: " + name);
-                    System.out.println(" E-Mail: " + email);
+                    fmt.format("%14s %14s %14s\n", eid,name,email);
                 } while (rs.next());
+
+                System.out.println(fmt);
+                buffer.setLength(0);
 
 
                 System.out.println("Enter student ID to be Approved or Press # to exit");
