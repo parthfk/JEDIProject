@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ProfessorServiceOperation extends UserServiceOperation implements ProfessorService{
-
     private Professor professor;
     private ProfessorDAO profDAO;
 
@@ -69,17 +68,6 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
                    gradeValidated = this.validateGrade(gradeString);
                    if (gradeValidated) {
                        profDAO.addGrade(student.getUserId(), semesterId, courseToGrade.getCourseID(), gradeString);
-//                   Grade gradeObj= new Grade();
-//                    gradeObj.setGrade(gradeString);
-//                   for(RegisteredCourse registration: registeredCourseList){
-//                       if(registration.getStudentID().equals(student.getUserId()) &&
-//                               registration.getSemesterID().equals(semesterId) &&
-//                               registration.getCourseID().equals(courseToGrade.getCourseID())
-//                       ){
-//                           registration.setGrade(gradeObj);
-//                            break;
-//                       }
-//                   }
                    } else {
                        System.out.println("Please enter one of the following grades: A" +
                                ",A-,B,B-,C,C-,D,D-,E,F");
@@ -106,29 +94,8 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         String courseId = courseAndSemIds.get(0);
         String semesterId = courseAndSemIds.get(1);
 
-        //dao
         return profDAO.viewEnrolledStudentListDao(courseId,semesterId);
-//        return this.getEnrolledStudentList(courseId,semesterId);
     }
-//    public List<Student> getEnrolledStudentList (String courseId,String semesterId){
-//        List<RegisteredCourse> regCourseList = RegisteredCourseData.regCourseList;
-//        List<Student> enrolledStudentList = new ArrayList<Student>();
-//        List<Student> studentList = UserData.studentList;
-//
-//        for(RegisteredCourse registeredCourse: regCourseList){
-//            if(registeredCourse.getSemesterID().equals(semesterId) && registeredCourse.getCourseID().equals(courseId)){
-//                String studentId = registeredCourse.getStudentID();
-//                for(Student student: studentList) {
-//                    if (student.getUserId().equals(studentId)) {
-//                        enrolledStudentList.add(student);
-//                        break;
-//                    }
-//                }
-//
-//            }
-//        }
-//        return enrolledStudentList;
-//    }
     public void selectCourse(Course course){
         List<Course> courseList = professor.getCoursesTaken();
         courseList.add(course);

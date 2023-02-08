@@ -339,8 +339,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                 studentDao.addCourse(courses.get(i).getCourseID());
                 isAdded = true;
                 break;
-            }else
-            {
+            } else {
                 try {
                     throw new CourseNotAvailableException(courseToAdd);
                 } catch (CourseNotAvailableException e) {
