@@ -182,6 +182,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
             boolean res=obj.addAdminDAO(newAdmin);
             if(res) {
                 System.out.println("Admin Registered Successfully!!");
+                return true;
             }
             else {
                 try {
@@ -194,7 +195,6 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
             }
         return true;
         }
-
 
 
 

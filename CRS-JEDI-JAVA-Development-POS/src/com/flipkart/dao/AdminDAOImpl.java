@@ -12,12 +12,6 @@ import com.flipkart.bean.Admin;
 import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
 
-import com.flipkart.constant.DBConnection;
-import com.flipkart.exception.AdminAlreadyExistException;
-import com.flipkart.exception.ProfessorAlreadyExistException;
-import com.flipkart.service.AdminService;
-
-
 import static com.flipkart.constant.DBConnection.*;
 import static com.flipkart.constant.SQLConstants.*;
 
@@ -31,7 +25,6 @@ public class AdminDAOImpl implements AdminDAO {
         PreparedStatement stmt = null;
 
         try {
-
 
 
             Class.forName(JDBC_DRIVER);
@@ -54,6 +47,7 @@ public class AdminDAOImpl implements AdminDAO {
                     return false;
                 }
             }
+
 
             stmt = conn.prepareStatement(COUNT_USERS_QUERY);
 
@@ -87,42 +81,27 @@ public class AdminDAOImpl implements AdminDAO {
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
+            return false;
         } catch (Exception e) {
             //Handle errors for Class.forName
             e.printStackTrace();
-        } finally {
-
-            try {
-                if (stmt != null)
-                    stmt.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
+            return false;
         }
         System.out.println("Admin Registered Successfully!!");
         return false;
     }
 
 
-
-    public boolean addProfessorDAO(Professor professor){
-
-
+    public boolean addProfessorDAO(Professor professor) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        int res=0;
-        try{
 
-
+        try {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
 
             stmt=conn.prepareStatement(FETCH_USER_WITH_EMAIL_ID+professor.getEmail());
 
@@ -146,10 +125,8 @@ public class AdminDAOImpl implements AdminDAO {
 
             ResultSet rs = stmt.executeQuery();
 
-
             if (rs.next())
                 noOfUsers = rs.getInt(1);
-
 
             noOfUsers++;
 
@@ -160,11 +137,11 @@ public class AdminDAOImpl implements AdminDAO {
             stmt.setString(4, professor.getEmail());
             stmt.setInt(5, 2);
 
-            res=stmt.executeUpdate();
+            stmt.executeUpdate();
 
             stmt = conn.prepareStatement(INSERT_PROFESSOR_QUERY);
 
-            stmt.setString(1, Integer.toString(noOfUsers));  // This would set adminId
+            stmt.setString(1, "p"+Integer.toString(noOfUsers));  // This would set adminId
             stmt.setDate(2, professor.getDob());   // this would set "DOB"
             stmt.setString(3, professor.getAddress());
             stmt.setString(4, professor.getMobileNumber());
@@ -177,17 +154,14 @@ public class AdminDAOImpl implements AdminDAO {
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
+            return false;
         } catch (Exception e) {
             //Handle errors for Class.forName
             e.printStackTrace();
-        } finally {
-            //finally block used to close resources
-
-            if(res==1)
-            System.out.println("Professor Registered Successfully!!");
-            return res==1;
-        }//end try
-
+            return false;
+        }
+        System.out.println("Professor Registered Successfully!!");
+        return true;
 
     }
 
@@ -287,115 +261,107 @@ public class AdminDAOImpl implements AdminDAO {
                 System.out.println("No Grade card ready to be generated");
                 return;
             }
+            System.out.println("Student Name \t UserID \t E-Mail \t \t Department");
 
-                while (rs.next()) {
-                    System.out.println("Name of student : " + rs.getString(1) + " UserID : " +
-                            rs.getString(2) + " Email " + rs.getString(3) +
-                            " Department Registered in " + rs.getString(4));
+            do {
+                System.out.println(rs.getString(1) + "\t \t" + rs.getString(2) + "\t \t \t" + rs.getString(3) + "\t" + rs.getString(4));
+            } while (rs.next());
 
-                }
+            rs.close();
 
-                System.out.println("Student Name \t UserID \t E-Mail \t \t Department");
-
-                do {
-                    System.out.println(rs.getString(1) + "\t \t" + rs.getString(2) + "\t \t \t" + rs.getString(3) + "\t" + rs.getString(4));
-                } while (rs.next());
-
-                rs.close();
-
-                System.out.println("Enter UserID of student to approve Grade Gard or Press # to exit");
-                scanner = new Scanner(System.in);
-                String userId_of_approved_gradeCard = scanner.next();
-                if (userId_of_approved_gradeCard.equals("#")) {
-                    return;
-                }
-
-                stmt = conn.prepareStatement(FETCH_GRADES_QUERY);
-                stmt.setString(1, userId_of_approved_gradeCard);
-                rs = stmt.executeQuery();
-
-                if (!rs.next()) {
-                    System.out.println("This student has not registered any courses yet.");
-                    return;
-                }
-
-                float gradeTotal = 0;
-                int num = 0;
-
-                String semID = "1";
-                boolean gradeNotAssigned = false;
-
-                while (rs.next()) {
-                    String tempGrade = rs.getString(1);
-                    semID = rs.getString(2);
-                    if (tempGrade == null || tempGrade.matches("N/A")) {
-                        gradeNotAssigned = true;
-                        break;
-                    }
-                    if (tempGrade.matches("A+")) {
-                        gradeTotal += 10;
-                    } else if (tempGrade.matches("A-")) {
-                        gradeTotal += 9;
-                    } else if (tempGrade.matches("B+")) {
-                        gradeTotal += 8;
-                    } else if (tempGrade.matches("B-")) {
-                        gradeTotal += 7;
-                    } else if (tempGrade.matches("C+")) {
-                        gradeTotal += 6;
-                    } else if (tempGrade.matches("C-")) {
-                        gradeTotal += 5;
-                    } else if (tempGrade.matches("D+")) {
-                        gradeTotal += 4;
-                    }
-
-                    num += 10;
-                }
-
-
-                rs.close();
-
-                if (gradeNotAssigned) {
-                    System.out.println("Cannot generate Grade Card, few courses are yet to be assigned grades for this student ");
-                    return;
-                }
-
-                stmt = conn.prepareStatement(COUNT_GRADECARDS_QUERY);
-                rs = stmt.executeQuery();
-                int records = 2312;
-                if (rs.next())
-                    records = rs.getInt(1);
-                else
-                    System.out.println("DB Operation Failed");
-
-                rs.close();
-
-                float sgpa = (gradeTotal / num) * 10;
-
-                stmt = conn.prepareStatement(INSERT_GRADECARD_QUERY);
-
-                stmt.setInt(1, records);
-                stmt.setString(2, userId_of_approved_gradeCard);
-                stmt.setFloat(3, sgpa);
-                stmt.setString(4, semID);
-
-                stmt.executeUpdate();
-                stmt.close();
-
-                stmt = conn.prepareStatement(UPDATE_STUDENT_GRADE_STATUS_QUERY);
-                stmt.setInt(1, records);
-                stmt.setString(2, userId_of_approved_gradeCard);
-
-
-                stmt.executeUpdate();
-
-                conn.close();
-
-                System.out.println("GradeCard generated!");
-
-
-            } catch (SQLException | ClassNotFoundException e) {
-                System.out.println(e.getMessage());
-                throw new RuntimeException(e);
+            System.out.println("Enter UserID of student to approve Grade Gard or Press # to exit");
+            scanner = new Scanner(System.in);
+            String userId_of_approved_gradeCard = scanner.next();
+            if (userId_of_approved_gradeCard.equals("#")) {
+                return;
             }
+
+            stmt = conn.prepareStatement(FETCH_GRADES_QUERY);
+            stmt.setString(1, userId_of_approved_gradeCard);
+            rs = stmt.executeQuery();
+
+            if (!rs.next()) {
+                System.out.println("This student has not registered any courses yet.");
+                return;
+            }
+
+            float gradeTotal = 0;
+            int num = 0;
+
+            String semID = "1";
+            boolean gradeNotAssigned = false;
+
+            do {
+                String tempGrade = rs.getString(1);
+                semID = rs.getString(2);
+                if (tempGrade == null || tempGrade.matches("N/A")) {
+                    gradeNotAssigned = true;
+                    break;
+                }
+                if (tempGrade.matches("A+")) {
+                    gradeTotal += 10;
+                } else if (tempGrade.matches("A-")) {
+                    gradeTotal += 9;
+                } else if (tempGrade.matches("B+")) {
+                    gradeTotal += 8;
+                } else if (tempGrade.matches("B-")) {
+                    gradeTotal += 7;
+                } else if (tempGrade.matches("C+")) {
+                    gradeTotal += 6;
+                } else if (tempGrade.matches("C-")) {
+                    gradeTotal += 5;
+                } else if (tempGrade.matches("D+")) {
+                    gradeTotal += 4;
+                }
+
+                num += 10;
+            }
+            while (rs.next());
+
+            rs.close();
+
+            if (gradeNotAssigned) {
+                System.out.println("Cannot generate Grade Card, few courses are yet to be assigned grades for this student ");
+                return;
+            }
+
+            stmt = conn.prepareStatement(COUNT_GRADECARDS_QUERY);
+            rs = stmt.executeQuery();
+            int records = 2312;
+            if (rs.next())
+                records = rs.getInt(1);
+            else
+                System.out.println("DB Operation Failed");
+
+            rs.close();
+
+            float sgpa = (gradeTotal / num) * 10;
+
+            stmt = conn.prepareStatement(INSERT_GRADECARD_QUERY);
+
+            stmt.setInt(1, records);
+            stmt.setString(2, userId_of_approved_gradeCard);
+            stmt.setFloat(3, sgpa);
+            stmt.setString(4, semID);
+
+            stmt.executeUpdate();
+            stmt.close();
+
+            stmt = conn.prepareStatement(UPDATE_STUDENT_GRADE_STATUS_QUERY);
+            stmt.setInt(1, records);
+            stmt.setString(2, userId_of_approved_gradeCard);
+
+
+            stmt.executeUpdate();
+
+            conn.close();
+
+            System.out.println("GradeCard generated!");
+
+
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }
