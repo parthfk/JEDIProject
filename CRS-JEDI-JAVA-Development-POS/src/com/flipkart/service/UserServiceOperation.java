@@ -149,11 +149,16 @@ public class UserServiceOperation implements UserService {
     }
 
     public List<Course> viewCourseCatalogue() {
-        System.out.println("These are the courses currently available: ");
         List<Course> courses = new CatalogueDAOImpl().fetchCatalogue();
-        for (int i = 0; i < courses.size(); i++) {
-            System.out.println("CourseID: " + courses.get(i).getCourseID() + " Course Name: " + courses.get(i).getName() +
-                    " Professor: " + courses.get(i).getProfessorID());
+        if(courses.size()==0)
+        {
+            System.out.println("No Courses exist in Catalogue");
+            return courses;
+        }
+        System.out.println("These are the courses currently available: ");
+        for(int i=0;i<courses.size();i++){
+            System.out.println("CourseID \t Course Name \t Professor ID ");
+            System.out.println(courses.get(i).getCourseID() + "\t\t\t" + courses.get(i).getName()+ "\t"+courses.get(i).getProfessorID());
         }
         return courses;
     }

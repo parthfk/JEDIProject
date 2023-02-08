@@ -59,9 +59,9 @@ public class CRSProfessorMenu {
 
                     System.out.println("These are the courses currently available: ");
 
-                    System.out.println("Course ID/tCourse Name");
+                    System.out.println("Course ID \tCourse Name");
                     for(int i=0;i<courseList.size();i++){
-                        System.out.println(courseList.get(i).getCourseID() + courseList.get(i).getName());
+                        System.out.println(courseList.get(i).getCourseID()+"\t \t \t " +courseList.get(i).getName());
                     }
                     while(true){
                         System.out.println("Please enter the courseId to teach or # to exit.");
@@ -84,8 +84,9 @@ public class CRSProfessorMenu {
                 case 3:
                     List<Student> studentList = profService.viewEnrolledStudentList();
                     if(studentList != null){
+                        System.out.println("Name \t \t ID");
                     for(Student s : studentList){
-                        System.out.println("Name - " + s.getName() + " , ID - " + s.getUserId());
+                        System.out.println(s.getName() +"\t"+ s.getUserId());
                     }
                     }
                     break;

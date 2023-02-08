@@ -17,6 +17,24 @@ import static com.flipkart.constant.DBConnection.*;
 public class AdminDAOImpl implements AdminDAO {
     private static int noOfUsers;
     private Scanner scanner;
+    public boolean addAdminDAO(Admin admin){
+        //  public static void main(String args[]){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+       int res=0;
+        try{
+
+            // Step 3 Regiater Driver here and create connection
+
+            Class.forName("com.mysql.jdbc.Driver");
+
+            // Step 4 make/open  a connection
+
+            //System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            //STEP 4: Execute a query
+            //System.out.println("Creating statement...");
 
     public boolean addAdminDAO(Admin admin) {
         Connection conn;
@@ -154,14 +172,16 @@ public class AdminDAOImpl implements AdminDAO {
                     return;
                 }
                 System.out.println("List of Un-Approved Students");
-                do {
+                System.out.println("Student ID \t  Name \t    E-Mail");
+                do{
+                    //Retrieve by column name
+
+
                     String eid = rs.getString("userId");
                     String name = rs.getString("name");
                     String email = rs.getString("email");
-                    System.out.print("Student ID: " + eid);
-                    System.out.print(" Name: " + name);
-                    System.out.println(" E-Mail: " + email);
-                } while (rs.next());
+                    System.out.println(eid+"\t \t \t " +name+"\t"+email);
+                }while(rs.next());
 
 
                 System.out.println("Enter student ID to be Approved or Press # to exit");
@@ -210,9 +230,14 @@ public class AdminDAOImpl implements AdminDAO {
         Connection conn;
         PreparedStatement stmt;
 
-        try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+
+        try{
+
+            Class.forName("com.mysql.jdbc.Driver");
+
+           // System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // fetch student list
             // select * from student
@@ -223,12 +248,23 @@ public class AdminDAOImpl implements AdminDAO {
             stmt = conn.prepareStatement(sql);
 
             ResultSet rs = stmt.executeQuery();
+            if(rs.next()==false){
+                System.out.println("No Grade card ready to be generated");
+                return;
+
 
             while (rs.next()) {
                 System.out.println("Name of student : " + rs.getString(1) + " UserID : " +
                         rs.getString(2) + " Email " + rs.getString(3) +
                         " Department Registered in " + rs.getString(4));
+
             }
+
+            System.out.println("Student Name \t UserID \t E-Mail \t \t Department");
+
+            do {
+                System.out.println(rs.getString(1) +"\t \t"+ rs.getString(2)  +"\t \t \t"+rs.getString(3) +"\t"+ rs.getString(4));
+            }while(rs.next());
 
             rs.close();
 
