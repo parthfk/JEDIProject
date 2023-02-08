@@ -8,8 +8,11 @@ import com.flipkart.exception.CourseNotFoundException;
 import com.flipkart.service.StudentServiceOperation;
 import com.flipkart.service.UserService;
 import com.flipkart.service.UserServiceOperation;
+import com.flipkart.utils.DbConnection;
 
 import java.io.Console;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class CRSApplication {
@@ -17,12 +20,12 @@ public class CRSApplication {
      * Main function which is the starting point of all functionality.
      * @param args
      */
-    public static void main (String[] args) {
+    public static void main (String[] args) throws SQLException {
         Scanner in = new Scanner(System.in);
-
         boolean endApplication  = false;
         UserService userService = new UserServiceOperation();
         User userObj = null;
+        Connection conn = DbConnection.getConnectionInstance();
 
         while (!endApplication) {
             System.out.println();
@@ -72,6 +75,7 @@ public class CRSApplication {
                     break;
                 case 4:
                     endApplication=true;
+                    if(conn != null)conn.close();
                     System.exit(0);
                     break;
                 default:

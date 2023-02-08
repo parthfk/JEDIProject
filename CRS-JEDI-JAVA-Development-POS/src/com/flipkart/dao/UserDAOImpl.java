@@ -1,22 +1,17 @@
 package com.flipkart.dao;
 
+import com.flipkart.constant.SQLConstants;
 import com.flipkart.exception.UserNotFoundException;
+import com.flipkart.utils.DbConnection;
 
 import java.sql.*;
-
-import static com.flipkart.constant.DBConnection.*;
 
 public class UserDAOImpl implements UserDAO {
     private Connection conn = null;
     private PreparedStatement stmt = null;
 
     UserDAOImpl() {
-        try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        conn = DbConnection.getConnectionInstance();
     }
 
     //Singleton pattern
@@ -31,8 +26,7 @@ public class UserDAOImpl implements UserDAO {
 
     public boolean verifyCredentials(String userId, String password) throws UserNotFoundException {
         try {
-            String sql = "update user set password=? where userId = ? ";
-            stmt = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(SQLConstants.VERIFY_CREDENTIALS_QUERY);
             stmt.setString(1, userId);
             ResultSet resultSet = stmt.executeQuery();
 
@@ -69,8 +63,7 @@ public class UserDAOImpl implements UserDAO {
 
     public boolean updatePassword(String userId, String newPassword) {
         try {
-            String sql = "update user set password=? where userId = ? ";
-            stmt = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(SQLConstants.UPDATE_PASSWORD_QUERY);
             stmt.setString(1, newPassword);
             stmt.setString(2, userId);
             int row = stmt.executeUpdate();
