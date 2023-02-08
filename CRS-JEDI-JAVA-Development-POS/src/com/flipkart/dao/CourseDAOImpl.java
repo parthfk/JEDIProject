@@ -2,6 +2,7 @@ package com.flipkart.dao;
 
 import com.flipkart.bean.Course;
 import com.flipkart.constant.DBConnection;
+import com.flipkart.utils.DbConnection;
 
 import java.sql.*;
 
@@ -14,14 +15,7 @@ public class CourseDAOImpl implements CourseDAO {
 
     public CourseDAOImpl()
     {
-        try{
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
-        }
-        catch (Exception e)
-        {
-            System.out.println(e);
-        }
+        conn = DbConnection.getConnectionInstance();
     }
 
     @Override
@@ -50,7 +44,6 @@ public class CourseDAOImpl implements CourseDAO {
     public void addCourseToDB(Course course) {
 
         try{
-
             stmt=conn.prepareStatement(INSERT_IN_COURSE_QUERY);
             stmt.setString(1, course.getCourseID());
             stmt.setString(2, course.getName());

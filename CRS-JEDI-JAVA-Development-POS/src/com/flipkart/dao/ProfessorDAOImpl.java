@@ -3,7 +3,6 @@ import com.flipkart.bean.Course;
 
 import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
-import com.flipkart.constant.DBConnection;
 import com.flipkart.constant.SQLConstants;
 import com.flipkart.utils.DbConnection;
 
@@ -11,8 +10,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static com.flipkart.constant.DBConnection.*;
 
 public class ProfessorDAOImpl implements ProfessorDAO{
     private Professor prof;
@@ -29,7 +26,7 @@ public class ProfessorDAOImpl implements ProfessorDAO{
         String courseId = course.getCourseID();
 
         try{
-            PreparedStatement st = conn.prepareStatement(SQLConstants.updateCourseQuery);
+            PreparedStatement st = conn.prepareStatement(SQLConstants.UPDATE_COURSE_QUERY);
             st.setString(1,profId);
             st.setString(2,courseId);
 
@@ -119,7 +116,7 @@ public class ProfessorDAOImpl implements ProfessorDAO{
     @Override
     public void addGrade(String studentId, String semId, String courseId, String grade) {
         try{
-            PreparedStatement st = conn.prepareStatement(SQLConstants.updateRegisteredCourse);
+            PreparedStatement st = conn.prepareStatement(SQLConstants.UPDATE_REGISTERED_COURSE_QUERY);
             st.setString(1,grade);
             st.setString(2,studentId);
             st.setString(3,courseId);

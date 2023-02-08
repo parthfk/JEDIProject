@@ -7,11 +7,14 @@ import com.flipkart.data.UserData;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.Scanner;
 
 import com.flipkart.dao.*;
 import com.flipkart.exception.AdminNotAddedException;
+import com.flipkart.exception.CourseAlreadyRegisteredException;
 import com.flipkart.exception.CourseNotFoundException;
+import com.flipkart.exception.ProfessorNotAddedException;
 import com.flipkart.utils.Utils;
 
 import java.util.List;
@@ -43,7 +46,11 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
             if (!courseDAO.doesCourseExist(courseId)) {
                 courseDAO.addCourseToDB(newCourse);
             }
-            catalogueDAO.addCourseInDB(newCourse, semesterId);
+            else {
+                throw new CourseAlreadyRegisteredException(courseId);
+            }
+            catalogueDAO.addCourseInDB(newCourse,semesterId);
+
 
 
             System.out.println("Your new course added: " + newCourse);
@@ -56,17 +63,26 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
     }
 
     public boolean removeCourse() {
+
         System.out.println("-----Below is the list of courses currently present-------");
         CatalogueDAOImpl catalogueDAO = new CatalogueDAOImpl();
         List<Course> courseList = catalogueDAO.fetchCatalogue(true);
         boolean flag1=true;
-        for (Course c :courseList) {
+        StringBuffer buffer = new StringBuffer();
+        Formatter fmt = new Formatter();
+
+        for(Course c: courseList)
+        {
             if(flag1){
-            System.out.println("Course Name \t Course ID");
-            flag1=false;
+                fmt.format("\n%14s %14s\n", "Course Name", "Course ID");
+                flag1=false;
             }
-            System.out.println(c.getName() + "\t \t" + c.getCourseID());
+            fmt.format("%14s %14s\n", c.getName(),c.getCourseID());
         }
+        System.out.println(fmt);
+        buffer.setLength(0);
+
+
         System.out.println("Enter the course ID to be deleted");
         String id_to_be_deleted = scanner.nextLine();
         boolean flag = false;
@@ -121,8 +137,13 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         Date dobParsed = Date.valueOf(dob);
         newProf.setDob(dobParsed);
         try {
-            AdminDAOImpl obj = new AdminDAOImpl();
-            obj.addProfessorDAO(newProf);
+
+            AdminDAOImpl obj=new AdminDAOImpl();
+            if(!obj.addProfessorDAO(newProf))
+            {
+                throw new ProfessorNotAddedException(newProf.getEmail());
+            }
+
         } catch (Exception e) {
             System.out.println("Something went wrong" + e.getMessage());
         }
@@ -156,21 +177,26 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         newAdmin.setDob(dobParsed);
 
 
-        AdminDAOImpl obj = new AdminDAOImpl();
-        boolean res = obj.addAdminDAO(newAdmin);
-        if (res) {
-            System.out.println("Admin Registered Successfully!!");
-        } else {
-            try {
-                throw new AdminNotAddedException(newAdmin.getUserId());
-            } catch (AdminNotAddedException e) {
-                System.out.println(e.getMessage());
-                return false;
+
+            AdminDAOImpl obj=new AdminDAOImpl();
+            boolean res=obj.addAdminDAO(newAdmin);
+            if(res) {
+                System.out.println("Admin Registered Successfully!!");
+                return true;
             }
+            else {
+                try {
+                    throw new AdminNotAddedException(newAdmin.getEmail());
+                } catch (AdminNotAddedException e) {
+                    System.out.println(e.getMessage());
+                    return false;
+                }
+
+            }
+        return true;
         }
 
-        return true;
-    }
+
 
     public void generateGradeCard() {
         AdminDAO adminDAO = new AdminDAOImpl();

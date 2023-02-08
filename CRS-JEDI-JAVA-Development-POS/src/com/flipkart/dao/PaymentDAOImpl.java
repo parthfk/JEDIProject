@@ -142,7 +142,7 @@ public class PaymentDAOImpl implements PaymentDAO {
             stmt = conn.prepareStatement(paymentDetailQuery);
 
             if (stmt.executeUpdate(paymentDetailQuery) == 1) {
-                res = true;
+wres = true;
                 System.out.println("Insertion in PaymentDetails successful !");
             } else {
                 System.out.println("Insertion in PaymentDetails unsuccessful !");
@@ -333,7 +333,9 @@ public class PaymentDAOImpl implements PaymentDAO {
                 return;
             }
 
+
             String fetchquery = "SELECT studentId, notificationId ,paymentAmount, message FROM PaymentNotification where studentId= '" + studentId + "'";
+
             stmt = conn.prepareStatement(fetchquery);
 
 //            stmt.setString(1,studentId);
@@ -368,7 +370,9 @@ public class PaymentDAOImpl implements PaymentDAO {
             String studentId = student.getUserId();
             boolean feeDone = true;
 
+
             String setFeeDoneQuery = "UPDATE Student SET feeDone = 1 WHERE studentId = '" + studentId + "'";
+
             stmt = conn.prepareStatement(setFeeDoneQuery);
 
             int m = stmt.executeUpdate(setFeeDoneQuery);
