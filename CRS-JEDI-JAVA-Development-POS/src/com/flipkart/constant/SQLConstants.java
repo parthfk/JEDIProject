@@ -16,7 +16,9 @@ public class SQLConstants {
     public static final String INSERT_GRADECARD_QUERY = "insert into GradeCard (gradeCardId,studentId,SGPA,semesterId) values(?,?,?,?)";
     public static final String UPDATE_STUDENT_GRADE_STATUS_QUERY = "UPDATE Student set gradeCardApproved = 1, gradeCardId = ? WHERE studentId = ?";
     public static final String INSERT_CATALOGUE_QUERY = "insert into Catalogue values (?,?,?,?)";
-    public static final String FETCH_CATALOGUE_QUERY = "select Catalogue.courseId, Course.name, Catalogue.professorId, Catalogue.availableSeats from Catalogue, Course where Catalogue.courseId = Course.courseId";
+    public static final String FETCH_CATALOGUE_QUERY = "select Catalogue.courseId, Course.name, Catalogue.professorId, Catalogue.availableSeats from Catalogue, Course where Catalogue.courseId = Course.courseId and professorId is not null";
+    public static final String FETCH_CATALOGUE_QUERY_ALL = "select Catalogue.courseId, Course.name, Catalogue.professorId, Catalogue.availableSeats from Catalogue, Course where Catalogue.courseId = Course.courseId";
+
     public static final String DELETE_FROM_CATALOGUE_QUERY = "delete from Catalogue where courseId = ?";
     public static final String CHECK_IF_COURSE_EXISTS_QUERY = "SELECT COUNT(*) FROM Course WHERE courseId = ?";
     public static final String INSERT_IN_COURSE_QUERY = "INSERT INTO Course VALUES (?, ?)";

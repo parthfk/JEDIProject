@@ -58,7 +58,7 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
     public boolean removeCourse() {
         System.out.println("-----Below is the list of courses currently present-------");
         CatalogueDAOImpl catalogueDAO = new CatalogueDAOImpl();
-        List<Course> courseList = catalogueDAO.fetchCatalogue();
+        List<Course> courseList = catalogueDAO.fetchCatalogue(true);
         boolean flag1=true;
         for (Course c :courseList) {
             if(flag1){
