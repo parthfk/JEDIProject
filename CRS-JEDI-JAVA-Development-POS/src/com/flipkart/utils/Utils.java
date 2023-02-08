@@ -26,7 +26,7 @@ public class Utils {
     public static Course getCourseFromCourseId(String courseId) {
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            String getCoursesQuery = "SELECT * from Catalogue JOIN Course WHERE Catalogue.courseId=" + courseId + " LIMIT 1";
+            String getCoursesQuery = "SELECT * from Catalogue JOIN Course WHERE Catalogue.courseId='" + courseId + "' LIMIT 1";
             PreparedStatement stmt = conn.prepareStatement(getCoursesQuery);
             ResultSet rs = stmt.executeQuery(getCoursesQuery);
             if (rs.next()) {

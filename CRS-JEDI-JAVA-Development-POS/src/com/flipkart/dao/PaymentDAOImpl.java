@@ -169,7 +169,7 @@ public class PaymentDAOImpl implements PaymentDAO {
             java.util.Date javaDate = new java.util.Date();
             java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
 
-            String sql2 = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values(" + paymentId + "," + "'" + student.getUserId() + "'" + ",3," + mySQLDate.toString() + ")";
+            String sql2 = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values('" + paymentId + "'," + "'" + student.getUserId() + "'" + ",3," + mySQLDate.toString() + ")";
 
             stmt = conn.prepareStatement(sql2);
 
@@ -357,7 +357,7 @@ public class PaymentDAOImpl implements PaymentDAO {
     public void sendNotification(String studentId, double paymentAmount, String message) {
         try {
             String paymentId = Integer.toString(Integer.parseInt(generatePaymentId()) - 1);
-            String insertPaymentNotificationQuery = "insert into PaymentNotification(notificationId,studentId,paymentAmount,message) values (" + paymentId + "," + studentId + "," + paymentAmount + ",'" + message + "')";
+            String insertPaymentNotificationQuery = "insert into PaymentNotification(notificationId,studentId,paymentAmount,message) values (" + paymentId + ",'" + studentId + "'," + paymentAmount + ",'" + message + "')";
             stmt = conn.prepareStatement(insertPaymentNotificationQuery);
 
 
@@ -368,7 +368,7 @@ public class PaymentDAOImpl implements PaymentDAO {
                 return;
             }
 
-            String fetchquery = "SELECT studentId, notificationId ,paymentAmount, message FROM PaymentNotification where studentId= " + studentId;
+            String fetchquery = "SELECT studentId, notificationId ,paymentAmount, message FROM PaymentNotification where studentId= '" + studentId +"'";
             stmt = conn.prepareStatement(fetchquery);
 
 //            stmt.setString(1,studentId);
@@ -403,7 +403,7 @@ public class PaymentDAOImpl implements PaymentDAO {
             String studentId = student.getUserId();
             boolean feeDone = true;
 
-            String setFeeDoneQuery = "UPDATE Student SET feeDone = 1 WHERE studentId = " + studentId;
+            String setFeeDoneQuery = "UPDATE Student SET feeDone = 1 WHERE studentId = '" + studentId +"'";
             stmt = conn.prepareStatement(setFeeDoneQuery);
 
             int m = stmt.executeUpdate(setFeeDoneQuery);
