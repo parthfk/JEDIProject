@@ -20,21 +20,11 @@ public class CatalogueDAOImpl implements CatalogueDAO {
 
     public CatalogueDAOImpl() {
         conn = DbConnection.getConnectionInstance();
+
     }
 
     @Override
     public void addCourseInDB(Course course, String semID) {
-//
-//    }
-//    public static void main(String args[]){
-//
-//         Connection conn = null;
-//         PreparedStatement stmt = null;
-//         Course course=new Course("123","","",5);
-//         int semID=5;
-
-
-        try{
             stmt = conn.prepareStatement(INSERT_CATALOGUE_QUERY);
 
             stmt.setString(1, course.getCourseID());
@@ -53,11 +43,14 @@ public class CatalogueDAOImpl implements CatalogueDAO {
     }
 
     @Override
-    public List<Course> fetchCatalogue() {
+    public List<Course> fetchCatalogue(boolean allCourses) {
         List<Course> courseList = new ArrayList<>();
 
-        try{
-            stmt = conn.prepareStatement(FETCH_CATALOGUE_QUERY);
+        try {
+            if (allCourses)
+                stmt = conn.prepareStatement(FETCH_CATALOGUE_QUERY_ALL);
+            else
+                stmt = conn.prepareStatement(FETCH_CATALOGUE_QUERY);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -78,7 +71,7 @@ public class CatalogueDAOImpl implements CatalogueDAO {
     public void deleteCourseInDB(String courseId) {
         try {
             stmt = conn.prepareStatement(DELETE_FROM_CATALOGUE_QUERY);
-            stmt.setString(1,courseId);
+            stmt.setString(1, courseId);
 
             int row = stmt.executeUpdate();
             stmt.close();

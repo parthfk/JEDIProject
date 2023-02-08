@@ -16,11 +16,14 @@ public class SQLConstants {
     public static final String INSERT_GRADECARD_QUERY = "insert into GradeCard (gradeCardId,studentId,SGPA,semesterId) values(?,?,?,?)";
     public static final String UPDATE_STUDENT_GRADE_STATUS_QUERY = "UPDATE Student set gradeCardApproved = 1, gradeCardId = ? WHERE studentId = ?";
     public static final String INSERT_CATALOGUE_QUERY = "insert into Catalogue values (?,?,?,?)";
-    public static final String FETCH_CATALOGUE_QUERY = "select Catalogue.courseId, Course.name, Catalogue.professorId, Catalogue.availableSeats from Catalogue, Course where Catalogue.courseId = Course.courseId";
+    public static final String FETCH_CATALOGUE_QUERY = "select Catalogue.courseId, Course.name, Catalogue.professorId, Catalogue.availableSeats from Catalogue, Course where Catalogue.courseId = Course.courseId and professorId is not null";
+    public static final String FETCH_CATALOGUE_QUERY_ALL = "select Catalogue.courseId, Course.name, Catalogue.professorId, Catalogue.availableSeats from Catalogue, Course where Catalogue.courseId = Course.courseId";
+
     public static final String DELETE_FROM_CATALOGUE_QUERY = "delete from Catalogue where courseId = ?";
     public static final String CHECK_IF_COURSE_EXISTS_QUERY = "SELECT COUNT(*) FROM Course WHERE courseId = ?";
     public static final String INSERT_IN_COURSE_QUERY = "INSERT INTO Course VALUES (?, ?)";
     public static final String PAYMENT_ENTRY_QUERY = "INSERT into Payment values (?,?,?,?)";
+
     public static final String UPDATE_COURSE_QUERY = "UPDATE Catalogue SET professorId=? WHERE courseId=?";
     public static final String UPDATE_REGISTERED_COURSE_QUERY = "UPDATE RegisteredCourse SET grade=? WHERE studentId=? AND courseId= ? AND semesterId=?";
 
@@ -51,5 +54,10 @@ public class SQLConstants {
     public static final String INSERT_IN_REGISTERED_COURSE =
             "INSERT into RegisteredCourse values (?,?,?,?)";
 
+
+
+    public static final String updateCourseQuery = "UPDATE Catalogue SET professorId=? WHERE courseId=?";
+    public static final String updateRegisteredCourse = "UPDATE RegisteredCourse SET grade=? WHERE studentId=? AND courseId= ? AND semesterId=?";
+    public static final String FETCH_USER_WITH_EMAIL_ID ="SELECT * FROM User where emailId=";
 
 }

@@ -56,7 +56,7 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
        catch(Exception e){
            e.printStackTrace();
        }
-        System.out.println("Please select one of the following grades for each student: A,A-,B,B-,C,C-,D,D-,E,F");
+       System.out.println("Please select one of the following grades for each student: A,A-,B,B-,C,C-,D,D-,E,F");
        try {
            List<Student> enrolledStudents = profDAO.viewEnrolledStudentListDao(courseToGrade.getCourseID(), semesterId);
 
