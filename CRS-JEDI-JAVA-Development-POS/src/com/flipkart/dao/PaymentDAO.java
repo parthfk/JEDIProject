@@ -3,6 +3,8 @@ import com.flipkart.bean.Student;
 
 public interface PaymentDAO {
 
+    public void insertHelper(String paymentId,Student student,Integer modeOfPayment);
+
     /**
      * method that send the payment notification after fee is paid
      * @param studentId
