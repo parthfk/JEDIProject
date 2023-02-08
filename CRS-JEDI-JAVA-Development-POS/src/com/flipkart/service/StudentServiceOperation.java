@@ -117,8 +117,17 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             mobileNumber = in.nextLine();
         }
         System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
-        String dob = in.nextLine();
-        Date dobParsed = Date.valueOf(dob);
+
+        Date dobParsed;
+        while (true) {
+            try {
+                String dob = in.nextLine();
+                dobParsed = Date.valueOf(dob);
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Your date format/values is incorrect, please enter in the format YYYY-MM-DD only. Try again:");
+            }
+        }
 
         Student newStudent = new Student(name, emailEntered, password, departmentId,
                 address, mobileNumber, dobParsed);
