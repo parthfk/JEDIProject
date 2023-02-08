@@ -4,6 +4,7 @@ import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
 import com.flipkart.constant.DBConnection;
+import com.flipkart.constant.SQLConstants;
 import com.flipkart.utils.DbConnection;
 
 import java.sql.*;
@@ -26,17 +27,15 @@ public class ProfessorDAOImpl implements ProfessorDAO{
     public void selectCourseDAO(Course course) {
         String profId = prof.getUserId();
         String courseId = course.getCourseID();
-        String updateCourseQuery = "UPDATE Catalogue SET professorId=? WHERE courseId=?";
 
         try{
-            PreparedStatement st = conn.prepareStatement(updateCourseQuery);
+            PreparedStatement st = conn.prepareStatement(SQLConstants.updateCourseQuery);
             st.setString(1,profId);
             st.setString(2,courseId);
 
             st.execute();
 
             st.close();
-            conn.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -119,28 +118,19 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
     @Override
     public void addGrade(String studentId, String semId, String courseId, String grade) {
-        String updateRegisteredCourse = "UPDATE RegisteredCourse SET grade='" + grade + "' WHERE studentId='"+studentId + "' AND courseId='"
-                + courseId + "' AND semesterId='"+semId +"'";
         try{
-            Statement st = establishConnection();
+            PreparedStatement st = conn.prepareStatement(SQLConstants.updateRegisteredCourse);
+            st.setString(1,grade);
+            st.setString(2,studentId);
+            st.setString(3,courseId);
+            st.setString(4,semId);
 
-            int m = st.executeUpdate(updateRegisteredCourse);
-            if (m == 1){
-                System.out.println("Updated successfully : " + updateRegisteredCourse);
-            }else System.out.println("Update failed");
+            st.execute();
 
             st.close();
         } catch (Exception e) {
             //Handle errors for Class.forName
             e.printStackTrace();
         }
-    }
-
-    private Statement establishConnection() throws ClassNotFoundException, SQLException {
-        Class.forName(JDBC_DRIVER);
-        System.out.println("Connecting to database.....");
-        conn = DriverManager.getConnection(DB_URL,USER,PASS);
-        Statement st = conn.createStatement();
-        return st;
     }
 }
