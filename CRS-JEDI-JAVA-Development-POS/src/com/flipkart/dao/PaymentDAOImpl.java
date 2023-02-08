@@ -36,6 +36,35 @@ public class PaymentDAOImpl implements PaymentDAO {
         return dao = new PaymentDAOImpl();
     }
 
+    public void insertHelper(String paymentId,Student student,Integer modeOfPayment)
+    {
+        java.util.Date javaDate = new java.util.Date();
+        java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
+
+        String sql2 = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values(" + paymentId + "," + "'" + student.getUserId() + "'" + ",'"+modeOfPayment+"','" + mySQLDate.toString() + "')";
+        System.out.println(sql2);
+
+        try {
+            stmt = conn.prepareStatement(sql2);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        try {
+            if (stmt.executeUpdate(sql2) == 1) {
+                    System.out.println("Insertion in Payment successful !");
+                } else {
+                    System.out.println("Insertion in Payment unsuccessful !");
+                    return ;
+                }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public String generatePaymentId() {
         try {
             String sql = "select count(*) from Payment";
@@ -65,25 +94,13 @@ public class PaymentDAOImpl implements PaymentDAO {
         String cvv = scanner.nextLine();
         System.out.println("Please enter expiry date");
         String exDate = scanner.nextLine();
+        Integer modeOfPayment=PaymentMode.CREDIT_CARD.ordinal();
 
         try {
-            java.util.Date javaDate = new java.util.Date();
-            java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
-
-            String sql2 = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values(" + paymentId + "," + "'" + student.getUserId() + "'" + ",4," + mySQLDate.toString() + ")";
-
-            stmt = conn.prepareStatement(sql2);
-
-            if (stmt.executeUpdate(sql2) == 1) {
-                System.out.println("Insertion in Payment successful !");
-            } else {
-                System.out.println("Insertion in Payment unsuccessful !");
-                return res;
-            }
+            insertHelper(paymentId,student,modeOfPayment);
 
             String paymentDetailQuery = "insert into PaymentDetails(paymentId,cardNumber,expiry,cvv) values(" + paymentId + "," + "'" + creditCardNumber + "'" + "," + "'" + exDate + "'" + "," + "'" + cvv + "'" + ")";
             stmt = conn.prepareStatement(paymentDetailQuery);
-
 
             if (stmt.executeUpdate(paymentDetailQuery) == 1) {
                 res = true;
@@ -115,25 +132,14 @@ public class PaymentDAOImpl implements PaymentDAO {
         String cvv = scanner.nextLine();
         System.out.println("Please enter expiry date");
         String exDate = scanner.nextLine();
+        Integer modeOfPayment=PaymentMode.DEBIT_CARD.ordinal();
 
         try {
-            java.util.Date javaDate = new java.util.Date();
-            java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
 
-            String sql2 = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values(" + paymentId + "," + "'" + student.getUserId() + "'" + ",5," + mySQLDate.toString() + ")";
-
-            stmt = conn.prepareStatement(sql2);
-
-            if (stmt.executeUpdate(sql2) == 1) {
-                System.out.println("Insertion in Payment successful !");
-            } else {
-                System.out.println("Insertion in Payment unsuccessful !");
-                return res;
-            }
+            insertHelper(paymentId,student,modeOfPayment);
 
             String paymentDetailQuery = "insert into PaymentDetails(paymentId,cardNumber,expiry,cvv) values(" + paymentId + "," + "'" + DebitCardNumber + "'" + "," + "'" + exDate + "'" + "," + "'" + cvv + "'" + ")";
             stmt = conn.prepareStatement(paymentDetailQuery);
-
 
             if (stmt.executeUpdate(paymentDetailQuery) == 1) {
                 res = true;
@@ -164,21 +170,12 @@ public class PaymentDAOImpl implements PaymentDAO {
         System.out.println("Please enter Upi Id");
         String UPIId = scanner.nextLine();
         UPIId.trim();
+        Integer modeOfPayment=PaymentMode.UPI.ordinal();
+
 
         try {
-            java.util.Date javaDate = new java.util.Date();
-            java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
 
-            String sql2 = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values(" + paymentId + "," + "'" + student.getUserId() + "'" + ",3," + mySQLDate.toString() + ")";
-
-            stmt = conn.prepareStatement(sql2);
-
-            if (stmt.executeUpdate(sql2) == 1) {
-                System.out.println("Insertion in Payment successful !");
-            } else {
-                System.out.println("Insertion in Payment unsuccessful !");
-                return res;
-            }
+            insertHelper(paymentId,student,modeOfPayment);
 
             String paymentDetailQuery = "insert into PaymentDetails(paymentId,upiId) values(" + paymentId + "," + "'" + UPIId + "'" + ")";
             stmt = conn.prepareStatement(paymentDetailQuery);
@@ -215,22 +212,11 @@ public class PaymentDAOImpl implements PaymentDAO {
         String bankName = scanner.nextLine();
         System.out.println("please enter your password");
         String password = scanner.nextLine();
+        Integer modeOfPayment=PaymentMode.NET_BANKING.ordinal();
 
         try {
 
-            java.util.Date javaDate = new java.util.Date();
-            java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
-
-            String sql2 = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values(" + paymentId + "," + student.getUserId() + ",6," + mySQLDate.toString() + ")";
-
-            stmt = conn.prepareStatement(sql2);
-
-            if (stmt.executeUpdate(sql2) == 1) {
-                System.out.println("Insertion in Payment successful !");
-            } else {
-                System.out.println("Insertion in Payment unsuccessful !");
-                return res;
-            }
+            insertHelper(paymentId,student,modeOfPayment);
 
             String paymentDetailQuery = "insert into PaymentDetails(paymentId,bankName,accountId,password) values(" + paymentId + "," + "'" + bankName + "'" + "," + "'" + accountNumber + "'" + "," + "'" + password + "'" + ")";
 
@@ -263,21 +249,10 @@ public class PaymentDAOImpl implements PaymentDAO {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter receipt number");
         String receiptNumber = scanner.nextLine();
+        Integer modeOfPayment=PaymentMode.CASH.ordinal();
 
         try {
-            java.util.Date javaDate = new java.util.Date();
-            java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
-
-            String sql2 = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values(" + paymentId + "," + student.getUserId() + ",1," + mySQLDate.toString() + ")";
-
-            stmt = conn.prepareStatement(sql2);
-
-            if (stmt.executeUpdate(sql2) == 1) {
-                System.out.println("Insertion in Payment successful !");
-            } else {
-                System.out.println("Insertion in Payment unsuccessful !");
-                return res;
-            }
+            insertHelper(paymentId,student,modeOfPayment);
 
             String paymentDetailQuery = "insert into PaymentDetails(paymentId,receiptNumber) values(" + paymentId + "," + "'" + receiptNumber + "'" + ")";
 
@@ -312,20 +287,10 @@ public class PaymentDAOImpl implements PaymentDAO {
         String chequeNumber = scanner.nextLine();
         System.out.println("Please enter receipt number");
         String receiptNumber = scanner.nextLine();
+        Integer modeOfPayment=PaymentMode.CHEQUE.ordinal();
 
         try {
-            java.util.Date javaDate = new java.util.Date();
-            java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
-            String sql2 = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values(" + paymentId + "," + student.getUserId() + ",2," + mySQLDate.toString() + ")";
-
-            stmt = conn.prepareStatement(sql2);
-
-            if (stmt.executeUpdate(sql2) == 1) {
-                System.out.println("Insertion in Payment successful !");
-            } else {
-                System.out.println("Insertion in Payment unsuccessful !");
-                return res;
-            }
+            insertHelper(paymentId,student,modeOfPayment);
 
             String paymentDetailQuery = "insert into PaymentDetails(paymentId,chequeNumber,receiptNumber) values(" + paymentId + "," + "'" + chequeNumber + "'" + "," + "'" + receiptNumber + "')";
             stmt = conn.prepareStatement(paymentDetailQuery);
@@ -357,7 +322,7 @@ public class PaymentDAOImpl implements PaymentDAO {
     public void sendNotification(String studentId, double paymentAmount, String message) {
         try {
             String paymentId = Integer.toString(Integer.parseInt(generatePaymentId()) - 1);
-            String insertPaymentNotificationQuery = "insert into PaymentNotification(notificationId,studentId,paymentAmount,message) values (" + paymentId + "," + studentId + "," + paymentAmount + ",'" + message + "')";
+            String insertPaymentNotificationQuery = "insert into PaymentNotification(notificationId,studentId,paymentAmount,message) values (" + paymentId + ",'" + studentId + "'," + paymentAmount + ",'" + message + "')";
             stmt = conn.prepareStatement(insertPaymentNotificationQuery);
 
 
@@ -368,7 +333,7 @@ public class PaymentDAOImpl implements PaymentDAO {
                 return;
             }
 
-            String fetchquery = "SELECT studentId, notificationId ,paymentAmount, message FROM PaymentNotification where studentId= " + studentId;
+            String fetchquery = "SELECT studentId, notificationId ,paymentAmount, message FROM PaymentNotification where studentId= '" + studentId + "'";
             stmt = conn.prepareStatement(fetchquery);
 
 //            stmt.setString(1,studentId);
@@ -403,7 +368,7 @@ public class PaymentDAOImpl implements PaymentDAO {
             String studentId = student.getUserId();
             boolean feeDone = true;
 
-            String setFeeDoneQuery = "UPDATE Student SET feeDone = 1 WHERE studentId = " + studentId;
+            String setFeeDoneQuery = "UPDATE Student SET feeDone = 1 WHERE studentId = '" + studentId + "'";
             stmt = conn.prepareStatement(setFeeDoneQuery);
 
             int m = stmt.executeUpdate(setFeeDoneQuery);
