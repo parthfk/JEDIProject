@@ -14,6 +14,7 @@ import com.flipkart.bean.Admin;
 import com.flipkart.bean.Professor;
 import com.flipkart.constant.DBConnection;
 import com.flipkart.exception.AdminAlreadyExistException;
+import com.flipkart.exception.ProfessorAlreadyExistException;
 import com.flipkart.service.AdminService;
 
 import static com.flipkart.constant.DBConnection.*;
@@ -46,7 +47,8 @@ public class AdminDAOImpl implements AdminDAO{
 
             ResultSet rs1 = stmt.executeQuery(ss1);
 
-            if (!rs1.next()) {
+            if (rs1.next()) {
+
                 try{
                     throw new AdminAlreadyExistException(admin.getEmail());
                 }
@@ -123,12 +125,12 @@ public class AdminDAOImpl implements AdminDAO{
     }
 
 
-    public void addProfessorDAO(Professor professor){
+    public boolean addProfessorDAO(Professor professor){
 
 
         Connection conn = null;
         PreparedStatement stmt = null;
-
+        int res=0;
         try{
 
             Class.forName(JDBC_DRIVER);
@@ -139,6 +141,24 @@ public class AdminDAOImpl implements AdminDAO{
 
             //STEP 4: Execute a query
             System.out.println("Creating statement...");
+
+            String ss1="SELECT * FROM User where emailId="+professor.getEmail();
+            stmt=conn.prepareStatement(ss1);
+
+            ResultSet rs1 = stmt.executeQuery(ss1);
+
+            if (rs1.next()) {
+
+                try{
+                    throw new ProfessorAlreadyExistException(professor.getEmail());
+                }
+                catch (ProfessorAlreadyExistException e) {
+                    System.out.println(e.getMessage());
+                }
+                finally {
+                    return false;
+                }
+            }
 
             String ss="SELECT COUNT(*) FROM User WHERE roleId=2";
             stmt=conn.prepareStatement(ss);
@@ -171,7 +191,7 @@ public class AdminDAOImpl implements AdminDAO{
             stmt.setString(4, professor.getEmail());
             stmt.setInt(5, 2);
 
-            stmt.executeUpdate();
+            res=stmt.executeUpdate();
 
             System.out.println("Creating statement...");
             sql="insert into Professor values(?,?,?,?,?)";
@@ -198,19 +218,10 @@ public class AdminDAOImpl implements AdminDAO{
             e.printStackTrace();
         }finally{
             //finally block used to close resources
-            try{
-                if(stmt!=null)
-                    stmt.close();
-            }catch(SQLException se2){
-            }// nothing we can do
-            try{
-                if(conn!=null)
-                    conn.close();
-            }catch(SQLException se){
-                se.printStackTrace();
-            }//end finally try
+            System.out.println("Professor Registered Successfully!!");
+            return res==1;
         }//end try
-        System.out.println("Professor Registered Successfuly!!");
+
 
     }
 
@@ -401,7 +412,7 @@ public class AdminDAOImpl implements AdminDAO{
 
             sql = "UPDATE Student set gradeCardApproved = 1, gradeCardId = ? WHERE studentId = '" + userId_of_approved_gradeCard +"'";
             stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, records);
+//            stmt.setInt(1, records);
             stmt.executeUpdate();
 
             System.out.println("GradeCard generated!");
