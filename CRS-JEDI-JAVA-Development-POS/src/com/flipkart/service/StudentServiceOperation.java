@@ -329,7 +329,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             return;
         }
 
-        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue();
+        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue(false);
         boolean isAdded = false, isFound = false;
         for (int i = 0; i < courses.size(); i++) {
             if (courses.get(i).getCourseID().matches(courseToAdd)) {
@@ -339,8 +339,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                 studentDao.addCourse(courses.get(i).getCourseID());
                 isAdded = true;
                 break;
-            }else
-            {
+            } else {
                 try {
                     throw new CourseNotAvailableException(courseToAdd);
                 } catch (CourseNotAvailableException e) {

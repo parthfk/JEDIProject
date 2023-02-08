@@ -1,15 +1,11 @@
 package com.flipkart.service;
 
-
-
-
 import com.flipkart.bean.Payment;
 import com.flipkart.bean.PaymentNotification;
 import com.flipkart.bean.Student;
 import com.flipkart.dao.PaymentDAOImpl;
 
 import java.util.Scanner;
-
 
 public class PaymentServiceOperation implements PaymentService {
 
@@ -19,8 +15,8 @@ public class PaymentServiceOperation implements PaymentService {
 
     public PaymentServiceOperation(Student student) {
         scanner = new Scanner(System.in);
-        this.student=student;
-        paymentDAO =  PaymentDAOImpl.getInstance();
+        this.student = student;
+        paymentDAO = PaymentDAOImpl.getInstance();
     }
 
     public double calculateAmount() {
@@ -31,7 +27,7 @@ public class PaymentServiceOperation implements PaymentService {
         return true;
     }
 
-    public void payCreditCard(){
+    public void payCreditCard() {
 //        System.out.println("Please enter credit card number");
 //        String creditCardNumber = scanner.nextLine();
 //
@@ -44,7 +40,8 @@ public class PaymentServiceOperation implements PaymentService {
         paymentDAO.payCreditCard(student);
 
     }
-    public void payDebitCard(){
+
+    public void payDebitCard() {
 //        System.out.println("Please enter debit card number");
 //        String debitCardNumber = scanner.nextLine();
 //
@@ -56,12 +53,14 @@ public class PaymentServiceOperation implements PaymentService {
 
         paymentDAO.payDebitCard(student);
     }
-    public void payUPI(){
+
+    public void payUPI() {
 //        System.out.println("Please enter UPI ID");
 //        String upiId = scanner.nextLine();
         paymentDAO.payUPI(student);
     }
-    public void payNetBanking(){
+
+    public void payNetBanking() {
 //        System.out.println("Please enter bank name");
 //        String bankName = scanner.nextLine();
 //
@@ -73,13 +72,13 @@ public class PaymentServiceOperation implements PaymentService {
         paymentDAO.payNetBanking(student);
     }
 
-    public void payCash(){
+    public void payCash() {
 //        System.out.println("Please enter receipt number");
 //        String receiptNumber = scanner.nextLine();
         paymentDAO.payCash(student);
     }
 
-    public void payCheque(){
+    public void payCheque() {
 //        System.out.println("Please enter bank name");
 //        String bankName = scanner.nextLine();
 //
@@ -88,7 +87,8 @@ public class PaymentServiceOperation implements PaymentService {
         paymentDAO.payCheque(student);
 
     }
-    public void sendNotification(String studentId,double paymentAmount,String paymentId,String message){
+
+    public void sendNotification(String studentId, double paymentAmount, String paymentId, String message) {
 //        PaymentNotification notification = new PaymentNotification(studentId,paymentAmount,paymentId,message);
 //        System.out.println("Your transaction has been completed successfully!");
 //        System.out.println("--------------------------------------------------");
@@ -98,6 +98,6 @@ public class PaymentServiceOperation implements PaymentService {
 //        System.out.println("PaymentID: "+notification.getPaymentAmount());
 //        System.out.println("Message: "+notification.getMessage());
 
-            paymentDAO.sendNotification(studentId, paymentAmount,message);
+        paymentDAO.sendNotification(studentId, paymentAmount, message);
     }
 }

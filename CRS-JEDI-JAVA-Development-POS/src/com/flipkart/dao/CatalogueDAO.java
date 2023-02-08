@@ -16,7 +16,7 @@ public interface CatalogueDAO {
     /** Method to fetch Courses in catalogue on database level
      * @return
      */
-    public List<Course> fetchCatalogue();
+    public List<Course> fetchCatalogue(boolean allCourses);
 
     /** Method to delete course from catalogue in DB using SQl commands
      * @param courseId ß
