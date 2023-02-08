@@ -182,10 +182,11 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
                 }
 
             }
+        return true;
         }
 
-        return true;
-    }
+
+
 
     public void generateGradeCard() {
         AdminDAO adminDAO = new AdminDAOImpl();
