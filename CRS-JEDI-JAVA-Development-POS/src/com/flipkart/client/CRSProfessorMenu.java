@@ -54,7 +54,7 @@ public class CRSProfessorMenu {
 
             switch (input) {
                 case 1:
-                    List<Course> courseList = new CatalogueDAOImpl().fetchCatalogue();
+                    List<Course> courseList = new CatalogueDAOImpl().fetchCatalogue(true);
                     if(courseList.size()==0)
                         System.out.println("No courses available");
 

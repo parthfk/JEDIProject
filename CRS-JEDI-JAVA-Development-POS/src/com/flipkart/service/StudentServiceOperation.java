@@ -117,8 +117,17 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             mobileNumber = in.nextLine();
         }
         System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
-        String dob = in.nextLine();
-        Date dobParsed = Date.valueOf(dob);
+
+        Date dobParsed;
+        while (true) {
+            try {
+                String dob = in.nextLine();
+                dobParsed = Date.valueOf(dob);
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Your date format/values is incorrect, please enter in the format YYYY-MM-DD only. Try again:");
+            }
+        }
 
         Student newStudent = new Student(name, emailEntered, password, departmentId,
                 address, mobileNumber, dobParsed);
@@ -132,7 +141,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void selectPrimaryCourse() {
-        if (StudentDAOImpl.registrationIsDone(student)) return;
+        if (this.studentDao.registrationIsDone(student)) return;
         System.out.println("Enter Course Id's to be added as your primary course and press enter.");
         System.out.println("Press # when you are done adding courses!");
         Scanner in = new Scanner(System.in);
@@ -176,7 +185,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void removeCourseFromCart(String type) {
-        if (StudentDAOImpl.registrationIsDone(student)) return;
+        if (this.studentDao.registrationIsDone(student)) return;
         List<String> courseIds = (type.matches("primary")) ?
                 this.studentDao.viewPrimaryCourses() :
                 this.studentDao.viewSecondaryCourses();
@@ -218,7 +227,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
 
     public void selectSecondaryCourse() {
-        if (StudentDAOImpl.registrationIsDone(student)) return;
+        if (this.studentDao.registrationIsDone(student)) return;
         System.out.println("Enter Course Id's to be added as your secondary course and press enter.");
         System.out.println("Press # when you are done adding courses!");
         Scanner in = new Scanner(System.in);
@@ -260,7 +269,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void confirmRegistration() {
-        if (StudentDAOImpl.registrationIsDone(student)) return;
+        if (this.studentDao.registrationIsDone(student)) return;
         // Proceed with business logic for course verification.
         ArrayList<String> primaryCourseIds = this.studentDao.viewPrimaryCourses();
         ArrayList<String> secondaryCourseIds = this.studentDao.viewSecondaryCourses();
@@ -329,7 +338,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             return;
         }
 
-        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue();
+        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue(false);
         boolean isAdded = false, isFound = false;
         for (int i = 0; i < courses.size(); i++) {
             if (courses.get(i).getCourseID().matches(courseToAdd)) {
@@ -392,7 +401,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void payFee() {
-        if (!StudentDAOImpl.registrationIsDone(student)) {
+        if (!this.studentDao.registrationIsDone(student)) {
             System.out.println("Please complete semester registration first.");
             return;
         }

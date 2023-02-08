@@ -21,7 +21,7 @@ public interface AdminDAO {
      * Method to add professor using SQL commands
      * @param professor
      */
-    public void addProfessorDAO(Professor professor);
+    public boolean addProfessorDAO(Professor professor);
 
     /**
      * Method to approve student using SQL commands

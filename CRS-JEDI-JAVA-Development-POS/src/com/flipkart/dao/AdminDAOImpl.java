@@ -12,6 +12,12 @@ import com.flipkart.bean.Admin;
 import com.flipkart.bean.Course;
 import com.flipkart.bean.Professor;
 
+import com.flipkart.constant.DBConnection;
+import com.flipkart.exception.AdminAlreadyExistException;
+import com.flipkart.exception.ProfessorAlreadyExistException;
+import com.flipkart.service.AdminService;
+
+
 import static com.flipkart.constant.DBConnection.*;
 import static com.flipkart.constant.SQLConstants.*;
 
@@ -27,9 +33,27 @@ public class AdminDAOImpl implements AdminDAO {
         try {
 
 
+
             Class.forName(JDBC_DRIVER);
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            stmt=conn.prepareStatement(FETCH_USER_WITH_EMAIL_ID+admin.getEmail());
+
+            ResultSet rs1 = stmt.executeQuery(FETCH_USER_WITH_EMAIL_ID+admin.getEmail());
+            
+            if (rs1.next()) {
+
+                try{
+                    throw new AdminAlreadyExistException(admin.getEmail());
+                }
+                catch (AdminAlreadyExistException e) {
+                    System.out.println(e.getMessage());
+                }
+                finally {
+                    return false;
+                }
+            }
 
             stmt = conn.prepareStatement(COUNT_USERS_QUERY);
 
@@ -85,23 +109,47 @@ public class AdminDAOImpl implements AdminDAO {
     }
 
 
-    public void addProfessorDAO(Professor professor) {
+
+    public boolean addProfessorDAO(Professor professor){
+
+
         Connection conn = null;
         PreparedStatement stmt = null;
+        int res=0;
+        try{
 
-        try {
+
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            stmt=conn.prepareStatement(FETCH_USER_WITH_EMAIL_ID+professor.getEmail());
+
+            ResultSet rs1 = stmt.executeQuery(FETCH_USER_WITH_EMAIL_ID+professor.getEmail());
+
+            if (rs1.next()) {
+
+                try{
+                    throw new ProfessorAlreadyExistException(professor.getEmail());
+                }
+                catch (ProfessorAlreadyExistException e) {
+                    System.out.println(e.getMessage());
+                }
+                finally {
+                    return false;
+                }
+            }
 
             stmt = conn.prepareStatement(COUNT_USERS_WITH_SPECIFIC_ROLE_QUERY);
             stmt.setInt(1, 2);
 
             ResultSet rs = stmt.executeQuery();
 
+
             if (rs.next())
                 noOfUsers = rs.getInt(1);
+
 
             noOfUsers++;
 
@@ -112,7 +160,7 @@ public class AdminDAOImpl implements AdminDAO {
             stmt.setString(4, professor.getEmail());
             stmt.setInt(5, 2);
 
-            stmt.executeUpdate();
+            res=stmt.executeUpdate();
 
             stmt = conn.prepareStatement(INSERT_PROFESSOR_QUERY);
 
@@ -134,19 +182,12 @@ public class AdminDAOImpl implements AdminDAO {
             e.printStackTrace();
         } finally {
             //finally block used to close resources
-            try {
-                if (stmt != null)
-                    stmt.close();
-            } catch (SQLException se2) {
-            }// nothing we can do
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }//end finally try
+
+            if(res==1)
+            System.out.println("Professor Registered Successfully!!");
+            return res==1;
         }//end try
-        System.out.println("Professor Registered Successfully!!");
+
 
     }
 
@@ -309,6 +350,7 @@ public class AdminDAOImpl implements AdminDAO {
 
                     num += 10;
                 }
+
 
                 rs.close();
 

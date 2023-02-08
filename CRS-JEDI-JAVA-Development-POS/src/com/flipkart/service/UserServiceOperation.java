@@ -151,8 +151,8 @@ public class UserServiceOperation implements UserService {
     }
 
     public List<Course> viewCourseCatalogue() {
+        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue(false);
 
-        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue();
         if(courses.size()==0)
         {
             System.out.println("No Courses exist in Catalogue");
