@@ -1,6 +1,7 @@
 package com.flipkart.constant;
 
 public class SQLConstants {
+
     public static final String USER_ENTRY_QUERY = "INSERT into User values (?,?,?,?,?)";
     public static final String COUNT_USERS_QUERY = "SELECT COUNT(*) FROM User";
     public static final String INSERT_USER_QUERY =  "insert into User values(?,?,?,?,?)";
@@ -19,5 +20,7 @@ public class SQLConstants {
     public static final String DELETE_FROM_CATALOGUE_QUERY = "delete from Catalogue where courseId = ?";
     public static final String CHECK_IF_COURSE_EXISTS_QUERY = "SELECT COUNT(*) FROM Course WHERE courseId = ?";
     public static final String INSERT_IN_COURSE_QUERY = "INSERT INTO Course VALUES (?, ?)";
-
+    public static final String PAYMENT_ENTRY_QUERY = "INSERT into Payment values (?,?,?,?)";
+    public static final String updateCourseQuery = "UPDATE Catalogue SET professorId=? WHERE courseId=?";
+    public static final String updateRegisteredCourse = "UPDATE RegisteredCourse SET grade=? WHERE studentId=? AND courseId= ? AND semesterId=?";
 }

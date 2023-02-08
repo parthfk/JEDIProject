@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 import com.flipkart.bean.Admin;
 import com.flipkart.bean.Professor;
+import com.flipkart.exception.AdminAlreadyExistException;
 
 import static com.flipkart.constant.DBConnection.*;
 import static com.flipkart.constant.SQLConstants.*;
@@ -27,7 +28,6 @@ public class AdminDAOImpl implements AdminDAO {
 
 
             Class.forName(JDBC_DRIVER);
-
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
@@ -47,7 +47,7 @@ public class AdminDAOImpl implements AdminDAO {
             stmt.setString(4, admin.getEmail());
             stmt.setInt(5, 1);
 
-            stmt.executeUpdate();
+            res = stmt.executeUpdate();
 
             stmt = conn.prepareStatement(INSERT_ADMIN_QUERY);
 
@@ -81,19 +81,16 @@ public class AdminDAOImpl implements AdminDAO {
             }
         }
         System.out.println("Admin Registered Successfully!!");
-
     }
 
 
     public void addProfessorDAO(Professor professor) {
-
-
         Connection conn = null;
         PreparedStatement stmt = null;
 
         try {
-
             Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
@@ -153,12 +150,10 @@ public class AdminDAOImpl implements AdminDAO {
     }
 
     public void approveStudentDAO() {
-
         Connection conn = null;
         PreparedStatement stmt = null;
 
         try {
-
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
@@ -185,8 +180,8 @@ public class AdminDAOImpl implements AdminDAO {
 
                 System.out.println("Enter student ID to be Approved or Press # to exit");
                 Scanner sc = new Scanner(System.in);
-                String studentid = sc.next();
-                if (studentid.equals("#")) {
+                String studentId = sc.next();
+                if (studentId.equals("#")) {
                     break;
                 }
 
@@ -196,7 +191,7 @@ public class AdminDAOImpl implements AdminDAO {
                 if (rs1 == 0) {
                     System.out.println("Enter A valid Student ID");
                 } else {
-                    System.out.println("Student with ID: " + studentid + " Approved!!");
+                    System.out.println("Student with ID: " + studentId + " Approved!!");
                 }
 
             }
@@ -226,7 +221,6 @@ public class AdminDAOImpl implements AdminDAO {
 
 
     public void generateGradeCardDAO() {
-
         Connection conn;
         PreparedStatement stmt;
 
@@ -237,16 +231,24 @@ public class AdminDAOImpl implements AdminDAO {
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-
             stmt = conn.prepareStatement(FETCH_STUDENT_FOR_GRADECARD_GENERATION_QUERY);
 
             ResultSet rs = stmt.executeQuery();
-
+            if(rs.next()==false){
+                System.out.println("No Grade card ready to be generated");
+                return;
             while (rs.next()) {
                 System.out.println("Name of student : " + rs.getString(1) + " UserID : " +
                         rs.getString(2) + " Email " + rs.getString(3) +
                         " Department Registered in " + rs.getString(4));
+
             }
+
+            System.out.println("Student Name \t UserID \t E-Mail \t \t Department");
+
+            do {
+                System.out.println(rs.getString(1) +"\t \t"+ rs.getString(2)  +"\t \t \t"+rs.getString(3) +"\t"+ rs.getString(4));
+            }while(rs.next());
 
             rs.close();
 
@@ -280,19 +282,19 @@ public class AdminDAOImpl implements AdminDAO {
                     gradeNotAssigned = true;
                     break;
                 }
-                if (tempgrade.matches("A+")) {
+                if (tempGrade.matches("A+")) {
                     gradeTotal += 10;
-                } else if (tempgrade.matches("A-")) {
+                } else if (tempGrade.matches("A-")) {
                     gradeTotal += 9;
-                } else if (tempgrade.matches("B+")) {
+                } else if (tempGrade.matches("B+")) {
                     gradeTotal += 8;
-                } else if (tempgrade.matches("B-")) {
+                } else if (tempGrade.matches("B-")) {
                     gradeTotal += 7;
-                } else if (tempgrade.matches("C+")) {
+                } else if (tempGrade.matches("C+")) {
                     gradeTotal += 6;
-                } else if (tempgrade.matches("C-")) {
+                } else if (tempGrade.matches("C-")) {
                     gradeTotal += 5;
-                } else if (tempgrade.matches("D+")) {
+                } else if (tempGrade.matches("D+")) {
                     gradeTotal += 4;
                 }
 
@@ -346,9 +348,5 @@ public class AdminDAOImpl implements AdminDAO {
         catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
-
-
 }

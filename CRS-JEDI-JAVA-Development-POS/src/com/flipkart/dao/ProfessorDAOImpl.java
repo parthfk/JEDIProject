@@ -3,6 +3,9 @@ import com.flipkart.bean.Course;
 
 import com.flipkart.bean.Professor;
 import com.flipkart.bean.Student;
+import com.flipkart.constant.DBConnection;
+import com.flipkart.constant.SQLConstants;
+import com.flipkart.utils.DbConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,36 +20,33 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
     public ProfessorDAOImpl(Professor prof) {
         this.prof = prof;
-        conn = null;
+        conn = DbConnection.getConnectionInstance();
     }
 
     @Override
     public void selectCourseDAO(Course course) {
         String profId = prof.getUserId();
         String courseId = course.getCourseID();
-        String updateCourseQuery = "UPDATE Catalogue SET professorId='"+ profId + "' WHERE courseId='"+ courseId+"'";
 
         try{
-            Statement st = establishConnection();
+            PreparedStatement st = conn.prepareStatement(SQLConstants.updateCourseQuery);
+            st.setString(1,profId);
+            st.setString(2,courseId);
 
-            int m = st.executeUpdate(updateCourseQuery);
-            if (m == 1){
-                System.out.println("Updated successfully : " + updateCourseQuery);
-            }else System.out.println("Update failed");
+            st.execute();
 
             st.close();
-            conn.close();
         } catch (Exception e) {
-            //Handle errors for Class.forName
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
 
     @Override
     public List<Student> viewEnrolledStudentListDao(String courseId, String semesterId) {
-        String getStudentIdListQuery = "SELECT studentId FROM RegisteredCourse WHERE courseId='" + courseId + "' AND semesterId='"+semesterId +"'";
+        String getStudentIdListQuery = "SELECT studentId FROM RegisteredCourse WHERE courseId='" + courseId + "' AND semesterId='" + semesterId + "'";
         try{
-            Statement st = establishConnection();
+            PreparedStatement st = conn.prepareStatement(getStudentIdListQuery);
             ResultSet rs = st.executeQuery(getStudentIdListQuery);
             List<String> studentIds = new ArrayList<>();
             while (rs.next()){
@@ -75,7 +75,7 @@ public class ProfessorDAOImpl implements ProfessorDAO{
             st.close();
             return studentList;
         } catch (Exception e) {
-            //Handle errors for Class.forName
+            System.out.println(e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -83,9 +83,9 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
     @Override
     public List<Course> viewCourseListDao(String id) {
-        String getCourseListQuery = "SELECT courseId,availableSeats FROM Catalogue WHERE professorId='"+id +"'";
+        String getCourseListQuery = "SELECT courseId,availableSeats FROM Catalogue WHERE professorId='" + prof.getUserId() + "'";
         try{
-            Statement st = establishConnection();
+            PreparedStatement st = conn.prepareStatement(getCourseListQuery);
             ResultSet rs = st.executeQuery(getCourseListQuery);
             List<String> courseIds = new ArrayList<>();
             HashMap<String,Integer> courseToAvailableSeatsMapping = new HashMap<>();
@@ -98,7 +98,8 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
             List<Course> courseList = new ArrayList<>();
             for(String courseID : courseIds){
-                String getCourseDetailsQuery = "SELECT name FROM Course WHERE courseId='"+courseID +"'";
+                String getCourseDetailsQuery = "SELECT name FROM Course WHERE courseId='" + courseID + "'";
+                st = conn.prepareStatement(getCourseDetailsQuery);
                 ResultSet rs2 = st.executeQuery(getCourseDetailsQuery);
                 while(rs2.next()){
                     String name = rs2.getString("name");
@@ -109,7 +110,7 @@ public class ProfessorDAOImpl implements ProfessorDAO{
             st.close();
             return courseList;
         } catch (Exception e) {
-            //Handle errors for Class.forName
+            System.out.println(e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -117,29 +118,19 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
     @Override
     public void addGrade(String studentId, String semId, String courseId, String grade) {
-        String updateRegisteredCourse = "UPDATE RegisteredCourse SET grade='" + grade + "' WHERE studentId='"+studentId + "' AND courseId='"
-                + courseId + "' AND semesterId='"+semId +"'";
         try{
-            Statement st = establishConnection();
+            PreparedStatement st = conn.prepareStatement(SQLConstants.updateRegisteredCourse);
+            st.setString(1,grade);
+            st.setString(2,studentId);
+            st.setString(3,courseId);
+            st.setString(4,semId);
 
-            int m = st.executeUpdate(updateRegisteredCourse);
-            if (m == 1){
-                System.out.println("Updated successfully : " + updateRegisteredCourse);
-            }else System.out.println("Update failed");
+            st.execute();
 
             st.close();
         } catch (Exception e) {
             //Handle errors for Class.forName
             e.printStackTrace();
         }
-    }
-
-    private Statement establishConnection() throws ClassNotFoundException, SQLException {
-        Class.forName(
-                "com.mysql.cj.jdbc.Driver");
-        System.out.println("Connecting to database.....");
-        conn = DriverManager.getConnection(DB_URL,USER,PASS);
-        Statement st = conn.createStatement();
-        return st;
     }
 }

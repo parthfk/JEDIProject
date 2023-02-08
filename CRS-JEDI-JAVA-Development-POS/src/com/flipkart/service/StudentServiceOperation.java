@@ -5,6 +5,9 @@ import com.flipkart.constant.PaymentMode;
 import com.flipkart.dao.CatalogueDAOImpl;
 import com.flipkart.dao.PaymentDAOImpl;
 import com.flipkart.dao.StudentDAOImpl;
+import com.flipkart.exception.CourseNotAddedException;
+import com.flipkart.exception.CourseNotAvailableException;
+import com.flipkart.exception.CourseNotFoundException;
 import com.flipkart.exception.PaymentFailedException;
 import com.flipkart.utils.Utils;
 
@@ -162,6 +165,8 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                 Course course = Utils.getCourseFromCourseId(input);
                 if (course == null) {
                     System.out.println("No course with the provided ID!");
+                } else if (course.getProfessorID().matches("") || course.getProfessorID() == null) {
+                    System.out.println("No professor assigned to this course yet. Please select another");
                 } else {
                     primaryCourses.add(course);
                     System.out.println("Course " + course.getCourseID() + " is added successfully to your cart!");
@@ -205,8 +210,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         if (type.matches("primary")) {
             this.studentDao.selectPrimaryCourse(courses);
             System.out.println("Course " + toBeDeleted + " removed from your primary courses");
-        }
-        else if (type.matches("secondary")) {
+        } else if (type.matches("secondary")) {
             this.studentDao.selectSecondaryCourse(courses);
             System.out.println("Course " + toBeDeleted + " removed from your secondary courses");
         }
@@ -245,6 +249,8 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                 Course course = Utils.getCourseFromCourseId(input);
                 if (course == null) {
                     System.out.println("No course with the provided ID!");
+                } else if (course.getProfessorID().matches("") || course.getProfessorID() == null) {
+                    System.out.println("No professor assigned to this course yet. Please select another");
                 } else {
                     secondaryCourses.add(course);
                     System.out.println("Course " + course.getCourseID() + " is added successfully to your (secondary) cart!");
@@ -324,9 +330,37 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         }
 
         List<Course> courses = new CatalogueDAOImpl().fetchCatalogue();
+        boolean isAdded = false, isFound = false;
         for (int i = 0; i < courses.size(); i++) {
-            if (courses.get(i).getCourseID().matches(courseToAdd) && courses.get(i).getAvailableSeats() > 0) {
+            if (courses.get(i).getCourseID().matches(courseToAdd)) {
+                isFound = true;
+            }
+            if (courses.get(i).getAvailableSeats() > 0) {
                 studentDao.addCourse(courses.get(i).getCourseID());
+                isAdded = true;
+                break;
+            } else {
+                try {
+                    throw new CourseNotAvailableException(courseToAdd);
+                } catch (CourseNotAvailableException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
+        if (!isFound) {
+            try {
+                throw new CourseNotFoundException(courseToAdd);
+            } catch (CourseNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        if (!isAdded) {
+            try {
+                throw new CourseNotAddedException(courseToAdd);
+            } catch (CourseNotAddedException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -349,6 +383,11 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             System.out.println("Course dropped successfully");
         } else {
             System.out.println("No such registered course exists");
+            try {
+                throw new CourseNotFoundException(courseId);
+            } catch (CourseNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
@@ -397,47 +436,46 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         int mode = sc.nextInt();
         String message = "";
 
-        boolean isFeeDone=false;
+        boolean isFeeDone = false;
 
         switch (mode) {
             case 1:
                 message = "Fees paid online through" + " UPI !";
                 studentPayment.setModeOfPayment(PaymentMode.UPI);
-                isFeeDone=PaymentDAOImpl.getInstance().payUPI(student);
+                isFeeDone = PaymentDAOImpl.getInstance().payUPI(student);
                 break;
             case 2:
                 message = "Fees paid online through" + " debit card !";
                 studentPayment.setModeOfPayment(PaymentMode.DEBIT_CARD);
-                isFeeDone=PaymentDAOImpl.getInstance().payDebitCard(student);
+                isFeeDone = PaymentDAOImpl.getInstance().payDebitCard(student);
                 break;
             case 3:
                 message = "Fees paid online through" + " credit card !";
                 studentPayment.setModeOfPayment(PaymentMode.CREDIT_CARD);
-                isFeeDone=PaymentDAOImpl.getInstance().payCreditCard(student);
+                isFeeDone = PaymentDAOImpl.getInstance().payCreditCard(student);
                 break;
             case 4:
                 studentPayment.setModeOfPayment(PaymentMode.NET_BANKING);
-                isFeeDone=PaymentDAOImpl.getInstance().payNetBanking(student);
+                isFeeDone = PaymentDAOImpl.getInstance().payNetBanking(student);
                 break;
             case 5:
                 message = "Fees paid offline through" + " cash !";
                 studentPayment.setModeOfPayment(PaymentMode.CASH);
-                isFeeDone=PaymentDAOImpl.getInstance().payCash(student);
+                isFeeDone = PaymentDAOImpl.getInstance().payCash(student);
                 break;
             case 6:
                 message = "Fees paid offline through" + " cheque !";
                 studentPayment.setModeOfPayment(PaymentMode.CHEQUE);
-                isFeeDone=PaymentDAOImpl.getInstance().payCheque(student);
+                isFeeDone = PaymentDAOImpl.getInstance().payCheque(student);
                 break;
             default:
                 System.out.println("Invalid key, try again!");
                 break;
         }
 
-        if(isFeeDone)
-        {
+        if (isFeeDone) {
             student.setFeeDone(true);
-        }else {
+        } else {
             try {
                 throw new PaymentFailedException(student.getUserId());
             } catch (PaymentFailedException e) {

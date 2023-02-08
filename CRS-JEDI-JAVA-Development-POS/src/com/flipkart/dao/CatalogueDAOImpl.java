@@ -13,19 +13,17 @@ import static com.flipkart.constant.DBConnection.*;
 import static com.flipkart.constant.SQLConstants.*;
 
 
-
-public class CatalogueDAOImpl implements CatalogueDAO{
-
+public class CatalogueDAOImpl implements CatalogueDAO {
     private Connection conn = null;
     private PreparedStatement stmt = null;
-    public CatalogueDAOImpl(){
+
+    public CatalogueDAOImpl() {
         try {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
-
     }
 
     @Override
@@ -45,54 +43,45 @@ public class CatalogueDAOImpl implements CatalogueDAO{
 
             stmt = conn.prepareStatement(INSERT_CATALOGUE_QUERY);
 
-            stmt.setString(1,course.getCourseID());
-            stmt.setString(2,semID);
-            stmt.setString(3,null);
-            stmt.setInt(4,course.getAvailableSeats());
-            if(stmt.executeUpdate()==1){
+            stmt.setString(1, course.getCourseID());
+            stmt.setString(2, semID);
+            stmt.setString(3, null);
+            stmt.setInt(4, course.getAvailableSeats());
+            if (stmt.executeUpdate() == 1) {
                 System.out.println("Catalogue Updated");
-            }
-            else {
+            } else {
                 System.out.println("Catalogue db update failed");
             }
-
             stmt.close();
-
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        catch (Exception e){
-            System.out.println(e);
-        }
-
     }
 
     @Override
     public List<Course> fetchCatalogue() {
-        List<Course> courseList = new ArrayList<Course>();
+        List<Course> courseList = new ArrayList<>();
 
         try{
             stmt = conn.prepareStatement(FETCH_CATALOGUE_QUERY);
             ResultSet rs = stmt.executeQuery();
 
-            while(rs.next())
-            {
-                Course tempcourse = new Course(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4));
+            while (rs.next()) {
+                Course tempcourse = new Course(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4));
                 courseList.add(tempcourse);
             }
 
             rs.close();
             return courseList;
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
         return courseList;
     }
 
     @Override
-    public void deleteCourseInDB(String courseId)  {
-
+    public void deleteCourseInDB(String courseId) {
         try {
             stmt = conn.prepareStatement(DELETE_FROM_CATALOGUE_QUERY);
             stmt.setString(1,courseId);
@@ -101,14 +90,11 @@ public class CatalogueDAOImpl implements CatalogueDAO{
             stmt.close();
             conn.close();
 
-            if(row == 0) {
+            if (row == 0) {
                 throw new CourseNotFoundException(courseId);
             }
 
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (CourseNotFoundException e) {
+        } catch (SQLException | CourseNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

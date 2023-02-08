@@ -1,15 +1,15 @@
 package com.flipkart.exception;
 
 public class StudentAlreadyExistException extends Exception{
-    private String studentId;
+    private String emailId;
 
     /**
      * constructor
-     * @param studentId
+     * @param emailId
      */
-    public StudentAlreadyExistException(String studentId) {
+    public StudentAlreadyExistException(String emailId) {
         super();
-        this.studentId = studentId;
+        this.emailId = emailId;
     }
 
     /**
@@ -18,6 +18,6 @@ public class StudentAlreadyExistException extends Exception{
      */
     @Override
     public String getMessage() {
-        return "Student with studentId: " + studentId + " is already exist.";
+        return "Student with studentId: " + emailId + " is already exist.";
     }
 }

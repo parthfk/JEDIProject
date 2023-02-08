@@ -14,15 +14,16 @@ public class Utils {
     private static Connection conn;
     private static PreparedStatement stmt = null;
 
-    Utils(){
+    Utils() {
         try {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public static Course getCourseFromCourseId (String courseId) {
+
+    public static Course getCourseFromCourseId(String courseId) {
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String getCoursesQuery = "SELECT * from Catalogue JOIN Course WHERE Catalogue.courseId=" + courseId + " LIMIT 1";
@@ -128,7 +129,7 @@ public class Utils {
                 String mobileNumber = rs.getString("mobileNumber");
                 Date dob = rs.getDate("dob");
 
-                Admin a = new Admin(name,email,password,address,mobileNumber,dob);
+                Admin a = new Admin(name, email, password, address, mobileNumber, dob);
                 a.setUserId(rs.getString("userId"));
                 admins.add(a);
 
@@ -214,7 +215,7 @@ public class Utils {
 
     public static boolean isPhoneNumberValid(String mobileNumber) {
         if (mobileNumber.length() != 10) return false;
-        for (int i=0; i<mobileNumber.length(); i++) {
+        for (int i = 0; i < mobileNumber.length(); i++) {
             if (mobileNumber.charAt(i) < '0' || mobileNumber.charAt(i) > '9') return false;
         }
         return true;

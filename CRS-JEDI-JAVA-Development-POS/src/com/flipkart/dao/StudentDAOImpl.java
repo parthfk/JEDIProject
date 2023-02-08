@@ -5,6 +5,7 @@ import com.flipkart.bean.Student;
 import com.flipkart.constant.DBConnection;
 import com.flipkart.constant.RoleId;
 import com.flipkart.constant.SQLConstants;
+import com.flipkart.utils.DbConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,22 +13,18 @@ import java.util.ArrayList;
 import static com.flipkart.constant.DBConnection.*;
 
 public class StudentDAOImpl implements StudentDAO {
-    private Connection conn = null;
-    private PreparedStatement stmt = null;
+    private Connection conn;
+    private PreparedStatement stmt;
     private Student student;
 
     private StudentDAOImpl(Student student) {
         this.student = student;
-        try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        this.conn = DbConnection.getConnectionInstance();
     }
 
     // Singleton Pattern
     private static StudentDAOImpl dao = null;
+
     public static StudentDAOImpl getInstance(Student student) {
         if (dao != null) return dao;
         return dao = new StudentDAOImpl(student);
@@ -54,7 +51,7 @@ public class StudentDAOImpl implements StudentDAO {
             stmt.setString(4, email);
             stmt.setInt(5, roleId);
 
-            if(stmt.executeUpdate()!=1){
+            if (stmt.executeUpdate() != 1) {
                 System.out.println("Insertion into User failed !");
                 return;
             }
@@ -85,7 +82,7 @@ public class StudentDAOImpl implements StudentDAO {
             stmt.setBoolean(8, gradeCardApproved);
             stmt.setInt(9, -1);
 
-            if(stmt.executeUpdate()==1){
+            if (stmt.executeUpdate() == 1) {
                 System.out.println("You have been added successfully as Student. Please contact admin for approval");
             } else {
                 System.out.println("Something went wrong. Please try again");
@@ -106,12 +103,10 @@ public class StudentDAOImpl implements StudentDAO {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             // Fields for updating SemRegistration record
             String userEntryQuery =
-                    "insert into SemRegistration values(?,?,?,?,?,?,?,?,?) " +
-                            "on duplicate key update pc1=?, pc2=?, pc3=?, pc4=?";
+                    "INSERT into SemRegistration values(?,?,?,?,?,?,?,?,?) " +
+                            "on duplicate key UPDATE pc1=?, pc2=?, pc3=?, pc4=?";
 
             String studentId = this.student.getUserId();
-            System.out.println("Student: " + this.student);
-            System.out.println("ID " + this.student.getUserId());
             String pc1 = "", pc2 = "", pc3 = "", pc4 = "";
             try {
                 pc1 = primaryCourses.get(0).getCourseID();
@@ -150,8 +145,7 @@ public class StudentDAOImpl implements StudentDAO {
         ArrayList<String> primaryCourses = new ArrayList<>();
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            String viewPrimaryCoursesQuery = "SELECT pc1, pc2, pc3, pc4 from SemRegistration " +
-                    "WHERE studentId='" + student.getUserId() + "'";
+            String viewPrimaryCoursesQuery = "SELECT pc1, pc2, pc3, pc4 from SemRegistration WHERE studentId='" + student.getUserId() + "'";
 
             stmt = conn.prepareStatement(viewPrimaryCoursesQuery);
             ResultSet rs = stmt.executeQuery(viewPrimaryCoursesQuery);
@@ -162,7 +156,8 @@ public class StudentDAOImpl implements StudentDAO {
                     pc2 = rs.getString("pc2");
                     pc3 = rs.getString("pc3");
                     pc4 = rs.getString("pc4");
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
                 primaryCourses.add(pc1);
                 primaryCourses.add(pc2);
                 primaryCourses.add(pc3);
@@ -183,17 +178,16 @@ public class StudentDAOImpl implements StudentDAO {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             // Fields for new SemRegistration record
             String userEntryQuery =
-                    "insert into SemRegistration values(?,?,?,?,?,?,?,?,?) " +
-                            "on duplicate key update sc1=?, sc2=?";
+                    "INSERT into SemRegistration values(?,?,?,?,?,?,?,?,?) " +
+                            "on duplicate key UPDATE sc1=?, sc2=?";
 
             String studentId = this.student.getUserId();
-            System.out.println("Student: " + this.student);
-            System.out.println("ID " + this.student.getUserId());
             String sc1 = "", sc2 = "";
             try {
                 sc1 = secondaryCourses.get(0).getCourseID();
                 sc2 = secondaryCourses.get(1).getCourseID();
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
 
             stmt = conn.prepareStatement(userEntryQuery);
             stmt.setString(1, studentId);
@@ -232,7 +226,8 @@ public class StudentDAOImpl implements StudentDAO {
                 try {
                     sc1 = rs.getString("sc1");
                     sc2 = rs.getString("sc2");
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
                 secondaryCourses.add(sc1);
                 secondaryCourses.add(sc2);
             }
@@ -270,68 +265,44 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public boolean addCourse(String courseId) {
-        try
-        {
-            stmt = conn.prepareStatement("insert into RegisteredCourse values ( ? , ? )");
+        try {
+            stmt = conn.prepareStatement("INSERT into RegisteredCourse values(?,?)");
             stmt.setString(1, courseId);
             stmt.setString(2, this.student.getUserId());
-            stmt.setString(3,"N/A");
-            stmt.setString(4,"1");
+            stmt.setString(3, "N/A");
+            stmt.setString(4, "1");
 
             stmt.executeUpdate();
 
-            stmt = conn.prepareStatement("update Catalogue set seats = seats-1 where courseId = ?");
+            stmt = conn.prepareStatement("UPDATE Catalogue set availableSeats=availableSeats-1 where courseId=?");
             stmt.setString(1, courseId);
             stmt.executeUpdate();
             return true;
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
-        }
-        finally
-        {   try {
-            stmt.close();
-            conn.close();
-            } catch(Exception e){
-            e.printStackTrace();
-           }
         }
         return false;
-
     }
 
     @Override
     public boolean dropCourse(String courseId) {
-        try
-        {
-            stmt = conn.prepareStatement("delete from RegisteredCourse where courseId = ? AND studentId = ?");
+        try {
+            stmt = conn.prepareStatement("DELETE from RegisteredCourse where courseId=? AND studentId=?");
             stmt.setString(1, courseId);
             stmt.setString(2, this.student.getUserId());
             stmt.execute();
 
-            stmt = conn.prepareStatement("update Catalogue set availableSeats = availableSeats + 1 where  courseId = ?");
+            stmt = conn.prepareStatement("UPDATE Catalogue set availableSeats=availableSeats+1 where  courseId=?");
             stmt.setString(1, courseId);
             stmt.execute();
 
             stmt.close();
-
             return true;
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
-        finally
-        {   try {
-            stmt.close();
-            conn.close();
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-        }
-
-
         return false;
     }
 
@@ -388,7 +359,7 @@ public class StudentDAOImpl implements StudentDAO {
 
             String studentId = this.student.getUserId();
             String getGrades =
-                        "SELECT courseId, grade FROM RegisteredCourse WHERE studentId=" + "'" + studentId + "'";
+                    "SELECT courseId, grade FROM RegisteredCourse WHERE studentId=" + "'" + studentId + "'";
 
             stmt = conn.prepareStatement(getGrades);
             ResultSet rs = stmt.executeQuery(getGrades);
@@ -421,7 +392,7 @@ public class StudentDAOImpl implements StudentDAO {
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-            for (Course c: registeredCourses) {
+            for (Course c : registeredCourses) {
                 String userEntryQuery =
                         "INSERT into RegisteredCourse values (?,?,?,?)";
 
