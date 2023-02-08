@@ -29,6 +29,9 @@ public class CRSProfessorMenu {
     private String professorUsername;
     private Scanner scanner;
     private UserService userService;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
     /**
      * constructor
@@ -62,7 +65,9 @@ public class CRSProfessorMenu {
                 case 1:
                     List<Course> courseList = new CatalogueDAOImpl().fetchCatalogue(true);
                     if(courseList.size()==0)
-                        System.out.println("No courses available");
+                        System.out.println(ANSI_YELLOW+
+                                "No courses available"+
+                                ANSI_RESET);
 
                     System.out.println("These are the courses currently available: ");
 
@@ -74,11 +79,11 @@ public class CRSProfessorMenu {
                     StringBuffer buffer = new StringBuffer();
                     Formatter fmt = new Formatter();
 
-                    fmt.format("\n%14s %14s\n", "Course ID", "Course Name");
+                    fmt.format("\n%17s %17s\n", ANSI_CYAN+"Course ID"+ANSI_RESET, ANSI_CYAN+"Course Name"+ANSI_RESET);
 
                     for(Course c: courseList)
                     {
-                        fmt.format("%14s %14s\n", c.getCourseID(),c.getName());
+                        fmt.format("%17s %17s\n", ANSI_RESET+c.getCourseID()+ANSI_RESET,ANSI_RESET+c.getName()+ANSI_RESET);
                     }
                     System.out.println(fmt);
                     buffer.setLength(0);
@@ -123,11 +128,11 @@ public class CRSProfessorMenu {
                         buffer = new StringBuffer();
                          fmt = new Formatter();
 
-                        fmt.format("\n%14s %14s\n", "Name", "ID");
+                        fmt.format("\n%17s %17s\n", ANSI_CYAN+"Name"+ANSI_RESET, ANSI_CYAN+"ID"+ANSI_RESET);
 
                         for(Student s: studentList)
                         {
-                            fmt.format("%14s %14s\n",s.getName(),s.getUserId());
+                            fmt.format("%17s %17s\n",ANSI_RESET+s.getName()+ANSI_RESET,ANSI_RESET+s.getUserId()+ANSI_RESET);
                         }
                         System.out.println(fmt);
                         buffer.setLength(0);
@@ -141,7 +146,9 @@ public class CRSProfessorMenu {
                     System.out.println("Menu Exited");
                     return;
                 default:
-                    System.out.println("Please select valid input");
+                    System.out.println(ANSI_YELLOW+
+                            "Please select valid input"+
+                            ANSI_RESET);
             }
         }
     }

@@ -73,7 +73,9 @@ public class StudentDAOImpl implements StudentDAO {
             stmt.setInt(5, roleId);
 
             if (stmt.executeUpdate() != 1) {
-                System.out.println("Insertion into User failed !");
+                System.out.println(ANSI_YELLOW+
+                        "Insertion into User failed !"+
+                        ANSI_RESET);
                 return;
             }
             stmt.close();
@@ -106,7 +108,9 @@ public class StudentDAOImpl implements StudentDAO {
             if (stmt.executeUpdate() == 1) {
                 System.out.println("You have been added successfully as Student. Please contact admin for approval");
             } else {
-                System.out.println("Something went wrong. Please try again");
+                System.out.println(ANSI_YELLOW+
+                        "Something went wrong. Please try again"+
+                        ANSI_RESET);
                 return;
             }
             stmt.close();
@@ -179,7 +183,9 @@ public class StudentDAOImpl implements StudentDAO {
             stmt.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Something went wrong on DB side!");
+            System.out.println(ANSI_YELLOW+
+                    "Something went wrong on DB side"+
+                    ANSI_RESET);
         }
         return primaryCourses;
     }
@@ -239,7 +245,9 @@ public class StudentDAOImpl implements StudentDAO {
             stmt.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Something went wrong on DB side!");
+            System.out.println(ANSI_YELLOW+
+                    "Something went wrong on DB side"+
+                    ANSI_RESET);
         }
         return secondaryCourses;
     }
@@ -323,7 +331,9 @@ public class StudentDAOImpl implements StudentDAO {
             stmt.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Something went wrong on DB side!");
+            System.out.println(ANSI_YELLOW+
+                    "Something went wrong on DB side"+
+                    ANSI_RESET);
         }
         return registeredCourses;
     }
@@ -343,7 +353,9 @@ public class StudentDAOImpl implements StudentDAO {
             stmt.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Something went wrong on DB side");
+            System.out.println(ANSI_YELLOW+
+                    "Something went wrong on DB side"+
+                    ANSI_RESET);
         }
         return false;
     }
@@ -364,7 +376,9 @@ public class StudentDAOImpl implements StudentDAO {
                 hasGradeCardBeenGenerated = rs.getBoolean(1);
 
             if(!hasGradeCardBeenGenerated){
-                System.out.println("GradeCard not generated yet ! Please contact the admin.");
+                System.out.println(ANSI_YELLOW+
+                        "GradeCard not generated yet ! Please contact the admin."+
+                        ANSI_RESET);
                 return;
             }
 
@@ -389,12 +403,12 @@ public class StudentDAOImpl implements StudentDAO {
             StringBuffer buffer = new StringBuffer();
             Formatter fmt = new Formatter();
 
-            fmt.format("\n%14s %14s\n", "Course ID", "Grade");
+            fmt.format("\n%17s %17s\n", ANSI_CYAN+"Course ID"+ANSI_RESET, ANSI_CYAN+"Grade"+ANSI_RESET);
 
             while (rs.next()) {
                 String courseId = rs.getString("courseId");
                 String grade = rs.getString("grade");
-                fmt.format("%14s %14s\n", courseId,grade);
+                fmt.format("%17s %17s\n", ANSI_RESET+courseId+ANSI_RESET,ANSI_RESET+grade+ANSI_RESET);
             }
             System.out.println(fmt);
             buffer.setLength(0);

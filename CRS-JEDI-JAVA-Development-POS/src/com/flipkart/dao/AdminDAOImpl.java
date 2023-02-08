@@ -93,7 +93,6 @@ public class AdminDAOImpl implements AdminDAO {
             e.printStackTrace();
             return false;
         }
-        //System.out.println("Admin Registered Successfully!!");
         return true;
     }
 
@@ -185,8 +184,6 @@ public class AdminDAOImpl implements AdminDAO {
                 StringBuffer buffer = new StringBuffer();
                 Formatter fmt = new Formatter();
 
-                //fmt.format("\n%20s %20s %20s\n", ANSI_RED+"Student ID"+ANSI_RESET, ANSI_RED+"Name"+ANSI_RESET, ANSI_RED+"E-Mail"+ANSI_RESET);
-
                 fmt.format("\n%-17s %-17s %-17s\n", ANSI_CYAN +"Student ID"+ ANSI_RESET,ANSI_CYAN+"Name"+ANSI_RESET,ANSI_CYAN+"E-Mail"+ANSI_RESET);
 
                 do {
@@ -212,7 +209,9 @@ public class AdminDAOImpl implements AdminDAO {
                 stmt.setString(1, studentId);
                 int rs1 = stmt.executeUpdate();
                 if (rs1 == 0) {
-                    System.out.println("Enter A valid Student ID");
+                    System.out.println(ANSI_YELLOW+
+                            "Enter A valid Student ID"+
+                            ANSI_RESET);
                 } else {
                     System.out.println("Student with ID: " + studentId + " Approved!!");
                 }
@@ -249,14 +248,27 @@ public class AdminDAOImpl implements AdminDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next() == false) {
-                System.out.println("No Grade card ready to be generated");
+                System.out.println(ANSI_YELLOW+
+                        "No Grade card ready to be generated"+
+                        ANSI_RESET);
                 return;
             }
-            System.out.println("Student Name \t UserID \t E-Mail \t \t Department");
+
+            StringBuffer buffer = new StringBuffer();
+            Formatter fmt = new Formatter();
+
+            fmt.format("\n%-17s %-17s %-17s %-17s\n", ANSI_CYAN +"Student Name"+ ANSI_RESET,ANSI_CYAN+"User Id"+ANSI_RESET,ANSI_CYAN+"E-Mail"+ANSI_RESET,ANSI_CYAN+"Department"+ANSI_RESET);
 
             do {
-                System.out.println(rs.getString(1) + "\t \t" + rs.getString(2) + "\t \t \t" + rs.getString(3) + "\t" + rs.getString(4));
+                String name = rs.getString(1);
+                String id = rs.getString(2);
+                String email = rs.getString(3);
+                String department = rs.getString(4);
+                fmt.format("%-17s %-17s %-17s %-17s\n", ANSI_RESET+name+ANSI_RESET,ANSI_RESET+id+ANSI_RESET,ANSI_RESET+email+ANSI_RESET,ANSI_RESET+department+ANSI_RESET);
             } while (rs.next());
+
+            System.out.println(fmt);
+            buffer.setLength(0);
 
             rs.close();
 
@@ -272,7 +284,9 @@ public class AdminDAOImpl implements AdminDAO {
             rs = stmt.executeQuery();
 
             if (!rs.next()) {
-                System.out.println("This student has not registered for any courses yet.");
+                System.out.println(ANSI_YELLOW+
+                        "This student has not registered for any courses yet."+
+                        ANSI_RESET);
                 return;
             }
 
@@ -289,19 +303,19 @@ public class AdminDAOImpl implements AdminDAO {
                     gradeNotAssigned = true;
                     break;
                 }
-                if (tempGrade.matches("A+")) {
+                if (tempGrade.matches("A")) {
                     gradeTotal += 10;
                 } else if (tempGrade.matches("A-")) {
                     gradeTotal += 9;
-                } else if (tempGrade.matches("B+")) {
+                } else if (tempGrade.matches("B")) {
                     gradeTotal += 8;
                 } else if (tempGrade.matches("B-")) {
                     gradeTotal += 7;
-                } else if (tempGrade.matches("C+")) {
+                } else if (tempGrade.matches("C")) {
                     gradeTotal += 6;
                 } else if (tempGrade.matches("C-")) {
                     gradeTotal += 5;
-                } else if (tempGrade.matches("D+")) {
+                } else if (tempGrade.matches("D")) {
                     gradeTotal += 4;
                 }
 
@@ -312,7 +326,9 @@ public class AdminDAOImpl implements AdminDAO {
             rs.close();
 
             if (gradeNotAssigned) {
-                System.out.println("Cannot generate Grade Card, few courses are yet to be assigned grades for this student ");
+                System.out.println(ANSI_YELLOW+
+                        "Cannot generate Grade Card, few courses are yet to be assigned grades for this student "+
+                        ANSI_RESET);
                 return;
             }
 
@@ -322,7 +338,9 @@ public class AdminDAOImpl implements AdminDAO {
             if (rs.next())
                 records = rs.getInt(1);
             else
-                System.out.println("DB Operation Failed");
+                System.out.println(ANSI_YELLOW+
+                        "DB Operation Failed"+
+                        ANSI_RESET);
 
             rs.close();
 

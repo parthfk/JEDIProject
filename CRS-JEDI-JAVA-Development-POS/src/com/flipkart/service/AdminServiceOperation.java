@@ -18,6 +18,9 @@ import java.util.List;
 
 public class AdminServiceOperation extends UserServiceOperation implements AdminService {
     private Scanner scanner;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
     public AdminServiceOperation() {
         scanner = new Scanner(System.in);
@@ -71,10 +74,10 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         for(Course c: courseList)
         {
             if(flag1){
-                fmt.format("\n%14s %14s\n", "Course Name", "Course ID");
+                fmt.format("\n%17s %17s\n", ANSI_CYAN+"Course Name"+ANSI_RESET, ANSI_CYAN+"Course ID"+ANSI_RESET);
                 flag1=false;
             }
-            fmt.format("%14s %14s\n", c.getName(),c.getCourseID());
+            fmt.format("%17s %17s\n", ANSI_CYAN+c.getName()+ANSI_RESET,ANSI_CYAN+c.getCourseID()+ANSI_RESET);
         }
         System.out.println(fmt);
         buffer.setLength(0);
@@ -93,7 +96,9 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
 
         }
         if (!flag) {
-            System.out.println("No such Course exists !");
+            System.out.println(ANSI_YELLOW+
+                    "No such Course exists !"+
+                    ANSI_RESET);
             return false;
         }
 
@@ -108,8 +113,6 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
 
     public void addProfessor() {
         Professor newProf = new Professor();
-//        System.out.println("Enter new Professor ID");
-//        newProf.setUserId(scanner.next());
 
         System.out.println("Enter new Professor Name");
         newProf.setName(scanner.next());
@@ -123,14 +126,16 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         System.out.println("Enter professor's address");
         String address = scanner.next();
         newProf.setAddress(address);
-        System.out.println("Enter professor's mobile number");
+        System.out.println("Enter new professor's mobile number");
         String mobileNumber = scanner.next();
         while (!Utils.isPhoneNumberValid(mobileNumber)) {
-            System.out.println("Your mobile number is invalid. It must a 10 digit numeric. Please enter again");
+            System.out.println(ANSI_YELLOW+
+                    "Your mobile number is invalid. It must a 10 digit numeric. Please enter again"+
+                    ANSI_RESET);
             mobileNumber = scanner.nextLine();
         }
+
         newProf.setMobileNumber(mobileNumber);
-        System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
         Date dobParsed = Utils.isDateValid(scanner);
         newProf.setDob(dobParsed);
         try {
@@ -148,9 +153,6 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
 
     public boolean addAdmin() {
         Admin newAdmin = new Admin();
-//        System.out.println("Enter new Admin ID");
-//        newAdmin.setUserId(scanner.next());
-
 
         System.out.println("Enter new Admin Name");
         newAdmin.setName(scanner.next());
@@ -165,14 +167,14 @@ public class AdminServiceOperation extends UserServiceOperation implements Admin
         System.out.println("Enter new admin's number");
         String mobileNumber = scanner.next();
         while (!Utils.isPhoneNumberValid(mobileNumber)) {
-            System.out.println("Your mobile number is invalid. It must a 10 digit numeric. Please enter again");
+            System.out.println(ANSI_YELLOW+
+                    "Your mobile number is invalid. It must a 10 digit numeric. Please enter again"+
+                    ANSI_RESET);
             mobileNumber = scanner.nextLine();
         }
         newAdmin.setMobileNumber(mobileNumber);
-        System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
         Date dobParsed = Utils.isDateValid(scanner);
         newAdmin.setDob(dobParsed);
-
 
         AdminDAOImpl obj = new AdminDAOImpl();
         boolean res = obj.addAdminDAO(newAdmin);

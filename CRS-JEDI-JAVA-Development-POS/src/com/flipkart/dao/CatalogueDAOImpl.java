@@ -38,7 +38,9 @@ public class CatalogueDAOImpl implements CatalogueDAO {
             if (stmt.executeUpdate() == 1) {
                 System.out.println("Catalogue Updated");
             } else {
-                System.out.println("Catalogue db update failed");
+                System.out.println(ANSI_YELLOW+
+                        "Catalogue db update failed"+
+                        ANSI_RESET);
             }
             stmt.close();
         } catch (Exception e) {

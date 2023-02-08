@@ -42,7 +42,7 @@ public class PaymentDAOImpl implements PaymentDAO {
         java.sql.Date mySQLDate = new java.sql.Date(javaDate.getDate());
 
         String sql2 = "insert into Payment(paymentId,studentId,modeOfPayment,transactionDate) values(" + paymentId + "," + "'" + student.getUserId() + "'" + ",'"+modeOfPayment+"','" + mySQLDate.toString() + "')";
-        System.out.println(sql2);
+        //System.out.println(sql2);
 
         try {
             stmt = conn.prepareStatement(sql2);
@@ -55,7 +55,9 @@ public class PaymentDAOImpl implements PaymentDAO {
             if (stmt.executeUpdate(sql2) == 1) {
                     System.out.println("Insertion in Payment successful !");
                 } else {
-                    System.out.println("Insertion in Payment unsuccessful !");
+                    System.out.println(ANSI_YELLOW+
+                            "Insertion in Payment unsuccessful !"+
+                            ANSI_RESET);
                     return ;
                 }
         } catch (SQLException e) {
@@ -106,7 +108,9 @@ public class PaymentDAOImpl implements PaymentDAO {
                 res = true;
                 System.out.println("Insertion in PaymentDetails successful !");
             } else {
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
+                System.out.println(ANSI_YELLOW+
+                        "Insertion in PaymentDetails unsuccessful !"+
+                        ANSI_RESET);
             }
 
         } catch (SQLException se) {
@@ -146,7 +150,9 @@ public class PaymentDAOImpl implements PaymentDAO {
 
                 System.out.println("Insertion in PaymentDetails successful !");
             } else {
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
+                System.out.println(ANSI_YELLOW+
+                        "Insertion in PaymentDetails unsuccessful !"+
+                        ANSI_RESET);
             }
 
         } catch (SQLException se) {
@@ -187,7 +193,9 @@ public class PaymentDAOImpl implements PaymentDAO {
 
                 System.out.println("Insertion in PaymentDetails successful !");
             } else {
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
+                System.out.println(ANSI_YELLOW+
+                        "Insertion in PaymentDetails unsuccessful !"+
+                        ANSI_RESET);
             }
 
         } catch (SQLException se) {
@@ -229,7 +237,9 @@ public class PaymentDAOImpl implements PaymentDAO {
 
                 System.out.println("Insertion in PaymentDetails successful !");
             } else {
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
+                System.out.println(ANSI_YELLOW+
+                        "Insertion in PaymentDetails unsuccessful !"+
+                        ANSI_RESET);
             }
 
         } catch (SQLException se) {
@@ -265,7 +275,9 @@ public class PaymentDAOImpl implements PaymentDAO {
 
                 System.out.println("Insertion in PaymentDetails successful !");
             } else {
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
+                System.out.println(ANSI_YELLOW+
+                        "Insertion in PaymentDetails unsuccessful !"+
+                        ANSI_RESET);
             }
         } catch (SQLException se) {
             //Handle errors for JDBC
@@ -297,16 +309,11 @@ public class PaymentDAOImpl implements PaymentDAO {
             stmt = conn.prepareStatement(paymentDetailQuery);
 
             if (stmt.executeUpdate(paymentDetailQuery) == 1) {
-                res = true;
                 System.out.println("Insertion in PaymentDetails successful !");
             } else {
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
-            }
-
-            if (stmt.executeUpdate(paymentDetailQuery) == 1) {
-                System.out.println("Insertion in PaymentDetails successful !");
-            } else {
-                System.out.println("Insertion in PaymentDetails unsuccessful !");
+                System.out.println(ANSI_YELLOW+
+                        "Insertion in PaymentDetails unsuccessful !"+
+                        ANSI_RESET);
             }
         } catch (SQLException se) {
             //Handle errors for JDBC
@@ -330,7 +337,9 @@ public class PaymentDAOImpl implements PaymentDAO {
             if (stmt.executeUpdate() == 1) {
                 System.out.println("Insertion in PaymentNotification successful !");
             } else {
-                System.out.println("Insertion in PaymentNotification failed!");
+                System.out.println(ANSI_YELLOW+
+                        "Insertion in PaymentNotification failed!"+
+                        ANSI_RESET);
                 return;
             }
 
@@ -353,7 +362,9 @@ public class PaymentDAOImpl implements PaymentDAO {
                 System.out.println("Amount Paid:" + amountPaid);
                 System.out.println(message);
             } else {
-                System.out.println("Reading from Payment Notification failed !");
+                System.out.println(ANSI_YELLOW+
+                        "Reading from Payment Notification failed !"+
+                        ANSI_RESET);
             }
         } catch (SQLException se) {
             //Handle errors for JDBC
@@ -381,7 +392,9 @@ public class PaymentDAOImpl implements PaymentDAO {
                 System.out.println("FeeDone Updated successfully");
                 return true;
             } else {
-                System.out.println("Update failed");
+                System.out.println(ANSI_YELLOW+
+                        "Update failed"+
+                        ANSI_RESET);
             }
         } catch (SQLException se) {
             //Handle errors for JDBC

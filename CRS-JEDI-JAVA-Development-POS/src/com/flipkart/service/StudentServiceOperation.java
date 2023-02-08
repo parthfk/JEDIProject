@@ -15,10 +15,16 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.*;
 
 public class StudentServiceOperation extends UserServiceOperation implements StudentService {
     private Student student;
     private StudentDAOImpl studentDao;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
     public StudentServiceOperation() {
 
@@ -99,11 +105,24 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     }
 
     public void signup() {
+
+
         Scanner in = new Scanner(System.in);
         System.out.println("Enter your name");
         String name = in.nextLine();
         System.out.println("Enter your Email Id");
         String emailEntered = in.nextLine();
+        String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(emailEntered);
+        while(!matcher.matches())
+        {
+            System.out.println(ANSI_YELLOW+
+                    "Invalid formatted email!"+
+                    ANSI_RESET+"Please enter Email id again:");
+            emailEntered=in.nextLine();
+            matcher = pattern.matcher(emailEntered);
+        }
         System.out.println("Enter your password");
         String password = in.nextLine();
         System.out.println("Enter your Department Id");
@@ -113,7 +132,9 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         System.out.println("Enter your mobile number");
         String mobileNumber = in.nextLine();
         while (!Utils.isPhoneNumberValid(mobileNumber)) {
-            System.out.println("Your mobile number is invalid. It must a 10 digit numeric. Please enter again:");
+            System.out.println(ANSI_YELLOW+
+                    "Your mobile number is invalid. It must a 10 digit numeric. Please enter again:"+
+                    ANSI_RESET);
             mobileNumber = in.nextLine();
         }
         Date dobParsed = Utils.isDateValid(in);
@@ -170,10 +191,14 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                     }
                 }
                 if (course == null) {
-                    System.out.println("No course with the provided ID!");
+                    System.out.println(ANSI_YELLOW+
+                            "No course with the provided ID!"+
+                            ANSI_RESET);
                 }
                 else if (course.getProfessorID().matches("") || course.getProfessorID() == null) {
-                    System.out.println("No professor assigned to this course yet. Please select another");
+                    System.out.println(ANSI_YELLOW+
+                            "No professor assigned to this course yet. Please select another"+
+                            ANSI_RESET);
                 } else if(!alreadyAdded) {
                     primaryCourses.add(course);
                     System.out.println("Course " + course.getCourseID() + " is added successfully to your cart!");
@@ -195,7 +220,9 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         });
 
         if (courses.size() == 0) {
-            System.out.println("You have not added any " + type + " courses yet");
+            System.out.println(ANSI_YELLOW+
+                    "You have not added any " + type + " courses yet"+
+                    ANSI_RESET);
             return;
         }
         System.out.println("Please enter the Course ID of the course to remove");
@@ -209,7 +236,9 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             }
         }
         if (toBeDeleted == null) {
-            System.out.println("You have not added " + courseId + " to your primary courses!");
+            System.out.println(ANSI_YELLOW+
+                    "You have not added " + courseId + " to your primary courses!"+
+                    ANSI_RESET);
             return;
         }
         courses.remove(toBeDeleted);
@@ -255,9 +284,13 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             } else {
                 Course course = Utils.getCourseFromCourseId(input);
                 if (course == null) {
-                    System.out.println("No course with the provided ID!");
+                    System.out.println(ANSI_YELLOW+
+                            "No course with the provided ID!"+
+                            ANSI_RESET);
                 } else if (course.getProfessorID().matches("") || course.getProfessorID() == null) {
-                    System.out.println("No professor assigned to this course yet. Please select another");
+                    System.out.println(ANSI_YELLOW+
+                            "No professor assigned to this course yet. Please select another"+
+                            ANSI_RESET);
                 } else {
                     secondaryCourses.add(course);
                     System.out.println("Course " + course.getCourseID() + " is added successfully to your (secondary) cart!");
@@ -293,7 +326,9 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
         for (Course c : primaryCourses) {
             if (c.getAvailableSeats() <= 0) {
-                System.out.println("Primary Course " + c.getCourseID() + " not available.");
+                System.out.println(ANSI_YELLOW+
+                        "Primary Course " + c.getCourseID() + " not available."+
+                        ANSI_RESET);
             } else {
                 System.out.println("Primary Course " + c.getCourseID() + " allotted for you!");
                 registeredCourses.add(c);
@@ -303,7 +338,9 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         if (registeredCourses.size() < 4) {
             for (Course c : secondaryCourses) {
                 if (c.getAvailableSeats() <= 0) {
-                    System.out.println("Secondary Course " + c.getCourseID() + " not available.");
+                    System.out.println(ANSI_YELLOW+
+                            "Secondary Course " + c.getCourseID() + " not available."+
+                            ANSI_RESET);
                     continue;
                 }
                 if (registeredCourses.size() >= 4) break;
@@ -325,14 +362,18 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         Scanner in = new Scanner(System.in);
 
         if (student.getCourseRegistered().size() >= 4) {
-            System.out.println("Course limit reached, please drop a course to add another");
+            System.out.println(ANSI_YELLOW+
+                    "Course limit reached, please drop a course to add another"+
+                    ANSI_RESET);
             return;
         }
 
         System.out.println("Enter course Id to add : ");
         String courseToAdd = in.nextLine();
         if (Utils.getCourseFromCourseId(courseToAdd) == null) {
-            System.out.println("No course with the given ID!");
+            System.out.println(ANSI_YELLOW+
+                    "No course with the given ID!"+
+                    ANSI_RESET);
             return;
         }
 
@@ -389,7 +430,9 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             studentDao.dropCourse(toBeDropped.getCourseID());
             System.out.println("Course dropped successfully");
         } else {
-            System.out.println("No such registered course exists");
+            System.out.println(ANSI_YELLOW+
+                    "No such registered course exists"+
+                    ANSI_RESET);
             try {
                 throw new CourseNotFoundException(courseId);
             } catch (CourseNotFoundException e) {
@@ -400,7 +443,9 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
     public void payFee() {
         if (!this.studentDao.registrationIsDone(student)) {
-            System.out.println("Please complete semester registration first.");
+            System.out.println(ANSI_YELLOW+
+                    "Please complete semester registration first."+
+                    ANSI_RESET);
             return;
         }
         if (student.isFeeDone()) {
@@ -496,7 +541,9 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             PaymentDAOImpl.getInstance().sendNotification(
                     student.getUserId(), paymentServiceOperation.calculateAmount(), message);
         } else {
-            System.out.println("Sorry,Payment Failed ! Please try again or contact admin.");
+            System.out.println(ANSI_YELLOW+
+                    "Sorry,Payment Failed ! Please try again or contact admin."+
+                    ANSI_RESET);
         }
     }
 

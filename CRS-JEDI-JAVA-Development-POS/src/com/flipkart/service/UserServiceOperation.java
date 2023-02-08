@@ -14,6 +14,9 @@ import java.util.regex.*;
 
 public class UserServiceOperation implements UserService {
 
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
     public User logIn() {
         Scanner in = new Scanner(System.in);
         boolean emailValidated = false, passWordEnteredIsCorrect = false;
@@ -104,7 +107,9 @@ public class UserServiceOperation implements UserService {
                             return null;
                         }
                     } else {
-                        System.out.println("Please enter a Valid role, which can be 'student', 'professor' or 'admin'!");
+                        System.out.println(ANSI_YELLOW+
+                                "Please enter a Valid role, which can be 'student', 'professor' or 'admin'!"+
+                                ANSI_RESET);
                         return null;
                     }
                 } catch (Exception e) {
@@ -112,7 +117,9 @@ public class UserServiceOperation implements UserService {
                     System.out.println("Failure in reading the db : \n" + e.getMessage());
                 }
             } else {
-                System.out.println("Invalid formatted email!");
+                System.out.println(ANSI_YELLOW+
+                        "Invalid formatted email!"+
+                        ANSI_RESET);
                 return null;
             }
         }
@@ -121,11 +128,12 @@ public class UserServiceOperation implements UserService {
             if (passwordEntered.equals(userObj.getPassword())) {
                 passWordEnteredIsCorrect = true;
             } else {
-                System.out.println("Password is incorrect !");
+                System.out.println(ANSI_YELLOW+
+                        "Password is incorrect !"+
+                        ANSI_RESET);
                 return null;
             }
         }
-        //System.out.println("You have logged in successfully at time " + new Date());
         return userObj;
     }
 
@@ -133,12 +141,16 @@ public class UserServiceOperation implements UserService {
         List<User> userList = Utils.getUserList();
         for (User u : userList) {
             if (u.getEmail().matches(inputEmail)) {
-                System.out.println("You have entered the wrong role. Please try again, entering the appropriate role");
+                System.out.println(ANSI_YELLOW+
+                        "You have entered the wrong role. Please try again, entering the appropriate role"+
+                        ANSI_RESET);
                 System.out.println("Your role is " + u.getUserType());
                 return;
             }
         }
-        System.out.println("No user exists with this email! Please contact admin for help!");
+        System.out.println(ANSI_YELLOW+
+                "No user exists with this email! Please contact admin for help!"+
+                ANSI_RESET);
     }
 
     public boolean logOut(User user) {
@@ -151,24 +163,22 @@ public class UserServiceOperation implements UserService {
 
         if(courses.size()==0)
         {
-            System.out.println("No Courses exist in Catalogue");
+            System.out.println(ANSI_YELLOW+
+                    "No Courses exist in Catalogue"+
+                    ANSI_RESET);
             return courses;
 
 
         }
         System.out.println("These are the courses currently available: ");
-//        for(int i=0;i<courses.size();i++) {
-//            System.out.println("CourseID \t Course Name \t Professor ID ");
-//            System.out.println(courses.get(i).getCourseID() + "\t\t\t " + courses.get(i).getName() + "\t \t \t\t  " + courses.get(i).getProfessorID());
-//        }
             StringBuffer buffer = new StringBuffer();
             Formatter fmt = new Formatter();
 
-            fmt.format("\n%14s %14s %14s\n", "Course ID", "Course Name", "Professor");
+            fmt.format("\n%17s %17s %17s\n", ANSI_CYAN+"Course ID"+ANSI_RESET, ANSI_CYAN+"Course Name"+ANSI_RESET,ANSI_CYAN+ "Professor"+ANSI_RESET);
 
             for(Course c: courses)
             {
-                fmt.format("%14s %14s %14s\n", c.getCourseID(),c.getName(),c.getProfessorID());
+                fmt.format("%17s %17s %17s\n", ANSI_RESET+c.getCourseID()+ANSI_RESET,ANSI_RESET+c.getName()+ANSI_RESET,ANSI_RESET+c.getProfessorID()+ANSI_RESET);
             }
             System.out.println(fmt);
             buffer.setLength(0);
@@ -261,7 +271,9 @@ public class UserServiceOperation implements UserService {
                 }
             }
             if (!emailValidated)
-                System.out.println("Email entered is invalid!");
+                System.out.println(ANSI_YELLOW+
+                        "Email entered is invalid!"+
+                        ANSI_RESET);
         }
 
         while (!passWordEnteredIsCorrect) {
@@ -273,7 +285,9 @@ public class UserServiceOperation implements UserService {
             if (passwordEntered.equals(userObj.getPassword())) {
                 passWordEnteredIsCorrect = true;
             } else {
-                System.out.println("Password is incorrect !");
+                System.out.println(ANSI_YELLOW+
+                        "Password is incorrect !"+
+                        ANSI_RESET);
             }
 
         }
@@ -285,21 +299,6 @@ public class UserServiceOperation implements UserService {
             return UserDAOImpl.getInstance().updatePassword(userObj.getUserId(), newPasswordEntered);
         }
 
-
     }
 
-//    public static boolean shouldExit(String string) {
-//        int intValue;
-//        if(string == null || string.equals("")) {
-//            System.out.println("String cannot be parsed, it is null or empty.");
-//            return false;
-//        }
-//        try {
-//            intValue = Integer.parseInt(string);
-//            return intValue == 1;
-//        }
-//        catch (NumberFormatException e) {
-//        }
-//        return false;
-//    }
 }

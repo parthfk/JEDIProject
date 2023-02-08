@@ -244,8 +244,9 @@ public class Utils {
     public static Date isDateValid(Scanner in) {
         while (true) {
             try {
+                Scanner scan=new Scanner(System.in);
                 System.out.println("Enter your date of birth in the format 'YYYY-MM-DD' ONLY");
-                String dob = in.nextLine();
+                String dob = scan.nextLine();
                 Date dobParsed = Date.valueOf(dob);
                 return dobParsed;
             } catch (IllegalArgumentException e) {

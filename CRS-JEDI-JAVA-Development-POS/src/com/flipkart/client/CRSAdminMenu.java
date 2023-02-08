@@ -24,6 +24,9 @@ public class CRSAdminMenu {
     // 6. delete course
     // 7. logout
     private String adminUsername;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
 
 
@@ -84,7 +87,9 @@ public class CRSAdminMenu {
                     System.out.println("Menu Exited");
                     return;
                 default:
-                    System.out.println("Please select valid input");
+                    System.out.println(ANSI_YELLOW+
+                            "Please select valid input"+
+                            ANSI_RESET);
             }
 
         }

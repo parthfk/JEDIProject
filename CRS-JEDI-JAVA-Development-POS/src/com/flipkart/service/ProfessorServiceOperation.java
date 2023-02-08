@@ -1,4 +1,5 @@
 package com.flipkart.service;
+import java.util.Formatter;
 
 import com.flipkart.bean.*;
 import com.flipkart.dao.ProfessorDAO;
@@ -12,6 +13,9 @@ import java.util.Scanner;
 public class ProfessorServiceOperation extends UserServiceOperation implements ProfessorService{
     private Professor professor;
     private ProfessorDAO profDAO;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
     Scanner in = new Scanner(System.in);
     public ProfessorServiceOperation(Professor professor){
@@ -26,15 +30,18 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         String semesterId = in.nextLine();
         return Arrays.asList(courseId,semesterId);
     }
-    public void printCourseList(List<Course> courseList){
-        boolean flag =true;
-        for(int i=0;i<courseList.size();i++){
-            if(flag){
-            System.out.println("Sr No. \t Course ID \tName");
-            flag=true;
+    public void printCourseList(List<Course> courseList) {
+        boolean flag = true;
+
+        Formatter fmt = new Formatter();
+        fmt.format("\n%-17s %-17s %-17s\n", ANSI_CYAN+"S.no"+ANSI_RESET, ANSI_CYAN+"Course Id"+ANSI_RESET, ANSI_CYAN+"Name"+ANSI_RESET);
+        for (int i = 0; i < courseList.size(); i++) {
+            if (flag) {
+                fmt.format("%-17s %-17s %-17s\n", ANSI_RESET+i + 1+ANSI_RESET, ANSI_RESET+courseList.get(i).getCourseID()+ANSI_RESET, ANSI_RESET+courseList.get(i).getName()+ANSI_RESET);
+                flag = true;
             }
-            System.out.println((i+1)+"\t"+ courseList.get(i).getCourseID()+"\t\t" +courseList.get(i).getName());
         }
+        System.out.println(fmt);
     }
 
     public void addGrade(){
@@ -54,7 +61,7 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
        catch(Exception e){
            e.printStackTrace();
        }
-       System.out.println("Please select one of the following grades for each student: A,A-,B,B-,C,C-,D,D-,E,F");
+       System.out.println("Please select one of the following grades for each student: A,A-,B,B-,C,C-,D,F");
        try {
            List<Student> enrolledStudents = profDAO.viewEnrolledStudentListDao(courseToGrade.getCourseID(), semesterId);
 
@@ -68,7 +75,7 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
                        profDAO.addGrade(student.getUserId(), semesterId, courseToGrade.getCourseID(), gradeString);
                    } else {
                        System.out.println("Please enter one of the following grades: A" +
-                               ",A-,B,B-,C,C-,D,D-,E,F");
+                               ",A-,B,B-,C,C-,D,F");
                    }
                }
            }
@@ -79,7 +86,7 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
     }
     public boolean validateGrade(String gradeEntered){
         List<String> possibleGrades = new ArrayList<>(Arrays.asList("A","A-",
-        "B","B-","C","C-","D","D-","E","F"));
+        "B","B-","C","C-","D","F"));
         for(String possibleGrade: possibleGrades){
             if(possibleGrade.equals(gradeEntered)){
                 return true;

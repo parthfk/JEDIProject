@@ -31,7 +31,9 @@ public class CourseDAOImpl implements CourseDAO {
             ResultSet rs = stmt.executeQuery();
 
             if(rs.next() && rs.getInt(1)==0) {
-                System.out.println("course does not exist");
+                System.out.println(ANSI_YELLOW+
+                        "course does not exist"+
+                        ANSI_RESET);
                     return false;
                 }
                 else {
@@ -55,7 +57,9 @@ public class CourseDAOImpl implements CourseDAO {
                 System.out.println("Insertion in Course db successful !");
             }
             else {
-                System.out.println("Insertion in Course db failed !");
+                System.out.println(ANSI_YELLOW+
+                        "Insertion in Course db failed !"+
+                        ANSI_RESET);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -19,6 +19,7 @@ import java.util.Scanner;
  * The starting point of CRS system. The main menu functionality is displayed here
  */
 public class CRSApplication {
+
     /**
      * Main function which is the starting point of all functionality.
      * @param args
@@ -83,8 +84,11 @@ public class CRSApplication {
                     if(userService.updatePassword()){
                         System.out.println("Password updated successfully! Please login again.");
                     }else{
-                        System.out.println("Password update failed.Please contact admin or try again later.");
-                    }
+                        System.out.println(ANSI_YELLOW+
+                                "Password update failed.Please contact admin or try again later."+
+                                ANSI_RESET);
+
+                   }
                     break;
                 case 4:
                     endApplication=true;
