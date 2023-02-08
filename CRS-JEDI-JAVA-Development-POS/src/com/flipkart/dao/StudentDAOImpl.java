@@ -17,6 +17,9 @@ public class StudentDAOImpl implements StudentDAO {
     private Connection conn;
     private PreparedStatement stmt;
     private Student student;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
     private StudentDAOImpl(Student student) {
         this.student = student;

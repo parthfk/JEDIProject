@@ -14,6 +14,9 @@ import java.util.List;
 public class ProfessorDAOImpl implements ProfessorDAO{
     private Professor prof;
     private Connection conn;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
     public ProfessorDAOImpl(Professor prof) {
         this.prof = prof;

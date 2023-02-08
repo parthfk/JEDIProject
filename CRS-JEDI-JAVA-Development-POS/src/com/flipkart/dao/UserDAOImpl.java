@@ -9,6 +9,9 @@ import java.sql.*;
 public class UserDAOImpl implements UserDAO {
     private Connection conn = null;
     private PreparedStatement stmt = null;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
     UserDAOImpl() {
         conn = DbConnection.getInstance().getConnection();
