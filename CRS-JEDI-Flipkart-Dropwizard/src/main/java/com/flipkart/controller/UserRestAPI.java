@@ -128,7 +128,7 @@ public class UserRestAPI {
 
     /**
      * lists of all users
-     * @return list of ausers
+     * @return list of all users
      */
     @GET
     @Path("/getAllUsers")
