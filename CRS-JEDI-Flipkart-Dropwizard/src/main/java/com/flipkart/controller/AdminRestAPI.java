@@ -119,7 +119,7 @@ public class AdminRestAPI {
 
     /**
      * /admin/deleteCourse
-     * REST-service for deleting course 
+     * REST-service for deleting course form catalogue
      * @param courseId
      * @return status for delete course successful or not
      * @throws ValidationException
@@ -166,9 +166,9 @@ public class AdminRestAPI {
 
     /**
      * /admin/generateGradeCard
-     *
+     *  generates grade card for student
      * @param studentId
-     * @return
+     * @return statues whether grade card generation successful or not
      * @throws ValidationException
      */
 
@@ -192,7 +192,11 @@ public class AdminRestAPI {
         }
     }
 
-
+    /**
+     *
+     * list of courses
+     * @return list of courses in catalogue
+     */
     @GET
     @Path("/viewCoursesInCatalogue")
     @Produces(MediaType.APPLICATION_JSON)
@@ -207,6 +211,10 @@ public class AdminRestAPI {
 
     }
 
+    /**
+     * views all courses in catalogue
+     * @return list of all courses in catalogue
+     */
     @GET
     @Path("/viewCourses")
     @Produces(MediaType.APPLICATION_JSON)
@@ -221,6 +229,10 @@ public class AdminRestAPI {
 
     }
 
+    /**
+     * viwes list of unapproved students
+     * @return list of unapproved students
+     */
     @GET
     @Path("/viewUnApprovedStudents")
     @Produces(MediaType.APPLICATION_JSON)
@@ -237,6 +249,10 @@ public class AdminRestAPI {
         }
     }
 
+    /**
+     * /admin/getAllUsers
+     * @return list of all users
+     */
     @GET
     @Path("/viewAllUsers")
     @Produces(MediaType.APPLICATION_JSON)
