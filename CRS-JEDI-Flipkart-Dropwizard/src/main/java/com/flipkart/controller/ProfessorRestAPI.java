@@ -16,6 +16,12 @@ import java.util.List;
  */
 @Path("/professor")
 public class ProfessorRestAPI {
+    /**
+     * list of courses current professor is enrolled in
+     *
+     * @param professorId
+     * @return list of courses professor is enrolled in
+     */
     @GET
     @Path("/viewSelectedCourses")
     @Produces(MediaType.APPLICATION_JSON)
@@ -36,6 +42,13 @@ public class ProfessorRestAPI {
         return Response.status(200).entity(res).build();
     }
 
+    /**
+     * views students enrolled in a course
+     * @param professorId
+     * @param courseId
+     * @param semId
+     * @return list of students enrolled in course Id
+     */
     @GET
     @Path("/viewEnrolledStudents")
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,6 +71,12 @@ public class ProfessorRestAPI {
         }
     }
 
+    /**
+     * professor selects course to teach
+     * @param professorId
+     * @param courseId
+     * @return registration in course successful or not
+     */
     @GET
     @Path("/selectCourse")
     @Produces(MediaType.TEXT_PLAIN)
@@ -74,6 +93,15 @@ public class ProfessorRestAPI {
 
     }
 
+    /**
+     * professor adds grade for students in course professor enrolled in
+     * @param professorId
+     * @param courseId
+     * @param semId
+     * @param studentId
+     * @param grade
+     * @return status of adding grades successful or not
+     */
     @GET
     @Path("/addGrade")
     @Produces(MediaType.TEXT_PLAIN)

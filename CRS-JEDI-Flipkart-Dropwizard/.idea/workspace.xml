@@ -8,9 +8,6 @@
       <change afterPath="$PROJECT_DIR$/target/classes/com/flipkart/exception/GradeNotValidException.class" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/target/classes/com/flipkart/exception/RoleMismatchException.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/bean/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/bean/Course.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/constant/SQLConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/constant/SQLConstants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/AdminRestAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/AdminRestAPI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/ProfessorRestAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/ProfessorRestAPI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/UserDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/UserDAOImpl.java" afterDir="false" />
@@ -53,10 +50,13 @@
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flipkart.AppTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flipkart.AppTest.txt" afterDir="false" />
     </list>
     <list id="f0ddba84-1b45-4416-8a75-e01c184bdb13" name="Changes by apoorv.badar" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/UserRestAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/UserRestAPI.java" afterDir="false" />
     </list>
     <list id="25db2ce0-51a1-4e4f-a6fa-251e54ae8021" name="Changes by manthan.asher" comment="" />
-    <list id="530fcba1-ab61-4534-9f48-394c020c9ca9" name="Changes by parth.aggarwal" comment="" />
+    <list id="530fcba1-ab61-4534-9f48-394c020c9ca9" name="Changes by parth.aggarwal" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/AdminRestAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/AdminRestAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/ProfessorRestAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/ProfessorRestAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/UserRestAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/UserRestAPI.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -71,6 +71,25 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/src/main/java/com/flipkart/controller/AdminRestAPI.java">
+      <ranges>
+        <range start1="29" end1="29" start2="29" end2="34" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="30" end1="35" start2="35" end2="35" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+        <range start1="64" end1="64" start2="64" end2="71" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="65" end1="72" start2="72" end2="72" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+        <range start1="89" end1="89" start2="89" end2="96" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="90" end1="97" start2="97" end2="97" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+        <range start1="121" end1="122" start2="121" end2="122" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="165" end1="165" start2="165" end2="173" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="166" end1="174" start2="174" end2="174" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+        <range start1="194" end1="195" start2="194" end2="199" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="209" end1="209" start2="213" end2="217" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="223" end1="223" start2="231" end2="235" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="239" end1="239" start2="251" end2="255" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+      </ranges>
+    </file>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -160,7 +179,7 @@
       <workItem from="1675866262749" duration="2525000" />
       <workItem from="1675920949634" duration="148000" />
       <workItem from="1675921105901" duration="401000" />
-      <workItem from="1675921542072" duration="5778000" />
+      <workItem from="1675921542072" duration="8193000" />
     </task>
     <servers />
   </component>

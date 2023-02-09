@@ -32,7 +32,7 @@ public class UserRestAPI {
 
 
     /**
-     *
+     * for updation of password for users
      * @param userId: email address of the user
      * @param newPassword: new password to be stored in db.
      * @return @return 201, if password is updated, else 500 in case of error
@@ -63,11 +63,11 @@ public class UserRestAPI {
     }
 
     /**
-     *
+     * verify credentials of login users
      * @param email
      * @param password
      * @param role
-     * @return
+     * @return @return 201, if credentials verification successful, else 500 in case of error
      */
 
     @POST
@@ -95,12 +95,22 @@ public class UserRestAPI {
 
     }
 
+    /**
+     * logout of system
+     * @return @return 201, if logout successful, else 500 in case of error
+     */
+
     @POST
     @Path("/logout")
     public Response logOut(){
         return Response.status(200).entity("Logged out successfully !").build();
 
     }
+
+    /**
+     * lists of all courses
+     * @return list of courses
+     */
 
     @GET
     @Path("/viewAllCourses")
@@ -112,6 +122,10 @@ public class UserRestAPI {
 
     }
 
+    /**
+     * lists of all users
+     * @return list of all users
+     */
     @GET
     @Path("/getAllUsers")
     @Produces(MediaType.APPLICATION_JSON)
