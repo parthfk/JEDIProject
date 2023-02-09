@@ -20,14 +20,15 @@ import java.util.Scanner;
  */
 public class CRSApplication {
 
-    /**
-     * Main function which is the starting point of all functionality.
-     * @param args
-     */
+
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_YELLOW = "\u001B[33m";
 
+    /**
+     * Main function which is the starting point of all functionality.
+     * @param args
+     */
     public static void main (String[] args) throws SQLException {
         Scanner in = new Scanner(System.in);
         boolean endApplication  = false;
@@ -47,9 +48,9 @@ public class CRSApplication {
             System.out.println("**************************************************");
             System.out.println();
             //endApplication = true;
-            int optionSelected = in.nextInt();
+            String optionSelected = in.next();
             switch (optionSelected) {
-                case 1:
+                case "1":
                     userObj = userService.logIn();
                         if(userObj==null)
                         {
@@ -75,11 +76,11 @@ public class CRSApplication {
                             continue;
                     }
                     break;
-                case 2:
+                case "2":
                     System.out.println("Redirect to Student Registration");
                     new StudentServiceOperation().signup();
                     break;
-                case 3:
+                case "3":
                     System.out.println("Redirect to Update Password");
                     if(userService.updatePassword()){
                         System.out.println("Password updated successfully! Please login again.");
@@ -90,7 +91,7 @@ public class CRSApplication {
 
                    }
                     break;
-                case 4:
+                case "4":
                     endApplication=true;
                     if(conn != null)conn.close();
                     System.exit(0);

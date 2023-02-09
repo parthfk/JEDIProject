@@ -18,8 +18,9 @@ public interface CatalogueDAO {
      */
     public List<Course> fetchCatalogue(boolean allCourses);
 
-    /** Method to delete course from catalogue in DB using SQl commands
-     * @param courseId ß
+    /**
+     * Method to delete course from catalogue in DB using SQl commands
+     * @param courseId
      * @throws CourseNotFoundException
      */
     public void deleteCourseInDB(String courseId) throws CourseNotFoundException;

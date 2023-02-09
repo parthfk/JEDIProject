@@ -12,7 +12,15 @@ import java.util.Scanner;
 import static com.flipkart.constant.DBConnection.*;
 
 
+
+
 public class Utils {
+
+    public static final String ANSI_RESET = "\u001B[0m";
+
+    // Declaring the color
+    // Custom declaration
+    public static final String ANSI_YELLOW = "\u001B[33m";
     private static Connection conn = DbConnection.getInstance().getConnection();
     private static PreparedStatement stmt = null;
 
@@ -32,8 +40,9 @@ public class Utils {
                 String semesterId = rs.getString("semesterId");
                 String professorId = rs.getString("professorId");
                 int availableSeats = rs.getInt("availableSeats");
-                System.out.println(courseId);
-                System.out.println(courseName);
+                System.out.println("Course ID: "+courseId);
+                System.out.println("Course Name: "+courseName+"\n");
+
 
                 return new Course(courseId, courseName, professorId, availableSeats);
             }
@@ -176,7 +185,7 @@ public class Utils {
 
     /**
      * Updates Seats available in a course
-     * @param Course (You want seats to get updated)
+     * @param c (You want seats to get updated)
      */
     public static void updateCourseSeats(Course c) {
         try {
@@ -250,7 +259,7 @@ public class Utils {
                 Date dobParsed = Date.valueOf(dob);
                 return dobParsed;
             } catch (IllegalArgumentException e) {
-                System.out.println("Your date format/values is incorrect, please enter in the format YYYY-MM-DD only. Try again:");
+                System.out.println(ANSI_YELLOW+"Your date format/values is incorrect, please enter in the format YYYY-MM-DD only. Try again:"+ANSI_RESET);
                 continue;
             }
         }

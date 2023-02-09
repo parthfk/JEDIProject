@@ -64,7 +64,7 @@ public interface StudentDAO {
     public ArrayList<String> displayRegisteredCourses();
 
     /**
-     * @return the student's gradecard, as a GradeCard object
+     * function to display grade card
      */
     public void displayGradeCard ();
 

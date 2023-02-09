@@ -52,17 +52,11 @@ public class CRSProfessorMenu {
 
         while(true) {
             consolePrints();
-            int input = -1;
-            try {
-                input = Integer.parseInt(scanner.nextLine());
-            }
-            catch(Exception e){
-                e.printStackTrace();
-            }
+            String input = scanner.next();
             ProfessorService profService = new ProfessorServiceOperation(professor);
 
             switch (input) {
-                case 1:
+                case "1":
                     List<Course> courseList = new CatalogueDAOImpl().fetchCatalogue(true);
                     if(courseList.size()==0)
                         System.out.println(ANSI_YELLOW+
@@ -115,11 +109,11 @@ public class CRSProfessorMenu {
                         }
                     }
                     break;
-                        case 2:
+                        case "2":
                     profService.viewCourseList();
 
                     break;
-                case 3:
+                case "3":
                     List<Student> studentList = profService.viewEnrolledStudentList();
                     if(studentList != null){
 //                           System.out.println("Name \t \t ID");
@@ -138,10 +132,10 @@ public class CRSProfessorMenu {
                         buffer.setLength(0);
                     }
                     break;
-                case 4:
+                case "4":
                     profService.addGrade();
                     break;
-                case 5:
+                case "5":
                     userService.logOut(professor);
                     System.out.println("Menu Exited");
                     return;

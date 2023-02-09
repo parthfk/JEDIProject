@@ -13,7 +13,7 @@ public interface PaymentService {
 
     /**
      * Method which tells the status of payment if it has been completed successfully.
-     * @paramsStudent object
+     * @param student
      * @return boolean
      */
     boolean paymentApproved(Student student);

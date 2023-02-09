@@ -1,11 +1,14 @@
 package com.flipkart.client;
 
 import com.flipkart.bean.Student;
+import com.flipkart.constant.DBConnection;
 import com.flipkart.service.StudentService;
 import com.flipkart.service.StudentServiceOperation;
 
 import java.util.Scanner;
 import java.util.Date;
+import java.io.*;
+
 /**
  * Contains the functionality to display Student Menu
  */
@@ -16,6 +19,10 @@ public class CRSStudentMenu {
     private Student student;
     private String studentUsername;
     private StudentServiceOperation service;
+
+    public static final String ANSI_RESET = "\u001B[0m";
+
+    public static final String ANSI_YELLOW = "\u001B[33m";
 
     /**
      * constructor
@@ -46,19 +53,20 @@ public class CRSStudentMenu {
             System.out.println("**************************************************");
             System.out.println();
             Scanner in = new Scanner(System.in);
-            int input = in.nextInt();
+            String input = in.next();
             switch (input) {
-                case 1:
+                case "1":
                     service.registerForSem();
                     break;
-                case 2:
+                case "2":
                     service.displayGradeCard();
                     break;
-                case 3:
+                case "3":
                     studentMenu = false;
                     service.logOut(student);
                     return;
                 default:
+                    System.out.println(ANSI_YELLOW+"Please select a valid input!"+ANSI_RESET);
                     break;
             }
         }

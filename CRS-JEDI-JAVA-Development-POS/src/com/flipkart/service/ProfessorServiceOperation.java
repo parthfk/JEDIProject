@@ -34,10 +34,10 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         boolean flag = true;
 
         Formatter fmt = new Formatter();
-        fmt.format("\n%-17s %-17s %-17s\n", ANSI_CYAN+"S.no"+ANSI_RESET, ANSI_CYAN+"Course Id"+ANSI_RESET, ANSI_CYAN+"Name"+ANSI_RESET);
+        fmt.format("\n%-17s %-17s\n", ANSI_CYAN+"Course Id"+ANSI_RESET, ANSI_CYAN+"Name"+ANSI_RESET);
         for (int i = 0; i < courseList.size(); i++) {
             if (flag) {
-                fmt.format("%-17s %-17s %-17s\n", ANSI_RESET+i + 1+ANSI_RESET, ANSI_RESET+courseList.get(i).getCourseID()+ANSI_RESET, ANSI_RESET+courseList.get(i).getName()+ANSI_RESET);
+                fmt.format("%-17s %-17s %-17s\n", i+1, ANSI_RESET+courseList.get(i).getCourseID()+ANSI_RESET, ANSI_RESET+courseList.get(i).getName()+ANSI_RESET);
                 flag = true;
             }
         }

@@ -55,34 +55,34 @@ public class CRSAdminMenu {
     private void displayAdminMenu(Admin admin) {
         while(true) {
             displayMenu();
-            int input=in.nextInt();
+            String input=in.next();
             AdminService adminObj=new AdminServiceOperation();
 
             switch (input) {
-                case 1:
+                case "1":
                     adminObj.approveStudent();
                     break;
-                case 2:
+                case "2":
                     adminObj.addProfessor();
                     break;
-                case 3:
+                case "3":
                     //incomplete
                     adminObj.generateGradeCard();
                     break;
-                case 4:
+                case "4":
                     adminObj.addAdmin();
                     break;
-                case 5:
+                case "5":
                     adminObj.addCourse();
                     break;
-                case 6:
+                case "6":
                     adminObj.removeCourse();
 
                     break;
-                case 7:
+                case "7":
                     userService.viewCourseCatalogue(true);
                     break;
-                case 8:
+                case "8":
                     userService.logOut(admin);
                     System.out.println("Menu Exited");
                     return;

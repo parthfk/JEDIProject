@@ -1,6 +1,8 @@
 package com.flipkart.bean;
 
-import java.sql.Date;
+import com.flipkart.utils.DbConnection;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +94,9 @@ public class Student extends User {
     }
 
     public List<Course> getCourseRegistered() {
+
         return courseRegistered;
+
     }
 
     public void setCourseRegistered(List<Course> courseRegistered) {

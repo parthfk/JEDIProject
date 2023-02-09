@@ -9,9 +9,13 @@ import com.flipkart.exception.CourseNotAddedException;
 import com.flipkart.exception.CourseNotAvailableException;
 import com.flipkart.exception.CourseNotFoundException;
 import com.flipkart.exception.PaymentFailedException;
+import com.flipkart.utils.DbConnection;
 import com.flipkart.utils.Utils;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
@@ -33,7 +37,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     public StudentServiceOperation(Student student) {
         this.student = student;
         this.studentDao = StudentDAOImpl.getInstance(this.student);
-        System.out.println(this.studentDao);
+
     }
 
     public void registerForSem() {
@@ -164,7 +168,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                 primaryCourses.add(Utils.getCourseFromCourseId(courseId));
         });
 
-        System.out.println(primaryCourses);
+//        System.out.println(primaryCourses);
         while (primaryCourses.size() <= 4) {
             if (primaryCourses.size() == 4) {
                 this.studentDao.selectPrimaryCourse(primaryCourses);
@@ -183,6 +187,12 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             } else {
                 Course course = Utils.getCourseFromCourseId(input);
                 boolean alreadyAdded = false;
+                if (course == null) {
+                    System.out.println(ANSI_YELLOW+
+                            "No course with the provided ID!"+
+                            ANSI_RESET);
+                    continue;
+                }
                 for(Course c : primaryCourses){
                     if(c.getCourseID().equals(course.getCourseID())){
                         System.out.println("Course already exists");
@@ -190,12 +200,8 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                         break;
                     }
                 }
-                if (course == null) {
-                    System.out.println(ANSI_YELLOW+
-                            "No course with the provided ID!"+
-                            ANSI_RESET);
-                }
-                else if (course.getProfessorID().matches("") || course.getProfessorID() == null) {
+
+                if (course.getProfessorID().matches("") || course.getProfessorID() == null) {
                     System.out.println(ANSI_YELLOW+
                             "No professor assigned to this course yet. Please select another"+
                             ANSI_RESET);
@@ -265,6 +271,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
             if (!(courseId.matches("") || courseId == null))
                 secondaryCourses.add(Utils.getCourseFromCourseId(courseId));
         });
+
 
         while (secondaryCourses.size() <= 2) {
             if (secondaryCourses.size() == 2) {
@@ -416,20 +423,21 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
     public void dropCourse() {
         System.out.println("Enter course Id to drop : ");
         Scanner in = new Scanner(System.in);
-        String courseId = in.nextLine();
+        String courseId = in.next();
+//        System.out.println(courseId);
 
-        Course toBeDropped = null;
-        for (Course c : student.getCourseRegistered()) {
-            if (c.getCourseID().matches(courseId)) {
-                toBeDropped = c;
-                break;
-            }
-        }
-        if (toBeDropped != null) {
-            student.getCourseRegistered().remove(toBeDropped);
-            studentDao.dropCourse(toBeDropped.getCourseID());
-            System.out.println("Course dropped successfully");
-        } else {
+        DbConnection dbConnection = DbConnection.getInstance();
+        Connection conn = dbConnection.getConnection();
+        PreparedStatement stmt = null;
+
+        String sql = "delete from RegisteredCourse where courseId='"+courseId+"'";
+
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
+            stmt.close();
+            System.out.println("Course deleted successfully!");
+        } catch (SQLException se){
             System.out.println(ANSI_YELLOW+
                     "No such registered course exists"+
                     ANSI_RESET);
@@ -439,6 +447,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
                 System.out.println(e.getMessage());
             }
         }
+
     }
 
     public void payFee() {
