@@ -1,4 +1,4 @@
-JEDIProject
+JEDI Project
 ===========
 
 A Course Registration System(CRS) created as a part of JEDI Training
