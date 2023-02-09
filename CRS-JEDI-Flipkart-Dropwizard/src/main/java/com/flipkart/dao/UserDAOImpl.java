@@ -34,13 +34,13 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public boolean verifyCredentials(String userId, String password) throws UserNotFoundException,PasswordMismatchException,SQLException {
-        String verifyQuery = "select password from User from userId = '" + userId + "'";
+        String verifyQuery = "select password from User where email = '" + userId + "'";
             stmt = conn.prepareStatement(verifyQuery);
-            stmt.setString(1, userId);
             ResultSet resultSet = stmt.executeQuery();
 
-            if (!resultSet.next())
+            if (!resultSet.next()) {
                 throw new UserNotFoundException(userId);
+            }
             else if (password.equals(resultSet.getString("password"))) {
                 return true;
             }
@@ -64,7 +64,7 @@ public class UserDAOImpl implements UserDAO {
             stmt.setString(1, newPassword);
             stmt.setString(2, userId);
             int row = stmt.executeUpdate();
-
+            System.out.println(row);
             if (row == 1)
                 return true;
             else

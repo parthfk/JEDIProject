@@ -17,32 +17,12 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
     private String profId;
     private ProfessorDAO profDAO;
 
-    Scanner in = new Scanner(System.in);
     public ProfessorServiceOperation(String professorId){
         this.profId = professorId;
         profDAO = new ProfessorDAOImpl(professorId);
     }
 
-    public List<String> readCourseAndSemesterIds(){
-        System.out.println("Please enter the course id ");
-        String courseId = in.nextLine();
-        System.out.println("Please enter the semesterId");
-        String semesterId = in.nextLine();
-        return Arrays.asList(courseId,semesterId);
-    }
-    public void printCourseList(List<Course> courseList){
-        boolean flag =true;
-        for(int i=0;i<courseList.size();i++){
-            if(flag){
-            System.out.println("Sr No. \t Course ID \tName");
-            flag=true;
-            }
-            System.out.println((i+1)+"\t"+ courseList.get(i).getCourseID()+"\t\t" +courseList.get(i).getName());
-        }
-    }
-
-    public boolean addGrade(String courseId, String semId, String studentId, String grade){
-       try {
+    public boolean addGrade(String courseId, String semId, String studentId, String grade) throws GradeNotValidException{
            boolean gradeValidated = false;
            while (!gradeValidated) {
                gradeValidated = this.validateGrade(grade);
@@ -50,16 +30,10 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
                    profDAO.addGrade(studentId, semId, courseId, grade);
                    return true;
                } else {
-
                    throw new GradeNotValidException(grade);
-
                }
            }
-       }catch(Exception e){
-           e.printStackTrace();
-           e.getMessage();
-           return false;
-       }
+
         return false;
     }
     public boolean validateGrade(String gradeEntered){
@@ -72,17 +46,9 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         }
         return false;
     }
-    public List<Student> viewEnrolledStudentList(String courseId,String semesterId){
-        return profDAO.viewEnrolledStudentListDao(courseId,semesterId);
-    }
+    public List<Student> viewEnrolledStudentList(String courseId,String semesterId) throws SQLException, CourseNotFoundException {
 
-    public void selectCourse(String courseId) throws SQLException, CourseNotFoundException {
-//        List<Course> courseList = professor.getCoursesTaken();
-//        courseList.add(course);
-//        course.setProfessorID(professor.getUserId());
-//        professor.setCoursesTaken(courseList);
-        //dao
-        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue(false);
+        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue(true);
         boolean  isFound = false;
         for (int i = 0; i < courses.size(); i++) {
             if (courses.get(i).getCourseID().matches(courseId)) {
@@ -92,14 +58,30 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         }
 
         if (!isFound) {
-
-                throw new CourseNotFoundException(courseId);
-
+            throw new CourseNotFoundException(courseId);
         }
+
+        return profDAO.viewEnrolledStudentListDao(courseId,semesterId);
+    }
+
+    public void selectCourse(String courseId) throws SQLException, CourseNotFoundException {
+
+        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue(true);
+        boolean  isFound = false;
+        for (int i = 0; i < courses.size(); i++) {
+            if (courses.get(i).getCourseID().matches(courseId)) {
+                isFound = true;
+                break;
+            }
+        }
+
+        if (!isFound) {
+                throw new CourseNotFoundException(courseId);
+        }
+
         profDAO.selectCourseDAO(courseId);
     }
     public List<Course> viewCourseList(){
-        //this.printCourseList(courseList);
         return profDAO.viewCourseListDao(profId);
     }
 }

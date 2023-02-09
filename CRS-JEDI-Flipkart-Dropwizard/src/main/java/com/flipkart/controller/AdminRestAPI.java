@@ -28,11 +28,22 @@ import com.flipkart.service.AdminServiceOperation;
 import com.flipkart.service.UserServiceOperation;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Calls for Admin Service Operations
+ */
+
+
 @Path("/admin")
 public class AdminRestAPI {
 
     AdminService adminService = new AdminServiceOperation();
 
+    /**
+     * /admin/addAdmin
+     * @param newAdmin
+     * @return responds new admin addition successful or not
+     * @throws ValidationException
+     */
 
     @POST
     @Path("/addAdmin")
@@ -52,6 +63,13 @@ public class AdminRestAPI {
 
     }
 
+    /**
+     * /admin/addProfessor
+     * @param newProf
+     * @return responds new Professor addition successful or not
+     * @throws ValidationException
+     */
+
     @POST
     @Path("/addProfessor")
     @Consumes("application/json")
@@ -70,6 +88,13 @@ public class AdminRestAPI {
 
     }
 
+    /**
+     * /admin/approveStudent
+     * @param studentId
+     * @return Status whether student approval successful or not
+     * @throws ValidationException
+     */
+
     @PUT
     @Path("/approveStudent")
     @Produces(MediaType.APPLICATION_JSON)
@@ -78,7 +103,12 @@ public class AdminRestAPI {
             @QueryParam("studentId") String studentId) throws ValidationException {
         try {
             boolean res = adminService.approveStudent(studentId);
-            return Response.status(201).entity("Student with studentId: " + studentId + " approved").build();
+            if(res){
+                return Response.status(201).entity("Student with studentId: " + studentId + " approved").build();
+            }
+            else {
+                return Response.status(409).entity("Student already approved !").build();
+            }
 
         } catch (SQLException e) {
             return Response.status(409).entity(e.getMessage()).build();
@@ -87,7 +117,13 @@ public class AdminRestAPI {
 
     }
 
-
+    /**
+     * /admin/deleteCourse
+     * REST-service for deleting course 
+     * @param courseId
+     * @return status for delete course successful or not
+     * @throws ValidationException
+     */
     @PUT
     @Path("/deleteCourse")
     @Produces(MediaType.APPLICATION_JSON)
@@ -127,6 +163,14 @@ public class AdminRestAPI {
 
         }
     }
+
+    /**
+     * /admin/generateGradeCard
+     *
+     * @param studentId
+     * @return
+     * @throws ValidationException
+     */
 
         @POST
     @Path("/generateGradeCard")

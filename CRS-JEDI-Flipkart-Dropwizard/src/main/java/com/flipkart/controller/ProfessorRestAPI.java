@@ -8,7 +8,6 @@ import com.flipkart.service.ProfessorServiceOperation;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,18 +41,22 @@ public class ProfessorRestAPI {
     @Path("/viewEnrolledStudents")
     @Produces(MediaType.APPLICATION_JSON)
     public Response viewEnrolledStudents(@QueryParam("professorId") String professorId,@QueryParam("courseId") String courseId,@QueryParam("semesterId")String semId){
-        ProfessorService profService = new ProfessorServiceOperation(professorId);
-        List<String> res = new ArrayList<>();
-        List<Student> students = profService.viewEnrolledStudentList(courseId,semId);
-        if (students.isEmpty())
-            return Response.status(200).entity("No students have registered for this course yet").build();
+        try{
+            ProfessorService profService = new ProfessorServiceOperation(professorId);
+            List<String> res = new ArrayList<>();
+            List<Student> students = profService.viewEnrolledStudentList(courseId, semId);
+            if (students.isEmpty())
+                return Response.status(200).entity("No students have registered for this course yet").build();
 
-        students.forEach(student -> {
-            res.add("Student ID: " + student.getUserId() +
-                    ", Student Name: " + student.getName());
-        });
+            students.forEach(student -> {
+                res.add("Student ID: " + student.getUserId() +
+                        ", Student Name: " + student.getName());
+            });
 
-        return Response.status(200).entity(res).build();
+            return Response.status(200).entity(res).build();
+        }catch (Exception e) {
+            return Response.status(409).entity(e.getMessage()).build();
+        }
     }
 
     @GET
@@ -76,11 +79,16 @@ public class ProfessorRestAPI {
     @Path("/addGrade")
     @Produces(MediaType.TEXT_PLAIN)
     public Response addGrade(@QueryParam("professorId") String professorId,@QueryParam("courseId") String courseId,@QueryParam("semesterId")String semId,@QueryParam("studentId") String studentId,@QueryParam("grade") String grade){
-        ProfessorService profService = new ProfessorServiceOperation(professorId);
-        if(profService.addGrade(courseId,semId,studentId,grade)){
-            return Response.status(200).entity("Course graded successfully").build();
-        }else{
-            return Response.status(200).entity("Failed to grade course").build();
+        try{
+            ProfessorService profService = new ProfessorServiceOperation(professorId);
+            if (profService.addGrade(courseId, semId, studentId, grade)) {
+                return Response.status(200).entity("Course graded successfully").build();
+            } else {
+                return Response.status(200).entity("Failed to grade course").build();
+            }
+        }
+        catch (Exception e) {
+            return Response.status(409).entity(e.getMessage()).build();
         }
 
     }

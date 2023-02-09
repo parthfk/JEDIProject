@@ -333,7 +333,6 @@ public class PaymentDAOImpl implements PaymentDAO {
 
             stmt = conn.prepareStatement(fetchquery);
 
-//            stmt.setString(1,studentId);
             ResultSet rs = stmt.executeQuery(fetchquery);
 
             if (rs.next()) {

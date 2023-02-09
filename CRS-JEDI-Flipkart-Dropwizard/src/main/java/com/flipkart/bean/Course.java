@@ -24,7 +24,14 @@ public class Course {
 		this.professorID = professorID;
 		this.availableSeats = availableSeats;
 	}
+	public Course(){
 
+	}
+	public Course(String courseID, String name, int availableSeats) {
+		this.courseID = courseID;
+		this.name = name;
+		this.availableSeats = availableSeats;
+	}
 	public String getCourseID() {
 		return courseID;
 	}

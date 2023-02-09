@@ -15,7 +15,7 @@ public class GradeNotValidException extends Exception{
     }
 
     /**
-     * method that throws exception if student tries to request grade card before  grades are added
+     * method that throws exception if grade is not in valid
      * @return exception message
      */
     @Override

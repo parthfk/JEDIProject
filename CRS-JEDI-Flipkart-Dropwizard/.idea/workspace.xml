@@ -5,25 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/exception/GradeNotValidException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/exception/RoleMismatchException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/client/CRSAdminMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/client/CRSAdminMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/client/CRSApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/client/CRSApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/client/CRSProfessorMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/client/CRSProfessorMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/client/CRSStudentMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/client/CRSStudentMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/bean/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/bean/Course.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/constant/SQLConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/constant/SQLConstants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/AdminRestAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/AdminRestAPI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/ProfessorRestAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/ProfessorRestAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/UserRestAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/UserRestAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/ProfessorDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/ProfessorDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/ProfessorDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/ProfessorDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/UserDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/service/ProfessorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/service/ProfessorService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/service/ProfessorServiceOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/service/ProfessorServiceOperation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/service/StudentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/service/StudentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/service/StudentServiceOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/service/StudentServiceOperation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/UserDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/UserDAOImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/service/UserServiceOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/service/UserServiceOperation.java" afterDir="false" />
+    </list>
+    <list id="f0ddba84-1b45-4416-8a75-e01c184bdb13" name="Changes by apoorv.badar" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/UserRestAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/UserRestAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/service/ProfessorServiceOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/service/ProfessorServiceOperation.java" afterDir="false" />
     </list>
     <list id="25db2ce0-51a1-4e4f-a6fa-251e54ae8021" name="Changes by manthan.asher" comment="" />
     <list id="530fcba1-ab61-4534-9f48-394c020c9ca9" name="Changes by parth.aggarwal" comment="" />
@@ -41,6 +35,16 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/src/main/java/com/flipkart/App.java">
+      <ranges>
+        <range start1="2" end1="2" start2="2" end2="3" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+        <range start1="3" end1="3" start2="4" end2="6" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+        <range start1="5" end1="5" start2="8" end2="9" changelist="f0ddba84-1b45-4416-8a75-e01c184bdb13" />
+        <range start1="25" end1="25" start2="29" end2="33" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+      </ranges>
+    </file>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -60,28 +64,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "last_opened_file_path": "/Users/divyesh.radadiya/Downloads/JEDIProject/CRS-JEDI-Flipkart-Dropwizard",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/divyesh.radadiya/Downloads/JEDIProject/CRS-JEDI-Flipkart-Dropwizard&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/java/com/flipkart" />
@@ -102,6 +106,7 @@
     <configuration name="CRS" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.flipkart.App" />
       <module name="CRS_JEDI" />
+      <option name="PROGRAM_PARAMETERS" value="server" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -128,6 +133,8 @@
       <updated>1675864070358</updated>
       <workItem from="1675866262749" duration="2525000" />
       <workItem from="1675920949634" duration="148000" />
+      <workItem from="1675921105901" duration="401000" />
+      <workItem from="1675921542072" duration="5778000" />
     </task>
     <servers />
   </component>

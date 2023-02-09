@@ -1,8 +1,11 @@
 package com.flipkart;
 
-import com.flipkart.controller.HelloRestApi;
+import com.flipkart.controller.AdminRestAPI;
+import com.flipkart.controller.ProfessorRestAPI;
+import com.flipkart.controller.UserRestAPI;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
+import io.dropwizard.jersey.jackson.JsonProcessingExceptionMapper;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -22,7 +25,10 @@ public class App extends Application<Configuration> {
         LOGGER.info("Registering REST resources");
 
         //registering all the RESTful service classes.
-        e.jersey().register(new HelloRestApi());
+        e.jersey().register(new AdminRestAPI());
+        e.jersey().register(new ProfessorRestAPI());
+        e.jersey().register(new UserRestAPI());
+        e.jersey().register(new JsonProcessingExceptionMapper(true));
 
     }
 
