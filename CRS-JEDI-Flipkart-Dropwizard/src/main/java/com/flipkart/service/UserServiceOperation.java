@@ -7,7 +7,6 @@ import com.flipkart.dao.UserDAOImpl;
 import com.flipkart.exception.*;
 import com.flipkart.utils.Utils;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.*;
@@ -15,7 +14,7 @@ import java.util.regex.*;
 
 public class UserServiceOperation implements UserService {
 
-    public User logIn(String inEmail, String passEntered,String roole) throws StudentNotFoundException,StudentNotApprovedException,ProfessorNotFoundException{
+    public User logIn(String inEmail, String passEntered,String role) throws AdminNotFoundException, StudentNotApprovedException, ProfessorNotFoundException, StudentNotFoundException,RoleMismatchException {
         Scanner in = new Scanner(System.in);
         boolean emailValidated = false, passWordEnteredIsCorrect = false;
         User userObj = null;
@@ -26,7 +25,7 @@ public class UserServiceOperation implements UserService {
        // System.out.println("Please enter your Password: ");
         String passwordEntered = passEntered.toLowerCase();
        // System.out.println("Please enter your Role: ");
-        String role = roole.toLowerCase();
+         role = role.toLowerCase();
         while (!emailValidated) {
             String regex = "^(.+)@(.+)$";
             Pattern pattern = Pattern.compile(regex);
@@ -44,10 +43,12 @@ public class UserServiceOperation implements UserService {
                             }
                         }
                         if (!emailValidated) {
-
+                            boolean res = checkUserExists(inputEmail);
+                            if(res){
+                                throw new RoleMismatchException(role);
+                            }else{
                                 throw new AdminNotFoundException(inputEmail);
-                            checkUserExists(inputEmail);
-                            return null;
+                            }
                         }
                     } else if (role.equals("student")) {
                         List<Student> studentList = Utils.getStudentList();
@@ -58,22 +59,19 @@ public class UserServiceOperation implements UserService {
                                 System.out.println(u.isStatusApproval());
                                 if (!u.isStatusApproval()) {
                                     System.out.println("Registration not approved. Please contact admin");
-
                                         throw new StudentNotApprovedException(inputEmail);
-
-                                    return null;
                                 }
                                 emailValidated = true;
                                 break;
                             }
                         }
                         if (!emailValidated) {
-
+                            boolean res = checkUserExists(inputEmail);
+                            if(res){
+                                throw new RoleMismatchException(role);
+                            }else{
                                 throw new StudentNotFoundException(inputEmail);
-
-
-                            checkUserExists(inputEmail);
-                            return null;
+                            }
                         }
                     } else if (role.equals("professor")) {
                         List<Professor> professorList = Utils.getProfessorList();
@@ -88,15 +86,17 @@ public class UserServiceOperation implements UserService {
                             }
                         }
                         if (!emailValidated) {
-
+                            boolean res = checkUserExists(inputEmail);
+                            if(res){
+                                throw new RoleMismatchException(role);
+                            }else{
                                 throw new ProfessorNotFoundException(inputEmail);
-
-                            checkUserExists(inputEmail);
-                            return null;
+                            }
                         }
                     } else {
-                        System.out.println("Please enter a Valid role, which can be 'student', 'professor' or 'admin'!");
-                        return null;
+                        throw new RoleMismatchException(role);
+//                        System.out.println("Please enter a Valid role, which can be 'student', 'professor' or 'admin'!");
+//                        return null;
                     }
 
             } else {
@@ -117,16 +117,16 @@ public class UserServiceOperation implements UserService {
         return userObj;
     }
 
-    private void checkUserExists(String inputEmail) {
+    public boolean checkUserExists(String inputEmail) {
         List<User> userList = Utils.getUserList();
         for (User u : userList) {
             if (u.getEmail().matches(inputEmail)) {
                 System.out.println("You have entered the wrong role. Please try again, entering the appropriate role");
                 System.out.println("Your role is " + u.getUserType());
-                return;
+                return false;
             }
         }
-        System.out.println("No user exists with this email! Please contact admin for help!");
+        return true;
     }
 
     public boolean logOut(User user) {
@@ -159,7 +159,7 @@ public class UserServiceOperation implements UserService {
 
     }
 
-    public boolean updatePassword(String inputEmail,String oldPassword,String newPassword,String role) {
+    public boolean updatePassword(String inputEmail,String oldPassword,String newPassword,String role) throws PasswordMismatchException,UserNotFoundException,SQLException{
 
 //        Scanner in = new Scanner(System.in);
 //
@@ -269,9 +269,9 @@ public class UserServiceOperation implements UserService {
 
         UserDAO userDAOInstance = UserDAOImpl.getInstance();
         if(userDAOInstance.verifyCredentials(inputEmail,oldPassword)){
-
+                return userDAOInstance.updatePassword(inputEmail,newPassword);
         }
-
+        return false;
     }
 
 //    public static boolean shouldExit(String string) {

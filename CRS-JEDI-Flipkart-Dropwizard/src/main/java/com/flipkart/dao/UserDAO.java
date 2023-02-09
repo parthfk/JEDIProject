@@ -27,11 +27,11 @@ public interface UserDAO {
 
     /**
      * Method to update Password in database
-     * @param userId
+     * @param inputEmail
      * @param newPassword
      * @return
      */
-    public boolean updatePassword(String userId,String newPassword) throws SQLException;
+    public boolean updatePassword(String inputEmail,String newPassword) throws SQLException;
 
 
     /*

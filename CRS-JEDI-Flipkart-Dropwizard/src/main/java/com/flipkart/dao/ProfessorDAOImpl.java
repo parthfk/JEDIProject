@@ -24,9 +24,7 @@ public class ProfessorDAOImpl implements ProfessorDAO{
     }
 
     @Override
-    public void selectCourseDAO(Course course) {
-        String courseId = course.getCourseID();
-
+    public void selectCourseDAO(String courseId) {
         try{
             PreparedStatement st = conn.prepareStatement(SQLConstants.UPDATE_COURSE_QUERY);
             st.setString(1,profId);

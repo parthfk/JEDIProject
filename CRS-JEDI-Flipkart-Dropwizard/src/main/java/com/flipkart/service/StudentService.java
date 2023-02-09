@@ -4,12 +4,14 @@ import com.flipkart.bean.GradeCard;
 import com.flipkart.bean.Student;
 import com.flipkart.exception.CourseNotFoundException;
 
+import java.sql.SQLException;
+
 public interface StudentService {
     /**
      * Method to initiate semester registration for student
      *
      */
-    void registerForSem();
+    void registerForSem() throws SQLException;
     /**
      * Method to register a student, although student can't login until it's approved by admin
      */
@@ -27,7 +29,7 @@ public interface StudentService {
     /**
      * Method to add course during add-drop window
      */
-    void addCourse();
+    void addCourse() throws SQLException;
     /**
      * Method to remove course during add-drop window
      */

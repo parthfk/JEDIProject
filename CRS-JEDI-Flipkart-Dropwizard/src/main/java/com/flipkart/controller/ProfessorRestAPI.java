@@ -5,12 +5,10 @@ import com.flipkart.bean.Student;
 import com.flipkart.service.ProfessorService;
 import com.flipkart.service.ProfessorServiceOperation;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,4 +55,34 @@ public class ProfessorRestAPI {
 
         return Response.status(200).entity(res).build();
     }
+
+    @GET
+    @Path("/selectCourse")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response selectCourse(@QueryParam("professorId") String professorId,@QueryParam("courseId") String courseId)  {
+
+        try {
+            ProfessorService profService = new ProfessorServiceOperation(professorId);
+            profService.selectCourse(courseId);
+
+        return Response.status(200).entity("Course selected to teach successfully").build();
+        } catch (Exception e) {
+            return Response.status(409).entity(e.getMessage()).build();
+        }
+
+    }
+
+    @GET
+    @Path("/addGrade")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response addGrade(@QueryParam("professorId") String professorId,@QueryParam("courseId") String courseId,@QueryParam("semesterId")String semId,@QueryParam("studentId") String studentId,@QueryParam("grade") String grade){
+        ProfessorService profService = new ProfessorServiceOperation(professorId);
+        if(profService.addGrade(courseId,semId,studentId,grade)){
+            return Response.status(200).entity("Course graded successfully").build();
+        }else{
+            return Response.status(200).entity("Failed to grade course").build();
+        }
+
+    }
+
 }

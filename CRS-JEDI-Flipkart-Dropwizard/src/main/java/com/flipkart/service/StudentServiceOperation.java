@@ -12,6 +12,7 @@ import com.flipkart.exception.PaymentFailedException;
 import com.flipkart.utils.Utils;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
@@ -30,7 +31,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         System.out.println(this.studentDao);
     }
 
-    public void registerForSem() {
+    public void registerForSem() throws SQLException {
         student.setSemRegistration(new SemRegistration(student));
 
         boolean registering = true;
@@ -321,7 +322,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         studentDao.confirmRegistration();
     }
 
-    public void addCourse() {
+    public void addCourse() throws SQLException {
         Scanner in = new Scanner(System.in);
 
         if (student.getCourseRegistered().size() >= 4) {

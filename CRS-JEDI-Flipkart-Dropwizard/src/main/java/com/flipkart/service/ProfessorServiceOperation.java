@@ -1,9 +1,13 @@
 package com.flipkart.service;
 
 import com.flipkart.bean.*;
+import com.flipkart.dao.CatalogueDAOImpl;
 import com.flipkart.dao.ProfessorDAO;
 import com.flipkart.dao.ProfessorDAOImpl;
+import com.flipkart.exception.CourseNotFoundException;
+import com.flipkart.exception.GradeNotValidException;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,45 +41,26 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         }
     }
 
-    public void addGrade(){
-       List<Course> coursesList = this.viewCourseList();
-       Course courseToGrade = null;
-       System.out.println("Please enter the semesterId");
-       String semesterId = in.nextLine();
-       System.out.println("Please select one of the following courses to grade: ");
-       this.printCourseList(coursesList);
-
-       System.out.println("Please select Serial number to add course grade out of " +coursesList.size());
-       int courseIdx = -1;
+    public boolean addGrade(String courseId, String semId, String studentId, String grade){
        try {
-            courseIdx = Integer.parseInt(in.nextLine());
-            courseToGrade = coursesList.get(courseIdx-1);
-       }
-       catch(Exception e){
-           e.printStackTrace();
-       }
-       System.out.println("Please select one of the following grades for each student: A,A-,B,B-,C,C-,D,F");
-       try {
-           List<Student> enrolledStudents = profDAO.viewEnrolledStudentListDao(courseToGrade.getCourseID(), semesterId);
+           boolean gradeValidated = false;
+           while (!gradeValidated) {
+               gradeValidated = this.validateGrade(grade);
+               if (gradeValidated) {
+                   profDAO.addGrade(studentId, semId, courseId, grade);
+                   return true;
+               } else {
 
-           for (Student student : enrolledStudents) {
-               boolean gradeValidated = false;
-               while (!gradeValidated) {
-                   System.out.println("Enter grade for studentID: " + student.getUserId());
-                   String gradeString = in.nextLine();
-                   gradeValidated = this.validateGrade(gradeString);
-                   if (gradeValidated) {
-                       profDAO.addGrade(student.getUserId(), semesterId, courseToGrade.getCourseID(), gradeString);
-                   } else {
-                       System.out.println("Please enter one of the following grades: A" +
-                               ",A-,B,B-,C,C-,D,F");
-                   }
+                   throw new GradeNotValidException(grade);
+
                }
            }
-           System.out.println("Grading for courseID: " + courseToGrade.getCourseID() + " done successfully !");
        }catch(Exception e){
            e.printStackTrace();
+           e.getMessage();
+           return false;
        }
+        return false;
     }
     public boolean validateGrade(String gradeEntered){
         List<String> possibleGrades = new ArrayList<>(Arrays.asList("A","A-",
@@ -91,13 +76,27 @@ public class ProfessorServiceOperation extends UserServiceOperation implements P
         return profDAO.viewEnrolledStudentListDao(courseId,semesterId);
     }
 
-    public void selectCourse(Course course){
+    public void selectCourse(String courseId) throws SQLException, CourseNotFoundException {
 //        List<Course> courseList = professor.getCoursesTaken();
 //        courseList.add(course);
 //        course.setProfessorID(professor.getUserId());
 //        professor.setCoursesTaken(courseList);
         //dao
-        profDAO.selectCourseDAO(course);
+        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue(false);
+        boolean  isFound = false;
+        for (int i = 0; i < courses.size(); i++) {
+            if (courses.get(i).getCourseID().matches(courseId)) {
+                isFound = true;
+                break;
+            }
+        }
+
+        if (!isFound) {
+
+                throw new CourseNotFoundException(courseId);
+
+        }
+        profDAO.selectCourseDAO(courseId);
     }
     public List<Course> viewCourseList(){
         //this.printCourseList(courseList);
