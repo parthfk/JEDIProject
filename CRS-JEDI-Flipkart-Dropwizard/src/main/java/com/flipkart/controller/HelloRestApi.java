@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 public class HelloRestApi {
     @GET
     public String getEmployees() {
-        return "my dropwizard service";
+        return "my dropwizard service 3";
     }
 
 }

@@ -11,9 +11,9 @@ public class SQLConstants {
     public static final String USER_ENTRY_QUERY = "INSERT into User values (?,?,?,?,?)";
     public static final String COUNT_USERS_QUERY = "SELECT COUNT(*) FROM User";
     public static final String INSERT_USER_QUERY =  "insert into User values(?,?,?,?,?)";
-    public static final String UPDATE_PASSWORD_QUERY = "update user set password=? where userId = ? ";
+    public static final String UPDATE_PASSWORD_QUERY = "update user set password=? where email = ? ";
     public static final String COUNT_USERS_WITH_SPECIFIC_ROLE_QUERY = "SELECT COUNT(*) FROM User WHERE roleId=?";
-    public static final String VERIFY_CREDENTIALS_QUERY = "update user set password=? where userId = ? ";
+    public static final String VERIFY_CREDENTIALS_QUERY = "select password from User from userId = ?";
     public static final String FETCH_USER_WITH_EMAIL_ID ="SELECT * FROM User where email= ?";
 
 
@@ -77,5 +77,7 @@ public class SQLConstants {
 
     public static final String updateCourseQuery = "UPDATE Catalogue SET professorId=? WHERE courseId=?";
     public static final String updateRegisteredCourse = "UPDATE RegisteredCourse SET grade=? WHERE studentId=? AND courseId= ? AND semesterId=?";
+
+    public static final String GET_ALL_USERS = "SELECT * from User";
 
 }

@@ -22,9 +22,7 @@ public class CourseDAOImpl implements CourseDAO {
     }
 
     @Override
-    public boolean doesCourseExist(String courseID) {
-        try {
-
+    public boolean doesCourseExist(String courseID) throws SQLException{
             stmt = conn.prepareStatement(CHECK_IF_COURSE_EXISTS_QUERY);
             stmt.setString(1,courseID);
 
@@ -38,28 +36,18 @@ public class CourseDAOImpl implements CourseDAO {
                 System.out.println("course exists");
                 return true;
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
-    }
+
 
     @Override
-    public void addCourseToDB(Course course) {
+    public boolean addCourseToDB(Course course) throws SQLException {
 
-        try{
             stmt=conn.prepareStatement(INSERT_IN_COURSE_QUERY);
             stmt.setString(1, course.getCourseID());
             stmt.setString(2, course.getName());
 
-            if (stmt.executeUpdate() == 1) {
-                System.out.println("Insertion in Course db successful !");
-            }
-            else {
-                System.out.println("Insertion in Course db failed !");
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            return stmt.executeUpdate() == 1;
         }
-    }
+
 }
 

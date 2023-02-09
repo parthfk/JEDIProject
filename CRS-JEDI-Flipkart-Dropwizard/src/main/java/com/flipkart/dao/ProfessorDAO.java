@@ -11,7 +11,7 @@ public interface ProfessorDAO {
      * Method to select course to teach from Database
      * @param course
      */
-    void selectCourseDAO(Course course);
+    void selectCourseDAO(String courseId);
 
     /**
      * Method to get students enrolled in a course using SQL

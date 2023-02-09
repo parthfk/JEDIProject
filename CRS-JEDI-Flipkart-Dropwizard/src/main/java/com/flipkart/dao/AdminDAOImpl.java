@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 import com.flipkart.bean.Admin;
 import com.flipkart.bean.Professor;
+import com.flipkart.bean.Student;
 import com.flipkart.exception.AdminAlreadyExistException;
 import com.flipkart.exception.ProfessorAlreadyExistException;
 import com.flipkart.utils.DbConnection;
@@ -19,7 +20,6 @@ import static com.flipkart.constant.SQLConstants.*;
 public class AdminDAOImpl implements AdminDAO {
 
     private static int noOfUsers;
-    Scanner scanner;
     private Connection conn;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_YELLOW = "\u001B[33m";
@@ -29,29 +29,19 @@ public class AdminDAOImpl implements AdminDAO {
         conn = DbConnection.getInstance().getConnection();
     }
 
-    public boolean addAdminDAO(Admin admin) {
+    public boolean addAdminDAO(Admin admin) throws AdminAlreadyExistException,SQLException {
 
         PreparedStatement stmt;
 
-        try {
 
             stmt=conn.prepareStatement(FETCH_USER_WITH_EMAIL_ID);
 
             stmt.setString(1, admin.getEmail());
 
             ResultSet rs1 = stmt.executeQuery();
-            
-            if (rs1.next()) {
 
-                try{
+            if (rs1.next()) {
                     throw new AdminAlreadyExistException(admin.getEmail());
-                }
-                catch (AdminAlreadyExistException e) {
-                    System.out.println(e.getMessage());
-                }
-                finally {
-                    return false;
-                }
             }
 
 
@@ -84,24 +74,14 @@ public class AdminDAOImpl implements AdminDAO {
 
             stmt.close();
 
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-            return false;
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
-            return false;
-        }
         //System.out.println("Admin Registered Successfully!!");
         return true;
     }
 
 
-    public boolean addProfessorDAO(Professor professor) {
+    public boolean addProfessorDAO(Professor professor) throws ProfessorAlreadyExistException,SQLException{
         PreparedStatement stmt;
 
-        try {
 
             stmt=conn.prepareStatement(FETCH_USER_WITH_EMAIL_ID);
             stmt.setString(1, professor.getEmail());
@@ -109,16 +89,7 @@ public class AdminDAOImpl implements AdminDAO {
             ResultSet rs1 = stmt.executeQuery();
 
             if (rs1.next()) {
-
-                try{
-                    throw new ProfessorAlreadyExistException(professor.getEmail());
-                }
-                catch (ProfessorAlreadyExistException e) {
-                    System.out.println(e.getMessage());
-                }
-                finally {
-                    return false;
-                }
+                throw new ProfessorAlreadyExistException(professor.getEmail());
             }
 
             stmt = conn.prepareStatement(COUNT_USERS_WITH_SPECIFIC_ROLE_QUERY);
@@ -151,129 +122,62 @@ public class AdminDAOImpl implements AdminDAO {
             stmt.executeUpdate();
 
             stmt.close();
-
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-            return false;
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
-            return false;
-        }
-        System.out.println("Professor Registered Successfully!!");
         return true;
 
     }
 
-    public void approveStudentDAO() {
+
+    public List<List<String>> getListUnApprovedStudents() throws SQLException{
         PreparedStatement stmt = null;
-
-        try {
-
-            while (true) {
-
-                stmt = conn.prepareStatement(SELECT_UNAPPROVED_STUDENTS_QUERY);
-                ResultSet rs = stmt.executeQuery();
+        List<List<String>> unApprovedStudents = new ArrayList<>();
+          stmt = conn.prepareStatement(SELECT_UNAPPROVED_STUDENTS_QUERY);
+            ResultSet rs = stmt.executeQuery();
 
                 if (!rs.next()) {
                     System.out.println("All students already approved");
-                    return;
+                    return unApprovedStudents;
                 }
-                System.out.println("List of Un-Approved Students");
-
-                StringBuffer buffer = new StringBuffer();
-                Formatter fmt = new Formatter();
-
-                //fmt.format("\n%20s %20s %20s\n", ANSI_RED+"Student ID"+ANSI_RESET, ANSI_RED+"Name"+ANSI_RESET, ANSI_RED+"E-Mail"+ANSI_RESET);
-
-                fmt.format("\n%-17s %-17s %-17s\n", ANSI_CYAN +"Student ID"+ ANSI_RESET,ANSI_CYAN+"Name"+ANSI_RESET,ANSI_CYAN+"E-Mail"+ANSI_RESET);
 
                 do {
-
+                   ArrayList<String> studDetails = new ArrayList<>();
                     String eid = rs.getString("userId");
                     String name = rs.getString("name");
                     String email = rs.getString("email");
-                    fmt.format("%-17s %-17s %-17s\n", ANSI_RESET+eid+ANSI_RESET,ANSI_RESET+name+ANSI_RESET,ANSI_RESET+email+ANSI_RESET);
+                    studDetails.add(eid);
+                    studDetails.add(name);
+                    studDetails.add(email);
+                    unApprovedStudents.add(studDetails);
                 } while (rs.next());
-
-                System.out.println(fmt);
-                buffer.setLength(0);
-
-
-                System.out.println("Enter student ID to be Approved or Press # to exit");
-                Scanner sc = new Scanner(System.in);
-                String studentId = sc.next();
-                if (studentId.equals("#")) {
-                    break;
-                }
+                return unApprovedStudents;
+    }
+    public boolean approveStudentDAO(String studentId) throws SQLException {
+        PreparedStatement stmt = null;
 
                 stmt = conn.prepareStatement(UPDATE_STUDENT_APPROVAL_STATUS_QUERY);
                 stmt.setString(1, studentId);
                 int rs1 = stmt.executeUpdate();
+                stmt.close();
                 if (rs1 == 0) {
                     System.out.println("Enter A valid Student ID");
+                    return false;
                 } else {
                     System.out.println("Student with ID: " + studentId + " Approved!!");
+                    return true;
                 }
 
-            }
-            stmt.close();
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        } finally {
-            //finally block used to close resources
-            try {
-                if (stmt != null)
-                    stmt.close();
-            } catch (SQLException se2) {
-            }// nothing we can do
-
-        }//end try
-        System.out.println("Operation Completed Successfully");
     }
 
 
-    public void generateGradeCardDAO() {
+    public int generateGradeCardDAO(String userId_of_approved_gradeCard) throws SQLException {
         PreparedStatement stmt;
-
-
-        try {
-
-            stmt = conn.prepareStatement(FETCH_STUDENT_FOR_GRADECARD_GENERATION_QUERY);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next() == false) {
-                System.out.println("No Grade card ready to be generated");
-                return;
-            }
-            System.out.println("Student Name \t UserID \t E-Mail \t \t Department");
-
-            do {
-                System.out.println(rs.getString(1) + "\t \t" + rs.getString(2) + "\t \t \t" + rs.getString(3) + "\t" + rs.getString(4));
-            } while (rs.next());
-
-            rs.close();
-
-            System.out.println("Enter UserID of student to approve Grade Gard or Press # to exit");
-            scanner = new Scanner(System.in);
-            String userId_of_approved_gradeCard = scanner.next();
-            if (userId_of_approved_gradeCard.equals("#")) {
-                return;
-            }
 
             stmt = conn.prepareStatement(FETCH_GRADES_QUERY);
             stmt.setString(1, userId_of_approved_gradeCard);
-            rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
             if (!rs.next()) {
                 System.out.println("This student has not registered for any courses yet.");
-                return;
+                return 1;
             }
 
             float gradeTotal = 0;
@@ -289,19 +193,19 @@ public class AdminDAOImpl implements AdminDAO {
                     gradeNotAssigned = true;
                     break;
                 }
-                if (tempGrade.matches("A+")) {
+                if (tempGrade.matches("A")) {
                     gradeTotal += 10;
                 } else if (tempGrade.matches("A-")) {
                     gradeTotal += 9;
-                } else if (tempGrade.matches("B+")) {
+                } else if (tempGrade.matches("B")) {
                     gradeTotal += 8;
                 } else if (tempGrade.matches("B-")) {
                     gradeTotal += 7;
-                } else if (tempGrade.matches("C+")) {
+                } else if (tempGrade.matches("C")) {
                     gradeTotal += 6;
                 } else if (tempGrade.matches("C-")) {
                     gradeTotal += 5;
-                } else if (tempGrade.matches("D+")) {
+                } else if (tempGrade.matches("D")) {
                     gradeTotal += 4;
                 }
 
@@ -313,12 +217,13 @@ public class AdminDAOImpl implements AdminDAO {
 
             if (gradeNotAssigned) {
                 System.out.println("Cannot generate Grade Card, few courses are yet to be assigned grades for this student ");
-                return;
+                return 2;
             }
 
             stmt = conn.prepareStatement(COUNT_GRADECARDS_QUERY);
             rs = stmt.executeQuery();
             int records = 2312;
+
             if (rs.next())
                 records = rs.getInt(1);
             else
@@ -348,11 +253,7 @@ public class AdminDAOImpl implements AdminDAO {
             stmt.close();
 
             System.out.println("GradeCard generated!");
+            return 3;
 
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
     }
 }

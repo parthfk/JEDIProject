@@ -26,6 +26,12 @@ public class StudentDAOImpl implements StudentDAO {
         this.conn = DbConnection.getInstance().getConnection();
     }
 
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Student getStudent(){return this.student;}
+
     // Singleton Pattern
     private static StudentDAOImpl dao = null;
 
@@ -35,7 +41,7 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
-    public void signup() {
+    public void signup(Student student) {
 
         try {
             // Fields for new User record
@@ -117,17 +123,15 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
-    public void selectPrimaryCourse(ArrayList<Course> primaryCourses) {
+    public void selectPrimaryCourse(String studentId, ArrayList<String> primaryCourses) {
         try {
             // Fields for updating SemRegistration record
-
-            String studentId = this.student.getUserId();
             String pc1 = "", pc2 = "", pc3 = "", pc4 = "";
             try {
-                pc1 = primaryCourses.get(0).getCourseID();
-                pc2 = primaryCourses.get(1).getCourseID();
-                pc3 = primaryCourses.get(2).getCourseID();
-                pc4 = primaryCourses.get(3).getCourseID();
+                pc1 = primaryCourses.get(0);
+                pc2 = primaryCourses.get(1);
+                pc3 = primaryCourses.get(2);
+                pc4 = primaryCourses.get(3);
             } catch (Exception ignored) {}
 
             stmt = conn.prepareStatement(SQLConstants.NEW_USER_ENTRY_QUERY);
@@ -155,10 +159,10 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
-    public ArrayList<String> viewPrimaryCourses() {
+    public ArrayList<String> viewPrimaryCourses(String studentId) {
         ArrayList<String> primaryCourses = new ArrayList<>();
         try {
-            String viewPrimaryCoursesQuery = "SELECT pc1, pc2, pc3, pc4 from SemRegistration WHERE studentId='" + student.getUserId() + "'";
+            String viewPrimaryCoursesQuery = "SELECT pc1, pc2, pc3, pc4 from SemRegistration WHERE studentId='" + studentId + "'";
 
             stmt = conn.prepareStatement(viewPrimaryCoursesQuery);
             ResultSet rs = stmt.executeQuery(viewPrimaryCoursesQuery);
@@ -185,14 +189,13 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
-    public void selectSecondaryCourse(ArrayList<Course> secondaryCourses) {
+    public void selectSecondaryCourse(String studentId, ArrayList<String> secondaryCourses) {
         try {
             // Fields for new SemRegistration record
-            String studentId = this.student.getUserId();
             String sc1 = "", sc2 = "";
             try {
-                sc1 = secondaryCourses.get(0).getCourseID();
-                sc2 = secondaryCourses.get(1).getCourseID();
+                sc1 = secondaryCourses.get(0);
+                sc2 = secondaryCourses.get(1);
             } catch (Exception ignored) {
             }
 
@@ -218,11 +221,11 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
-    public ArrayList<String> viewSecondaryCourses() {
+    public ArrayList<String> viewSecondaryCourses(String studentId) {
         ArrayList<String> secondaryCourses = new ArrayList<>();
         try {
             String viewSecondaryCoursesQuery = "SELECT sc1, sc2 from SemRegistration " +
-                    "WHERE studentId='" + student.getUserId() + "'";
+                    "WHERE studentId='" + studentId + "'";
 
             stmt = conn.prepareStatement(viewSecondaryCoursesQuery);
             ResultSet rs = stmt.executeQuery(viewSecondaryCoursesQuery);
@@ -248,12 +251,9 @@ public class StudentDAOImpl implements StudentDAO {
         Just sets regDone to true in the Student's semRegistration
      */
     @Override
-    public void confirmRegistration() {
+    public void confirmRegistration(String studentId) {
         try {
             // Fields for new SemRegistration record
-
-
-            String studentId = this.student.getUserId();
             stmt = conn.prepareStatement(SQLConstants.UPDATE_USER_ENTRY_QUERY);
             stmt.setString(1, studentId);
             stmt.executeUpdate();
@@ -308,11 +308,11 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
-    public ArrayList<String> displayRegisteredCourses() {
+    public ArrayList<String> displayRegisteredCourses(String studentId) {
         ArrayList<String> registeredCourses = new ArrayList<>();
         try {
             String displayRegisteredCoursesQuery = "SELECT * from RegisteredCourse " +
-                    "WHERE studentId='" + student.getUserId() +
+                    "WHERE studentId='" + studentId +
                     "' AND semesterId ='1' ";
 
             stmt = conn.prepareStatement(displayRegisteredCoursesQuery);
@@ -349,13 +349,13 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
-    public void displayGradeCard() {
+    public String displayGradeCard(String studentId) {
         try {
-
+            String output ="";
             //Check if gradecard is approved
 
             stmt = conn.prepareStatement(SQLConstants.GRADECARD_GENERATED);
-            stmt.setString(1,this.student.getUserId());
+            stmt.setString(1,studentId);
 
             boolean hasGradeCardBeenGenerated = false;
 
@@ -364,11 +364,9 @@ public class StudentDAOImpl implements StudentDAO {
                 hasGradeCardBeenGenerated = rs.getBoolean(1);
 
             if(!hasGradeCardBeenGenerated){
-                System.out.println("GradeCard not generated yet ! Please contact the admin.");
-                return;
+                return "GradeCard not generated yet ! Please contact the admin.";
             }
 
-            String studentId = this.student.getUserId();
             String getGrades =
                     "SELECT courseId, grade FROM RegisteredCourse WHERE studentId=" + "'" + studentId + "'";
 
@@ -397,6 +395,7 @@ public class StudentDAOImpl implements StudentDAO {
                 fmt.format("%14s %14s\n", courseId,grade);
             }
             System.out.println(fmt);
+            output += fmt;
             buffer.setLength(0);
             stmt.close();
 
@@ -407,9 +406,11 @@ public class StudentDAOImpl implements StudentDAO {
             if (rs2.next()) {
                 float sgpa = rs2.getFloat("SGPA");
                 System.out.println("Your SGPA is: " + sgpa);
+                output += "Your SGPA is: " + sgpa;
             }
 
             stmt2.close();
+            return output;
         } 
         catch (GradeNotAddedException e) {
             System.out.println(e.getMessage());
@@ -418,14 +419,14 @@ public class StudentDAOImpl implements StudentDAO {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
+        return "Error";
     }
 
     @Override
-    public void setRegisteredCourses(ArrayList<Course> registeredCourses) {
+    public void setRegisteredCourses(String studentId, ArrayList<Course> registeredCourses) {
         try {
             for (Course c : registeredCourses) {
                 String courseId = c.getCourseID();
-                String studentId = this.student.getUserId();
 
                 stmt = conn.prepareStatement(SQLConstants.INSERT_IN_REGISTERED_COURSE);
                 stmt.setString(1, courseId);
