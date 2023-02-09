@@ -1,0 +1,6 @@
+*.iml
+./.idea
+.classpath
+./bin
+*.DS_Store
+out
