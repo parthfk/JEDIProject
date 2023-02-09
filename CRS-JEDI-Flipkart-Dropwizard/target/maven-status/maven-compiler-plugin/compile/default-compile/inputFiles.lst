@@ -5,8 +5,11 @@
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/dao/StudentDAO.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/exception/PaymentFailedException.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/bean/Course.java
+/Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/exception/GradeNotValidException.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/dao/ProfessorDAOImpl.java
+/Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/client/CRSApplication.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/controller/ProfessorRestAPI.java
+/Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/client/CRSProfessorMenu.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/bean/Admin.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/service/PaymentService.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/exception/CourseNotAvailableException.java
@@ -27,6 +30,7 @@
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/exception/ProfessorNotAddedException.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/exception/StudentNotApprovedException.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/exception/CourseAlreadyRegisteredException.java
+/Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/client/CRSAdminMenu.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/bean/SemRegistration.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/dao/AdminDAOImpl.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/App.java
@@ -40,6 +44,7 @@
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/service/StudentServiceOperation.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/service/UserServiceOperation.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/controller/StudentRestAPI.java
+/Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/client/CRSStudentMenu.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/bean/Student.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/bean/Professor.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/bean/GradeCard.java
@@ -52,6 +57,7 @@
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/bean/PaymentNotification.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/exception/AdminNotFoundException.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/exception/UserNotFoundException.java
+/Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/exception/RoleMismatchException.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/service/AdminService.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/exception/AdminNotAddedException.java
 /Users/kushal.vallamkatt/IdeaProjects/JEDIProject/CRS-JEDI-Flipkart-Dropwizard/src/main/java/com/flipkart/service/ProfessorService.java

@@ -5,10 +5,7 @@ import com.flipkart.constant.PaymentMode;
 import com.flipkart.dao.CatalogueDAOImpl;
 import com.flipkart.dao.PaymentDAOImpl;
 import com.flipkart.dao.StudentDAOImpl;
-import com.flipkart.exception.CourseNotAddedException;
-import com.flipkart.exception.CourseNotAvailableException;
-import com.flipkart.exception.CourseNotFoundException;
-import com.flipkart.exception.PaymentFailedException;
+import com.flipkart.exception.*;
 import com.flipkart.utils.Utils;
 
 import java.sql.Date;
@@ -116,6 +113,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 //            }
 //        }
 //    }
+
 
     public void signup(Student newStudent) {
 //        Scanner in = new Scanner(System.in);
@@ -264,7 +262,7 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
         studentDao.confirmRegistration(studentId);
     }
 
-    public void addCourse() {
+    public void addCourse() throws SQLException {
         Scanner in = new Scanner(System.in);
 
         if (student.getCourseRegistered().size() >= 4) {
@@ -431,5 +429,20 @@ public class StudentServiceOperation extends UserServiceOperation implements Stu
 
     public String displayGradeCard(String studentId) {
         return this.studentDao.displayGradeCard(studentId);
+    }
+
+    @Override
+    public boolean logOut(User user) {
+        return false;
+    }
+
+    @Override
+    public boolean updatePassword(String inputEmail, String oldPassword, String newPassword, String role) throws UserNotFoundException, PasswordMismatchException, SQLException {
+        return false;
+    }
+
+    @Override
+    public List<User> getAllUsers() throws SQLException {
+        return null;
     }
 }

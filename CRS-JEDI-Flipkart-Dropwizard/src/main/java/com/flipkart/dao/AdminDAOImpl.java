@@ -153,44 +153,6 @@ public class AdminDAOImpl implements AdminDAO {
     public boolean approveStudentDAO(String studentId) throws SQLException {
         PreparedStatement stmt = null;
 
-      //  try {
-
-
-              //  stmt = conn.prepareStatement(SELECT_UNAPPROVED_STUDENTS_QUERY);
-            //    ResultSet rs = stmt.executeQuery();
-//
-//                if (!rs.next()) {
-//                    System.out.println("All students already approved");
-//                    return;
-//                }
-               // System.out.println("List of Un-Approved Students");
-
-   //             StringBuffer buffer = new StringBuffer();
-//                Formatter fmt = new Formatter();
-//
-//                //fmt.format("\n%20s %20s %20s\n", ANSI_RED+"Student ID"+ANSI_RESET, ANSI_RED+"Name"+ANSI_RESET, ANSI_RED+"E-Mail"+ANSI_RESET);
-//
-//                fmt.format("\n%-17s %-17s %-17s\n", ANSI_CYAN +"Student ID"+ ANSI_RESET,ANSI_CYAN+"Name"+ANSI_RESET,ANSI_CYAN+"E-Mail"+ANSI_RESET);
-//
-//                do {
-//
-//                    String eid = rs.getString("userId");
-//                    String name = rs.getString("name");
-//                    String email = rs.getString("email");
-//                    fmt.format("%-17s %-17s %-17s\n", ANSI_RESET+eid+ANSI_RESET,ANSI_RESET+name+ANSI_RESET,ANSI_RESET+email+ANSI_RESET);
-//                } while (rs.next());
-//
-//                System.out.println(fmt);
-//                buffer.setLength(0);
-
-
-//                System.out.println("Enter student ID to be Approved or Press # to exit");
-//                Scanner sc = new Scanner(System.in);
-//                String studentId = sc.next();
-//                if (studentId.equals("#")) {
-//                    break;
-//                }
-
                 stmt = conn.prepareStatement(UPDATE_STUDENT_APPROVAL_STATUS_QUERY);
                 stmt.setString(1, studentId);
                 int rs1 = stmt.executeUpdate();
@@ -203,38 +165,11 @@ public class AdminDAOImpl implements AdminDAO {
                     return true;
                 }
 
-       // System.out.println("Operation Completed Successfully");
     }
 
 
     public int generateGradeCardDAO(String userId_of_approved_gradeCard) throws SQLException {
         PreparedStatement stmt;
-
-
-
-//            stmt = conn.prepareStatement(FETCH_STUDENT_FOR_GRADECARD_GENERATION_QUERY);
-//
-//            ResultSet rs = stmt.executeQuery();
-//
-//            if (rs.next() == false) {
-//                System.out.println("No Grade card ready to be generated");
-//                return;
-//            }
-
-//            System.out.println("Student Name \t UserID \t E-Mail \t \t Department");
-//
-//            do {
-//                System.out.println(rs.getString(1) + "\t \t" + rs.getString(2) + "\t \t \t" + rs.getString(3) + "\t" + rs.getString(4));
-//            } while (rs.next());
-//
-//            rs.close();
-
-//            System.out.println("Enter UserID of student to approve Grade Gard or Press # to exit");
-//            scanner = new Scanner(System.in);
-//            String userId_of_approved_gradeCard = scanner.next();
-//            if (userId_of_approved_gradeCard.equals("#")) {
-//                return;
-//            }
 
             stmt = conn.prepareStatement(FETCH_GRADES_QUERY);
             stmt.setString(1, userId_of_approved_gradeCard);

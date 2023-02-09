@@ -1,5 +1,6 @@
 com/flipkart/bean/RegisteredCourse.class
 com/flipkart/bean/Professor.class
+com/flipkart/exception/GradeNotValidException.class
 com/flipkart/bean/PaymentNotification.class
 com/flipkart/bean/User.class
 com/flipkart/exception/GradeNotAddedException.class
@@ -50,6 +51,7 @@ com/flipkart/service/ProfessorService.class
 com/flipkart/bean/Catalogue.class
 com/flipkart/service/AdminServiceOperation.class
 com/flipkart/utils/Utils.class
+com/flipkart/exception/RoleMismatchException.class
 com/flipkart/constant/PaymentMode.class
 com/flipkart/exception/CourseNotFoundException.class
 com/flipkart/exception/CourseAlreadyRegisteredException.class
