@@ -152,7 +152,13 @@ public class AdminRestAPI {
     @Path("/viewCoursesInCatalogue")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Course> viewCoursesInCatalogue() {
-        return new UserServiceOperation().viewCourseCatalogue(false);
+        List<Course> coursesInCatalogue = null;
+        try{
+            coursesInCatalogue = new UserServiceOperation().viewCourseCatalogue(false);
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return coursesInCatalogue;
 
     }
 
@@ -160,7 +166,13 @@ public class AdminRestAPI {
     @Path("/viewCourses")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Course> viewAllCourses() {
-        return new UserServiceOperation().viewCourseCatalogue(true);
+        List<Course> allCourses = null;
+        try{
+            allCourses = new UserServiceOperation().viewCourseCatalogue(true);
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return allCourses;
 
     }
 
@@ -184,8 +196,14 @@ public class AdminRestAPI {
     @Path("/viewAllUsers")
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getAllUsers() {
-        return new UserServiceOperation().getAllUsers();
-
+        List<User> allUsers = null;
+        try{
+        allUsers = new UserServiceOperation().getAllUsers();
+        }
+        catch (SQLException e){
+            System.out.println(e);
+        }
+        return allUsers;
     }
 
 //

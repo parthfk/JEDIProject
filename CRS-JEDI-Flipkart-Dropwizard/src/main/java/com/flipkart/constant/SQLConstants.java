@@ -13,7 +13,7 @@ public class SQLConstants {
     public static final String INSERT_USER_QUERY =  "insert into User values(?,?,?,?,?)";
     public static final String UPDATE_PASSWORD_QUERY = "update user set password=? where userId = ? ";
     public static final String COUNT_USERS_WITH_SPECIFIC_ROLE_QUERY = "SELECT COUNT(*) FROM User WHERE roleId=?";
-    public static final String VERIFY_CREDENTIALS_QUERY = "update user set password=? where userId = ? ";
+    public static final String VERIFY_CREDENTIALS_QUERY = "select password from User from userId = ?";
     public static final String FETCH_USER_WITH_EMAIL_ID ="SELECT * FROM User where email= ?";
 
 

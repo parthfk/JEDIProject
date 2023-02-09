@@ -5,26 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/AdminRestAPI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/client/CRSAdminMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/client/CRSAdminMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/constant/SQLConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/constant/SQLConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/AdminDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/AdminDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/AdminDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/AdminDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/CatalogueDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/CatalogueDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/CatalogueDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/CatalogueDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/CourseDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/CourseDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/CourseDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/CourseDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/AdminRestAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/controller/AdminRestAPI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/UserDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/UserDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/dao/UserDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/service/AdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/service/AdminService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/service/AdminServiceOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/service/AdminServiceOperation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/service/UserServiceOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/service/UserServiceOperation.java" afterDir="false" />
     </list>
+    <list id="d41dea23-f802-48e9-99ff-2d891073a957" name="Changes by divyesh.radadiya" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/service/UserServiceOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/service/UserServiceOperation.java" afterDir="false" />
+    </list>
     <list id="25db2ce0-51a1-4e4f-a6fa-251e54ae8021" name="Changes by manthan.asher" comment="" />
-    <list id="530fcba1-ab61-4534-9f48-394c020c9ca9" name="Changes by parth.aggarwal" comment="" />
+    <list id="530fcba1-ab61-4534-9f48-394c020c9ca9" name="Changes by parth.aggarwal" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flipkart/service/UserServiceOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flipkart/service/UserServiceOperation.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,6 +34,31 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/src/main/java/com/flipkart/service/UserServiceOperation.java">
+      <ranges>
+        <range start1="10" end1="10" start2="10" end2="11" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+        <range start1="16" end1="17" start2="17" end2="18" changelist="d41dea23-f802-48e9-99ff-2d891073a957" />
+        <range start1="34" end1="35" start2="35" end2="36" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="45" end1="46" start2="46" end2="47" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="47" end1="50" start2="48" end2="48" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="62" end1="63" start2="60" end2="61" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="64" end1="67" start2="62" end2="63" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="74" end1="75" start2="70" end2="71" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="76" end1="79" start2="72" end2="73" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="96" end1="97" start2="90" end2="91" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="98" end1="101" start2="92" end2="93" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="108" end1="112" start2="100" end2="101" changelist="530fcba1-ab61-4534-9f48-394c020c9ca9" />
+        <range start1="147" end1="148" start2="136" end2="137" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+        <range start1="172" end1="175" start2="161" end2="162" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+        <range start1="176" end1="178" start2="163" end2="167" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+        <range start1="179" end1="188" start2="168" end2="268" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+        <range start1="189" end1="192" start2="269" end2="271" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+        <range start1="193" end1="280" start2="272" end2="273" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+        <range start1="300" end1="301" start2="293" end2="294" changelist="47d0847a-5bfe-47a0-8ddb-78e89fa9f81b" />
+      </ranges>
+    </file>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -85,7 +105,19 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean" />
+    </option>
+  </component>
   <component name="RunManager">
+    <configuration name="CRS" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.flipkart.App" />
+      <module name="CRS_JEDI" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
         <option name="Make" enabled="true" />

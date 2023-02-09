@@ -8,13 +8,14 @@ import com.flipkart.exception.*;
 import com.flipkart.utils.Utils;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.regex.*;
 
 public class UserServiceOperation implements UserService {
 
-    public User logIn(String inEmail, String passEntered,String roole) {
+    public User logIn(String inEmail, String passEntered,String roole) throws StudentNotFoundException,StudentNotApprovedException,ProfessorNotFoundException{
         Scanner in = new Scanner(System.in);
         boolean emailValidated = false, passWordEnteredIsCorrect = false;
         User userObj = null;
@@ -32,7 +33,7 @@ public class UserServiceOperation implements UserService {
             Matcher matcher = pattern.matcher(inputEmail);
 
             if (matcher.matches()) {
-                try {
+
                     if (role.equals("admin")) {
                         List<Admin> adminList = Utils.getAdminList();
                         for (Admin u : adminList) {
@@ -43,11 +44,8 @@ public class UserServiceOperation implements UserService {
                             }
                         }
                         if (!emailValidated) {
-                            try {
+
                                 throw new AdminNotFoundException(inputEmail);
-                            } catch (AdminNotFoundException e) {
-                                System.out.println(e.getMessage());
-                            }
                             checkUserExists(inputEmail);
                             return null;
                         }
@@ -60,11 +58,9 @@ public class UserServiceOperation implements UserService {
                                 System.out.println(u.isStatusApproval());
                                 if (!u.isStatusApproval()) {
                                     System.out.println("Registration not approved. Please contact admin");
-                                    try {
+
                                         throw new StudentNotApprovedException(inputEmail);
-                                    } catch (StudentNotApprovedException e) {
-                                        System.out.println(e.getMessage());
-                                    }
+
                                     return null;
                                 }
                                 emailValidated = true;
@@ -72,11 +68,9 @@ public class UserServiceOperation implements UserService {
                             }
                         }
                         if (!emailValidated) {
-                            try {
+
                                 throw new StudentNotFoundException(inputEmail);
-                            } catch (StudentNotFoundException e) {
-                                System.out.println(e.getMessage());
-                            }
+
 
                             checkUserExists(inputEmail);
                             return null;
@@ -94,11 +88,9 @@ public class UserServiceOperation implements UserService {
                             }
                         }
                         if (!emailValidated) {
-                            try {
+
                                 throw new ProfessorNotFoundException(inputEmail);
-                            } catch (ProfessorNotFoundException e) {
-                                System.out.println(e.getMessage());
-                            }
+
                             checkUserExists(inputEmail);
                             return null;
                         }
@@ -106,10 +98,7 @@ public class UserServiceOperation implements UserService {
                         System.out.println("Please enter a Valid role, which can be 'student', 'professor' or 'admin'!");
                         return null;
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("Failure in reading the db : \n" + e.getMessage());
-                }
+
             } else {
                 System.out.println("Invalid formatted email!");
                 return null;
@@ -145,7 +134,7 @@ public class UserServiceOperation implements UserService {
         return true;
     }
 
-    public List<Course> viewCourseCatalogue(boolean viewAll) {
+    public List<Course> viewCourseCatalogue(boolean viewAll) throws SQLException {
         List<Course> courses = new CatalogueDAOImpl().fetchCatalogue(viewAll);
 
         if(courses.size()==0)
@@ -170,114 +159,118 @@ public class UserServiceOperation implements UserService {
 
     }
 
-    public boolean updatePassword() {
+    public boolean updatePassword(String inputEmail,String oldPassword,String newPassword,String role) {
 
-        Scanner in = new Scanner(System.in);
+//        Scanner in = new Scanner(System.in);
+//
+//        System.out.println("Please enter your Role: ");
+//        String role = in.nextLine().toLowerCase();
 
-        System.out.println("Please enter your Role: ");
-        String role = in.nextLine().toLowerCase();
+//        boolean emailValidated = false, passWordEnteredIsCorrect = false;
+//       // String inputEmail = null, passwordEntered = null;
+//        User userObj = null;
+//        while (!emailValidated) {
+//            System.out.println("Please enter your emailId: (or press 1 to exit)");
+//            //inputEmail = in.nextLine();
+//            if (inputEmail.equals("1")) {
+//                return false;
+//            }
+//
+//            String regex = "^(.+)@(.+)$";
+//            Pattern pattern = Pattern.compile(regex);
+//            Matcher matcher = pattern.matcher(inputEmail);
+//
+//            if (matcher.matches()) {
+//                try {
+//                    if (role.equals("admin")) {
+//                        List<Admin> adminList = Utils.getAdminList();
+//                        for (User u : adminList) {
+//                            if (u.getEmail().equals(inputEmail)) {
+//                                userObj = u;
+//                                emailValidated = true;
+//                                break;
+//                            }
+//                        }
+//                        if (!emailValidated) {
+//                            try {
+//                                throw new AdminNotFoundException(inputEmail);
+//                            } catch (AdminNotFoundException e) {
+//                                System.out.println(e.getMessage());
+//                            }
+//                            checkUserExists(inputEmail);
+//                            return false;
+//                        }
+//                    } else if (role.equals("student")) {
+//                        List<Student> studentList = Utils.getStudentList();
+//                        for (User u : studentList) {
+//                            if (u.getEmail().equals(inputEmail)) {
+//                                userObj = u;
+//                                emailValidated = true;
+//                                break;
+//                            }
+//                        }
+//                        if (!emailValidated) {
+//                            try {
+//                                throw new StudentNotFoundException(inputEmail);
+//                            } catch (StudentNotFoundException e) {
+//                                System.out.println(e.getMessage());
+//                            }
+//                            checkUserExists(inputEmail);
+//                            return false;
+//                        }
+//
+//                    } else if (role.equals("professor")) {
+//                        List<Professor> professorList = Utils.getProfessorList();
+//                        for (User u : professorList) {
+//                            if (u.getEmail().equals(inputEmail)) {
+//                                userObj = u;
+//                                emailValidated = true;
+//                                break;
+//                            }
+//                        }
+//                        if (!emailValidated) {
+//                            try {
+//                                throw new ProfessorNotFoundException(inputEmail);
+//                            } catch (ProfessorNotFoundException e) {
+//                                System.out.println(e.getMessage());
+//                            }
+//                            checkUserExists(inputEmail);
+//                            return false;
+//                        }
+//                    }
+//                } catch (NullPointerException e) {
+//                    System.out.println("Error in reading db :" + e.getMessage());
+//                }
+//            }
+//            if (!emailValidated)
+//                System.out.println("Email entered is invalid!");
+//        }
+//
+//        while (!passWordEnteredIsCorrect) {
+//            System.out.println("Please enter your current password: (or press 1 to exit)");
+//            passwordEntered = in.nextLine();
+//            if (passwordEntered.equals("1")) {
+//                return false;
+//            }
+//            if (passwordEntered.equals(userObj.getPassword())) {
+//                passWordEnteredIsCorrect = true;
+//            } else {
+//                System.out.println("Password is incorrect !");
+//            }
+//
+//        }
+//        System.out.println("Please enter new password: (or press 1 to exit)");
+//        String newPasswordEntered = in.nextLine();
+//        if (newPasswordEntered.equals("1")) {
+//            return false;
+//        } else {
+//            return UserDAOImpl.getInstance().updatePassword(userObj.getUserId(), newPasswordEntered);
+//        }
 
-        boolean emailValidated = false, passWordEnteredIsCorrect = false;
-        String inputEmail = null, passwordEntered = null;
-        User userObj = null;
-        while (!emailValidated) {
-            System.out.println("Please enter your emailId: (or press 1 to exit)");
-            inputEmail = in.nextLine();
-            if (inputEmail.equals("1")) {
-                return false;
-            }
+        UserDAO userDAOInstance = UserDAOImpl.getInstance();
+        if(userDAOInstance.verifyCredentials(inputEmail,oldPassword)){
 
-            String regex = "^(.+)@(.+)$";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(inputEmail);
-
-            if (matcher.matches()) {
-                try {
-                    if (role.equals("admin")) {
-                        List<Admin> adminList = Utils.getAdminList();
-                        for (User u : adminList) {
-                            if (u.getEmail().equals(inputEmail)) {
-                                userObj = u;
-                                emailValidated = true;
-                                break;
-                            }
-                        }
-                        if (!emailValidated) {
-                            try {
-                                throw new AdminNotFoundException(inputEmail);
-                            } catch (AdminNotFoundException e) {
-                                System.out.println(e.getMessage());
-                            }
-                            checkUserExists(inputEmail);
-                            return false;
-                        }
-                    } else if (role.equals("student")) {
-                        List<Student> studentList = Utils.getStudentList();
-                        for (User u : studentList) {
-                            if (u.getEmail().equals(inputEmail)) {
-                                userObj = u;
-                                emailValidated = true;
-                                break;
-                            }
-                        }
-                        if (!emailValidated) {
-                            try {
-                                throw new StudentNotFoundException(inputEmail);
-                            } catch (StudentNotFoundException e) {
-                                System.out.println(e.getMessage());
-                            }
-                            checkUserExists(inputEmail);
-                            return false;
-                        }
-
-                    } else if (role.equals("professor")) {
-                        List<Professor> professorList = Utils.getProfessorList();
-                        for (User u : professorList) {
-                            if (u.getEmail().equals(inputEmail)) {
-                                userObj = u;
-                                emailValidated = true;
-                                break;
-                            }
-                        }
-                        if (!emailValidated) {
-                            try {
-                                throw new ProfessorNotFoundException(inputEmail);
-                            } catch (ProfessorNotFoundException e) {
-                                System.out.println(e.getMessage());
-                            }
-                            checkUserExists(inputEmail);
-                            return false;
-                        }
-                    }
-                } catch (NullPointerException e) {
-                    System.out.println("Error in reading db :" + e.getMessage());
-                }
-            }
-            if (!emailValidated)
-                System.out.println("Email entered is invalid!");
         }
-
-        while (!passWordEnteredIsCorrect) {
-            System.out.println("Please enter your current password: (or press 1 to exit)");
-            passwordEntered = in.nextLine();
-            if (passwordEntered.equals("1")) {
-                return false;
-            }
-            if (passwordEntered.equals(userObj.getPassword())) {
-                passWordEnteredIsCorrect = true;
-            } else {
-                System.out.println("Password is incorrect !");
-            }
-
-        }
-        System.out.println("Please enter new password: (or press 1 to exit)");
-        String newPasswordEntered = in.nextLine();
-        if (newPasswordEntered.equals("1")) {
-            return false;
-        } else {
-            return UserDAOImpl.getInstance().updatePassword(userObj.getUserId(), newPasswordEntered);
-        }
-
 
     }
 
@@ -298,7 +291,7 @@ public class UserServiceOperation implements UserService {
 
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws SQLException {
         return UserDAOImpl.getInstance().getAllUsers();
     }
 }

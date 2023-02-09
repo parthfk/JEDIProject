@@ -2,6 +2,7 @@ package com.flipkart.dao;
 
 import com.flipkart.bean.User;
 import com.flipkart.constant.SQLConstants;
+import com.flipkart.exception.PasswordMismatchException;
 import com.flipkart.exception.UserNotFoundException;
 import com.flipkart.utils.DbConnection;
 
@@ -32,9 +33,9 @@ public class UserDAOImpl implements UserDAO {
         return dao;
     }
 
-    public boolean verifyCredentials(String userId, String password) throws UserNotFoundException {
-        try {
-            stmt = conn.prepareStatement(SQLConstants.VERIFY_CREDENTIALS_QUERY);
+    public boolean verifyCredentials(String userId, String password) throws UserNotFoundException,PasswordMismatchException,SQLException {
+        String verifyQuery = "select password from User from userId = '" + userId + "'";
+            stmt = conn.prepareStatement(verifyQuery);
             stmt.setString(1, userId);
             ResultSet resultSet = stmt.executeQuery();
 
@@ -42,18 +43,11 @@ public class UserDAOImpl implements UserDAO {
                 throw new UserNotFoundException(userId);
             else if (password.equals(resultSet.getString("password"))) {
                 return true;
-            } else {
-                return false;
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+            throw new PasswordMismatchException(userId);
     }
 
-    public String getRole(String userId) {
-        try {
+    public String getRole(String userId) throws  SQLException{
             String sql = "select role from user where userId='" + userId + "'";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, userId);
@@ -62,15 +56,10 @@ public class UserDAOImpl implements UserDAO {
             if (rs.next()) {
                 return rs.getString("role");
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return null;
     }
 
-    public boolean updatePassword(String userId, String newPassword) {
-        try {
+    public boolean updatePassword(String userId, String newPassword) throws SQLException{
             stmt = conn.prepareStatement(SQLConstants.UPDATE_PASSWORD_QUERY);
             stmt.setString(1, newPassword);
             stmt.setString(2, userId);
@@ -80,16 +69,11 @@ public class UserDAOImpl implements UserDAO {
                 return true;
             else
                 return false;
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return false;
-    }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws SQLException {
         List<User> allUsers = new ArrayList<>();
-        try {
             PreparedStatement stmt = conn.prepareStatement(SQLConstants.GET_ALL_USERS);
             ResultSet rs = stmt.executeQuery();
 
@@ -114,9 +98,7 @@ public class UserDAOImpl implements UserDAO {
                 allUsers.add(u);
 
             } while (rs.next());
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
+
         return allUsers;
     }
 }
