@@ -8,6 +8,7 @@ import com.flipkart.exception.*;
 import com.flipkart.utils.Utils;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.regex.*;
@@ -146,7 +147,12 @@ public class UserServiceOperation implements UserService {
     }
 
     public List<Course> viewCourseCatalogue(boolean viewAll) {
-        List<Course> courses = new CatalogueDAOImpl().fetchCatalogue(viewAll);
+        List<Course> courses;
+        try {
+            courses = new CatalogueDAOImpl().fetchCatalogue(viewAll);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         if(courses.size()==0)
         {

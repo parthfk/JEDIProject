@@ -4,6 +4,7 @@ import com.flipkart.bean.Course;
 import com.flipkart.bean.User;
 import com.flipkart.exception.AdminNotFoundException;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface UserService {
@@ -24,7 +25,7 @@ public interface UserService {
      * Method to see the list of courses offered in the catalogue. This is kept in user class as course catalogue can be viewed by every type of user.
      * @return List of courses being offered
      */
-    List<Course> viewCourseCatalogue(boolean viewAll);
+    List<Course> viewCourseCatalogue(boolean viewAll) throws SQLException;
     /**
      * Method to update password of a user
      * @return boolean indicating if the password is updated successfully

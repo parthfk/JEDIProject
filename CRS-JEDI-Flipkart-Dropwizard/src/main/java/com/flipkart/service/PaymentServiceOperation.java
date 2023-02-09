@@ -54,12 +54,6 @@ public class PaymentServiceOperation implements PaymentService {
         paymentDAO.payDebitCard(student);
     }
 
-    public void payUPI() {
-//        System.out.println("Please enter UPI ID");
-//        String upiId = scanner.nextLine();
-        paymentDAO.payUPI(student);
-    }
-
     public void payNetBanking() {
 //        System.out.println("Please enter bank name");
 //        String bankName = scanner.nextLine();

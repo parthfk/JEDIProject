@@ -7,7 +7,7 @@
   <version>1.0-SNAPSHOT</version>
   <url>http://maven.apache.org</url>
   <build>
-    <finalName>DropWizardExample-${version}</finalName>
+    <finalName>CRS-JEDI-Flipkart-Dropwizard-${version}</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

@@ -27,7 +27,7 @@ public interface PaymentDAO {
      * method that allows student to pay via UPI
      * @param student
      */
-    public boolean payUPI(Student student);
+    public boolean payUPI(String studentId, String upiId);
 
     /**
      * method that allows student to pay via Net banking
@@ -66,6 +66,5 @@ public interface PaymentDAO {
      * @param student
      * @param modeOfPayment
      */
-    public void insertHelper(String paymentId,Student student,Integer modeOfPayment);
 
 }

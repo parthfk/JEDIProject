@@ -9,21 +9,21 @@ public interface StudentService {
      * Method to initiate semester registration for student
      *
      */
-    void registerForSem();
+    //void registerForSem();
     /**
      * Method to register a student, although student can't login until it's approved by admin
      */
-    void signup();
+    void signup(Student newStudent);
 
     /**
      * Method to select 4 primary courses for course registration
      */
-    void selectPrimaryCourse();
+    void selectPrimaryCourse(String studentId, String pc1, String pc2, String pc3, String pc4);
 
     /**
      * Method to select 2 secondary courses for course registration
      */
-    void selectSecondaryCourse();
+    void selectSecondaryCourse(String studentId, String sc1, String sc2);
     /**
      * Method to add course during add-drop window
      */
@@ -34,11 +34,6 @@ public interface StudentService {
     void dropCourse() throws CourseNotFoundException;
 
     /**
-     * Method to initiate fees payment after course registration is done.
-     */
-    void payFee();
-
-    /**
      * Method to view all the registered courses.
      */
     void displayRegisteredCourses();
@@ -46,6 +41,6 @@ public interface StudentService {
      * Method to retrieve Grade card
      *
      */
-    void displayGradeCard ();
+    String displayGradeCard (String studentId);
 
 }

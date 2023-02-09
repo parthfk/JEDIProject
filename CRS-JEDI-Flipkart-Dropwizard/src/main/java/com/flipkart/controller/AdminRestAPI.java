@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 
 @Path("/admin")
 public class AdminRestAPI {
-
     AdminService adminService = new AdminServiceOperation();
 
 
@@ -187,19 +186,4 @@ public class AdminRestAPI {
         return new UserServiceOperation().getAllUsers();
 
     }
-
-//
-//    /**
-//     *
-//     * @return list of professors in the system
-//     */
-//    @GET
-//    @Path("/viewProfessors")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<Professor> viewProfessors() {
-//
-//        return adminOperation.viewProfessors();
-//    }
-//
-
 }

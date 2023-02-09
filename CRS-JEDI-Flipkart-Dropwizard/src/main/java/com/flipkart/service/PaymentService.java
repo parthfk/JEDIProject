@@ -29,7 +29,7 @@ public interface PaymentService {
     /**
      * Method which collects UPI details if a student wants to pay by UPI
      */
-    void payUPI();
+//    void payUPI(String studentId, String upiId);
     /**
      * Method which collects net banking details if a student wants to pay net banking.
      */

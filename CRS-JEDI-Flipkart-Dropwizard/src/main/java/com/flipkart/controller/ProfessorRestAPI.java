@@ -19,7 +19,6 @@ import java.util.List;
  */
 @Path("/professor")
 public class ProfessorRestAPI {
-
     @GET
     @Path("/viewSelectedCourses")
     @Produces(MediaType.APPLICATION_JSON)
